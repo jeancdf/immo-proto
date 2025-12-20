@@ -244,6 +244,18 @@ app.get('/api/properties', (req, res) => {
         city: prop.city,
         zipCode: prop.zipCode,
         type: prop.type,
+        // Extended property details
+        description: prop.description || '',
+        surface: prop.surface || null,
+        rooms: prop.rooms || null,
+        floor: prop.floor || null,
+        hasParking: prop.hasParking || false,
+        hasCellar: prop.hasCellar || false,
+        hasElevator: prop.hasElevator || false,
+        rent: prop.rent || null,
+        price: prop.price || null,
+        charges: prop.charges || null,
+        // Dossier tracking
         dossierCount: 0,
         dossierIds: [],
         statuses: {
@@ -302,6 +314,74 @@ app.get('/api/properties/:id/dossiers', (req, res) => {
   );
   
   res.json(enrichedDossiers);
+});
+
+// PATCH /api/properties/:id - Update property details
+app.patch('/api/properties/:id', (req, res) => {
+  const db = readDb();
+  const propertyId = parseInt(req.params.id);
+  const updates = req.body;
+  
+  // Find all dossiers with this property
+  const dossiersWithProperty = db.dossiers.filter(
+    d => d.property.id === propertyId
+  );
+  
+  if (dossiersWithProperty.length === 0) {
+    return res.status(404).json({ error: 'Property not found' });
+  }
+  
+  // Update property in all related dossiers
+  dossiersWithProperty.forEach(dossier => {
+    const prop = dossier.property;
+    
+    // Update address fields
+    if (updates.address !== undefined) prop.address = updates.address;
+    if (updates.city !== undefined) prop.city = updates.city;
+    if (updates.zipCode !== undefined) prop.zipCode = updates.zipCode;
+    if (updates.type !== undefined) prop.type = updates.type;
+    
+    // Update extended property details
+    if (updates.description !== undefined) prop.description = updates.description;
+    if (updates.surface !== undefined) prop.surface = updates.surface;
+    if (updates.rooms !== undefined) prop.rooms = updates.rooms;
+    if (updates.floor !== undefined) prop.floor = updates.floor;
+    if (updates.hasParking !== undefined) prop.hasParking = updates.hasParking;
+    if (updates.hasCellar !== undefined) prop.hasCellar = updates.hasCellar;
+    if (updates.hasElevator !== undefined) prop.hasElevator = updates.hasElevator;
+    
+    // Update financial fields
+    if (updates.rent !== undefined) prop.rent = updates.rent;
+    if (updates.price !== undefined) prop.price = updates.price;
+    if (updates.charges !== undefined) prop.charges = updates.charges;
+    
+    // Update dossier timestamp
+    dossier.updatedAt = new Date().toISOString();
+  });
+  
+  writeDb(db);
+  
+  // Return updated property data
+  const updatedProperty = dossiersWithProperty[0].property;
+  res.json({
+    id: updatedProperty.id,
+    address: updatedProperty.address,
+    city: updatedProperty.city,
+    zipCode: updatedProperty.zipCode,
+    type: updatedProperty.type,
+    description: updatedProperty.description,
+    surface: updatedProperty.surface,
+    rooms: updatedProperty.rooms,
+    floor: updatedProperty.floor,
+    hasParking: updatedProperty.hasParking,
+    hasCellar: updatedProperty.hasCellar,
+    hasElevator: updatedProperty.hasElevator,
+    rent: updatedProperty.rent,
+    price: updatedProperty.price,
+    charges: updatedProperty.charges,
+    dossierCount: dossiersWithProperty.length,
+    message: `Updated property in ${dossiersWithProperty.length} dossier(s)`
+  });
 });
 
 // GET /api/stats - Get dashboard statistics

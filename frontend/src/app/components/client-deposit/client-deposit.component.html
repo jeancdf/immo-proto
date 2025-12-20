@@ -1,0 +1,142 @@
+<div class="deposit-page">
+  <!-- Header -->
+  <header class="deposit-header">
+    <div class="header-content">
+      <div class="agency-badge">
+        <div class="agency-logo"></div>
+        <span class="agency-name">{{ agencyName }}</span>
+      </div>
+      <span class="powered-by">Propulsé par DossierHub</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="deposit-main">
+    <div class="deposit-container">
+      <!-- Title -->
+      <div class="deposit-title">
+        <h1>Votre dossier – {{ dossierType }}</h1>
+        <p>Déposez vos documents ici, tout est centralisé pour votre agence.</p>
+      </div>
+
+      <!-- Progress Card -->
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-label">Progression de votre dossier</span>
+          <span class="progress-percent">{{ progressPercent }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [style.width.%]="progressPercent">
+          </div>
+        </div>
+        <span class="progress-status">
+          Dossier en cours – {{ documentsProvided }} / {{ totalDocuments }} 
+          documents fournis
+        </span>
+      </div>
+
+      <!-- Documents to Upload -->
+      <section class="documents-section">
+        <h2 class="section-title">Documents à fournir</h2>
+        
+        @for (doc of requiredDocuments; track doc.id) {
+          <div class="document-card" [class.expanded]="expandedDoc() === doc.id">
+            <div class="document-header" (click)="toggleExpand(doc.id)">
+              <div class="document-info">
+                <h3 class="document-name">{{ doc.name }}</h3>
+                <p class="document-desc">{{ doc.description }}</p>
+              </div>
+              <div class="document-status">
+                <span 
+                  class="status-badge" 
+                  [class]="doc.status">
+                  {{ getStatusLabel(doc.status) }}
+                </span>
+                @if (doc.status === 'pending') {
+                  <button class="btn-action" (click)="openUpload(doc.id, $event)">
+                    Ajouter
+                  </button>
+                } @else if (doc.status === 'partial') {
+                  <button class="btn-action" (click)="openUpload(doc.id, $event)">
+                    Mettre à jour
+                  </button>
+                }
+              </div>
+            </div>
+
+            @if (expandedDoc() === doc.id && doc.status === 'pending') {
+              <div class="upload-zone">
+                <div 
+                  class="drop-area"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event, doc.id)"
+                  [class.dragover]="isDragging()">
+                  <p class="drop-text">Glissez votre fichier ici</p>
+                  <span class="drop-or">ou</span>
+                  <label class="btn-upload">
+                    <input 
+                      type="file" 
+                      hidden 
+                      (change)="onFileSelected($event, doc.id)">
+                    Choisir un fichier
+                  </label>
+                  <span class="file-types">
+                    Formats acceptés : PDF, JPG, PNG (max 10 Mo)
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Already Submitted Documents -->
+      <section class="submitted-section">
+        <h2 class="section-title dark">Documents déjà envoyés</h2>
+        
+        <div class="submitted-list">
+          @for (doc of submittedDocuments; track doc.id) {
+            <div class="submitted-item">
+              <div class="submitted-info">
+                <span class="submitted-name">{{ doc.filename }}</span>
+                <span class="submitted-meta">
+                  {{ doc.type }} • Envoyé le {{ doc.date }}
+                </span>
+              </div>
+              <span 
+                class="review-badge" 
+                [class]="doc.reviewStatus">
+                {{ getReviewLabel(doc.reviewStatus) }}
+              </span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Help Section -->
+      <section class="help-section">
+        <h3 class="help-title">Besoin d'aide ?</h3>
+        <p class="help-text">
+          Compléter votre dossier prend généralement moins de 10 minutes. 
+          Vous pouvez faire une pause et revenir plus tard avec le même lien. 
+          Vos documents sont transmis de manière sécurisée à l'agence.
+        </p>
+        <div class="help-contacts">
+          <a href="tel:0123456789" class="contact-link">01 23 45 67 89</a>
+          <a href="mailto:contact@immoparis.com" class="contact-link">
+            contact&#64;immoparis.com
+          </a>
+        </div>
+      </section>
+
+      <!-- Submit Button -->
+      <button class="btn-submit" (click)="submitDossier()">
+        J'ai terminé de déposer mes documents
+      </button>
+    </div>
+  </main>
+</div>
+

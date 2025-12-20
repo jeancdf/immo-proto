@@ -5,16 +5,31 @@ import { DossierDetailComponent } from
   './components/dossier-detail/dossier-detail.component';
 import { DossierEditComponent } from 
   './components/dossier-edit/dossier-edit.component';
+import { ShareDossierComponent } from 
+  './components/share-dossier/share-dossier.component';
 import { BiensComponent } from './components/biens/biens.component';
 import { BienDetailComponent } from 
   './components/bien-detail/bien-detail.component';
+import { BienEditComponent } from 
+  './components/bien-edit/bien-edit.component';
+import { ClientDepositComponent } from 
+  './components/client-deposit/client-deposit.component';
+import { PropertyLinkComponent } from 
+  './components/property-link/property-link.component';
+import { PublicApplicationComponent } from 
+  './components/public-application/public-application.component';
 
 /**
  * Application Routes
- * All routes are wrapped in the Layout component
- * Note: /dossier/new must come before /dossier/:id to avoid 'new' as ID
+ * - Main routes wrapped in Layout component (with sidebar)
+ * - Public routes without Layout (client deposit, candidature)
  */
 export const routes: Routes = [
+  // Public routes (no layout/sidebar)
+  { path: 'deposit/:token', component: ClientDepositComponent },
+  { path: 'candidature/:propertyId', component: PublicApplicationComponent },
+
+  // Main application routes with layout
   {
     path: '',
     component: LayoutComponent,
@@ -23,8 +38,12 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'dossier/new', component: DossierEditComponent },
       { path: 'dossier/:id/edit', component: DossierEditComponent },
+      { path: 'dossier/:id/share', component: ShareDossierComponent },
       { path: 'dossier/:id', component: DossierDetailComponent },
       { path: 'biens', component: BiensComponent },
+      { path: 'biens/lien', component: PropertyLinkComponent },
+      { path: 'biens/:id/lien', component: PropertyLinkComponent },
+      { path: 'biens/:id/edit', component: BienEditComponent },
       { path: 'biens/:id', component: BienDetailComponent },
       { path: 'mes-dossiers', component: DashboardComponent },
       { path: 'clients', component: DashboardComponent },

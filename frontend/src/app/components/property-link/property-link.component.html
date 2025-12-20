@@ -1,0 +1,258 @@
+<div class="link-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-top">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12,19 5,12 12,5"/>
+        </svg>
+      </button>
+      <div class="title-section">
+        <h1 class="page-title">Générer un lien candidature</h1>
+        <p class="page-subtitle">
+          Créez un lien à partager dans vos annonces pour recevoir 
+          des candidatures
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="link-content">
+    <!-- Property Selection -->
+    <div class="form-card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2" class="card-icon">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <h2 class="card-title">Sélectionner un bien</h2>
+      </div>
+      <div class="card-body">
+        @if (selectedProperty(); as prop) {
+          <!-- Selected Property Display -->
+          <div class="selected-property">
+            <div class="property-info">
+              <span class="property-address">{{ prop.address }}</span>
+              <span class="property-location">
+                {{ prop.zipCode }} {{ prop.city }}
+                @if (prop.type) { • {{ prop.type }} }
+              </span>
+              <span class="property-dossiers">
+                {{ prop.dossierCount }} dossier(s) existant(s)
+              </span>
+            </div>
+            <button class="btn-change" (click)="propertyId.set(null)">
+              Changer
+            </button>
+          </div>
+        } @else {
+          <!-- Property Selector -->
+          <div class="property-selector">
+            <label class="form-label">Choisir un bien *</label>
+            <div class="property-grid">
+              @for (prop of property(); track prop.id) {
+                <button 
+                  class="property-card"
+                  (click)="selectProperty(prop.id)">
+                  <div class="property-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="2">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                      <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                  </div>
+                  <div class="property-details">
+                    <span class="property-name">{{ prop.address }}</span>
+                    <span class="property-meta">
+                      {{ prop.zipCode }} {{ prop.city }}
+                    </span>
+                  </div>
+                </button>
+              } @empty {
+                <p class="no-properties">Aucun bien disponible</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (selectedProperty()) {
+      <!-- Link Settings -->
+      <div class="form-card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2" class="card-icon">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <h2 class="card-title">Paramètres du lien</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Type de dossier</label>
+            <div class="type-toggle">
+              <button 
+                class="type-btn"
+                [class.active]="linkType() === 'location'"
+                (click)="linkType.set('location')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Location
+              </button>
+              <button 
+                class="type-btn"
+                [class.active]="linkType() === 'vente'"
+                (click)="linkType.set('vente')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                Vente
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Validité du lien</label>
+            <div class="expiration-options">
+              <button 
+                class="exp-btn"
+                [class.active]="expirationDays() === 7"
+                (click)="expirationDays.set(7)">
+                7 jours
+              </button>
+              <button 
+                class="exp-btn"
+                [class.active]="expirationDays() === 30"
+                (click)="expirationDays.set(30)">
+                30 jours
+              </button>
+              <button 
+                class="exp-btn"
+                [class.active]="expirationDays() === 90"
+                (click)="expirationDays.set(90)">
+                90 jours
+              </button>
+              <button 
+                class="exp-btn"
+                [class.active]="expirationDays() === 0"
+                (click)="expirationDays.set(0)">
+                Illimité
+              </button>
+            </div>
+          </div>
+
+          <button 
+            class="btn btn-primary generate-btn"
+            (click)="generateLink()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            Générer le lien
+          </button>
+        </div>
+      </div>
+
+      <!-- Generated Link -->
+      @if (generatedLink()) {
+        <div class="form-card result-card">
+          <div class="card-header success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2" class="card-icon">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22,4 12,14.01 9,11.01"/>
+            </svg>
+            <h2 class="card-title">Lien généré avec succès !</h2>
+          </div>
+          <div class="card-body">
+            <p class="result-info">
+              Partagez ce lien dans vos annonces. Les candidats pourront 
+              créer leur dossier directement.
+            </p>
+            
+            <div class="link-box">
+              <input 
+                type="text" 
+                class="link-input" 
+                [value]="generatedLink()" 
+                readonly>
+              <button class="btn btn-copy" (click)="copyLink()">
+                @if (copied()) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  Copié !
+                } @else {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  Copier
+                }
+              </button>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="qr-section">
+              <button 
+                class="btn btn-secondary qr-toggle"
+                (click)="toggleQRCode()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                </svg>
+                {{ showQRCode() ? 'Masquer' : 'Afficher' }} le QR Code
+              </button>
+              
+              @if (showQRCode()) {
+                <div class="qr-container">
+                  <img 
+                    [src]="getQRCodeUrl()" 
+                    alt="QR Code candidature"
+                    class="qr-image">
+                  <p class="qr-hint">
+                    Scannez pour accéder au formulaire de candidature
+                  </p>
+                </div>
+              }
+            </div>
+
+            <!-- Preview Link -->
+            <div class="preview-section">
+              <a 
+                [href]="generatedLink()" 
+                target="_blank" 
+                class="btn btn-outline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15,3 21,3 21,9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Prévisualiser le formulaire
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
+

@@ -127,47 +127,132 @@
               <h2 class="card-title">Informations bien</h2>
             </div>
             <div class="card-body">
+              <!-- Property Mode Toggle -->
               <div class="form-group">
-                <label class="form-label">Adresse *</label>
-                <input 
-                  type="text" 
-                  class="form-input"
-                  [(ngModel)]="formData.property.address" 
-                  name="propertyAddress"
-                  placeholder="12 rue de la Paix"
-                  required>
-              </div>
-              <div class="form-row three-cols">
-                <div class="form-group">
-                  <label class="form-label">Ville *</label>
-                  <input 
-                    type="text" 
-                    class="form-input"
-                    [(ngModel)]="formData.property.city" 
-                    name="propertyCity"
-                    placeholder="Paris"
-                    required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Code postal *</label>
-                  <input 
-                    type="text" 
-                    class="form-input"
-                    [(ngModel)]="formData.property.zipCode" 
-                    name="propertyZipCode"
-                    placeholder="75001"
-                    required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Type de bien</label>
-                  <input 
-                    type="text" 
-                    class="form-input"
-                    [(ngModel)]="formData.property.type" 
-                    name="propertyType"
-                    placeholder="T2, Studio, T3...">
+                <label class="form-label">Sélection du bien</label>
+                <div class="property-mode-toggle">
+                  <button 
+                    type="button"
+                    class="mode-btn"
+                    [class.active]="propertyMode() === 'new'"
+                    (click)="setPropertyMode('new')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Nouvelle adresse
+                  </button>
+                  <button 
+                    type="button"
+                    class="mode-btn"
+                    [class.active]="propertyMode() === 'existing'"
+                    (click)="setPropertyMode('existing')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Adresse existante
+                  </button>
                 </div>
               </div>
+
+              @if (propertyMode() === 'existing') {
+                <!-- Existing Property Selector -->
+                <div class="form-group">
+                  <label class="form-label">Choisir un bien existant *</label>
+                  <select 
+                    class="form-select property-select"
+                    [ngModel]="selectedPropertyId()"
+                    (ngModelChange)="selectProperty($event)"
+                    name="existingProperty"
+                    required>
+                    <option [ngValue]="null" disabled>
+                      Sélectionner un bien...
+                    </option>
+                    @for (prop of properties(); track prop.id) {
+                      <option [ngValue]="prop.id">
+                        {{ prop.address }}, {{ prop.zipCode }} {{ prop.city }}
+                        ({{ prop.dossierCount }} dossier{{ prop.dossierCount > 1 ? 's' : '' }})
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                @if (selectedProperty()) {
+                  <!-- Selected Property Preview -->
+                  <div class="selected-property-preview">
+                    <div class="preview-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                           stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                      </svg>
+                    </div>
+                    <div class="preview-info">
+                      <span class="preview-address">
+                        {{ selectedProperty()?.address }}
+                      </span>
+                      <span class="preview-location">
+                        {{ selectedProperty()?.zipCode }} 
+                        {{ selectedProperty()?.city }}
+                        @if (selectedProperty()?.type) {
+                          • {{ selectedProperty()?.type }}
+                        }
+                      </span>
+                      <span class="preview-dossiers">
+                        {{ selectedProperty()?.dossierCount }} dossier(s) existant(s)
+                      </span>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <!-- New Address Form -->
+                <div class="form-group">
+                  <label class="form-label">Adresse *</label>
+                  <input 
+                    type="text" 
+                    class="form-input"
+                    [(ngModel)]="formData.property.address" 
+                    name="propertyAddress"
+                    placeholder="12 rue de la Paix"
+                    required>
+                </div>
+                <div class="form-row three-cols">
+                  <div class="form-group">
+                    <label class="form-label">Ville *</label>
+                    <input 
+                      type="text" 
+                      class="form-input"
+                      [(ngModel)]="formData.property.city" 
+                      name="propertyCity"
+                      placeholder="Paris"
+                      required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Code postal *</label>
+                    <input 
+                      type="text" 
+                      class="form-input"
+                      [(ngModel)]="formData.property.zipCode" 
+                      name="propertyZipCode"
+                      placeholder="75001"
+                      required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Type de bien</label>
+                    <input 
+                      type="text" 
+                      class="form-input"
+                      [(ngModel)]="formData.property.type" 
+                      name="propertyType"
+                      placeholder="T2, Studio, T3...">
+                  </div>
+                </div>
+              }
+
+              <!-- Rent/Price (shown in both modes) -->
               <div class="form-row">
                 @if (formData.type === 'location') {
                   <div class="form-group">

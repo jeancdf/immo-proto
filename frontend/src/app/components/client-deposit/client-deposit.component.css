@@ -1,0 +1,428 @@
+.deposit-page {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* Header */
+.deposit-header {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 24px;
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.agency-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agency-logo {
+  width: 32px;
+  height: 32px;
+  background: #3b82f6;
+  border-radius: 8px;
+}
+
+.agency-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.powered-by {
+  font-size: 13px;
+  color: #94a3b8;
+  padding-left: 16px;
+  border-left: 1px solid #e2e8f0;
+}
+
+/* Main Content */
+.deposit-main {
+  padding: 40px 24px 60px;
+}
+
+.deposit-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Title */
+.deposit-title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.deposit-title h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.deposit-title p {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Progress Card */
+.progress-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.progress-percent {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3b82f6;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-status {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Sections */
+.documents-section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+}
+
+.section-title.dark {
+  background: #334155;
+  color: #fff;
+  padding: 16px 24px;
+  margin: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Document Card */
+.document-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.document-header:hover {
+  background: #f8fafc;
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.document-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.document-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-badge.partial {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.complete {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.btn-action {
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-action:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Upload Zone */
+.upload-zone {
+  padding: 0 24px 24px;
+}
+
+.drop-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.drop-area.dragover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.drop-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #334155;
+  margin: 0;
+}
+
+.drop-or {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.btn-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-upload:hover {
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.file-types {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 8px;
+}
+
+/* Submitted Documents */
+.submitted-section {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.submitted-list {
+  padding: 0;
+}
+
+.submitted-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.submitted-item:last-child {
+  border-bottom: none;
+}
+
+.submitted-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.submitted-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.submitted-meta {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.review-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.review-badge.accepted {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.review-badge.pending {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.review-badge.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Help Section */
+.help-section {
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.help-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.help-text {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.help-contacts {
+  display: flex;
+  gap: 24px;
+}
+
+.contact-link {
+  font-size: 14px;
+  color: #1e293b;
+  text-decoration: underline;
+}
+
+.contact-link:hover {
+  color: #3b82f6;
+}
+
+/* Submit Button */
+.btn-submit {
+  width: 100%;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-submit:hover {
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .deposit-main {
+    padding: 24px 16px 40px;
+  }
+  
+  .document-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .document-status {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .help-contacts {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+

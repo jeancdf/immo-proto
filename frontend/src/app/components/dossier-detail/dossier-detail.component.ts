@@ -1,9 +1,7 @@
-import { Component, inject, OnInit, computed, effect } from '@angular/core';
+import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
-import { Document } from '../../models/dossier.model';
-import { signal } from '@angular/core';
 
 /**
  * Dossier Detail Component
@@ -26,8 +24,9 @@ export class DossierDetailComponent implements OnInit {
   readonly dossier = this.state.selectedDossier;
   readonly loading = this.state.loadingDossierDetail;
 
-  // Local state for document filtering
+  // Local state
   readonly documentFilter = signal('');
+  readonly linkCopied = signal(false);
   
   // Computed filtered documents
   readonly filteredDocuments = computed(() => {
@@ -98,20 +97,31 @@ export class DossierDetailComponent implements OnInit {
     }
   }
 
-  // Share dossier (placeholder)
+  // Navigate to share dossier page
   shareDossier(): void {
-    console.log('Share dossier:', this.dossier()?.id);
+    const id = this.dossier()?.id;
+    if (id) {
+      this.router.navigate(['/dossier', id, 'share']);
+    }
   }
 
-  // Send reminder for missing documents (placeholder)
+  // Send reminder for missing documents
   sendReminder(): void {
-    console.log('Send reminder for:', this.dossier()?.id);
+    const dossier = this.dossier();
+    if (dossier) {
+      // In real app, would send email/notification
+      alert(`Relance envoyée à ${dossier.client.email} pour les pièces manquantes.`);
+    }
   }
 
-  // Copy deposit link (placeholder)
+  // Copy deposit link to clipboard
   copyDepositLink(): void {
-    const link = `${window.location.origin}/deposit/${this.dossier()?.id}`;
-    navigator.clipboard.writeText(link);
-    console.log('Link copied:', link);
+    const id = this.dossier()?.id;
+    if (id) {
+      const link = `${window.location.origin}/deposit/${id}`;
+      navigator.clipboard.writeText(link);
+      this.linkCopied.set(true);
+      setTimeout(() => this.linkCopied.set(false), 2000);
+    }
   }
 }

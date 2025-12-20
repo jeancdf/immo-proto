@@ -1,0 +1,203 @@
+<div class="share-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a routerLink="/dashboard" class="breadcrumb-link">Dashboard</a>
+      <span class="breadcrumb-sep">/</span>
+      <a [routerLink]="['/dossier', dossierId()]" class="breadcrumb-link">
+        Dossier #{{ dossier()?.reference }}
+      </a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Partager</span>
+    </div>
+    <h1 class="page-title">Partager le dossier</h1>
+    <p class="page-subtitle">
+      Envoyez un accès sécurisé à un professionnel (notaire, diagnostiqueur, 
+      banque, etc.).
+    </p>
+  </div>
+
+  <div class="share-form">
+    <!-- Destinataire Section -->
+    <section class="form-section">
+      <h2 class="section-label">DESTINATAIRE</h2>
+      <div class="recipient-grid">
+        @for (recipient of recipientTypes; track recipient.id) {
+          <button 
+            class="recipient-card"
+            [class.active]="selectedRecipient() === recipient.id"
+            (click)="selectRecipient(recipient.id)">
+            <div class="recipient-icon">
+              <div class="icon-circle"></div>
+            </div>
+            <span class="recipient-name">{{ recipient.name }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Documents Section -->
+    <section class="form-section">
+      <h2 class="section-label">DOCUMENTS À INCLURE</h2>
+      <div class="documents-grid">
+        @for (doc of documentTypes; track doc.id) {
+          <label class="checkbox-item">
+            <input 
+              type="checkbox" 
+              [checked]="selectedDocuments().includes(doc.id)"
+              (change)="toggleDocument(doc.id)">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">{{ doc.name }}</span>
+          </label>
+        }
+      </div>
+      <label class="checkbox-item select-all">
+        <input 
+          type="checkbox" 
+          [checked]="allDocumentsSelected()"
+          (change)="toggleAllDocuments()">
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-label">Tout le dossier</span>
+      </label>
+    </section>
+
+    <!-- Permissions & Security Row -->
+    <div class="two-columns">
+      <!-- Permissions -->
+      <section class="form-section">
+        <h2 class="section-label">PERMISSIONS</h2>
+        <div class="permissions-list">
+          <label class="radio-item">
+            <input 
+              type="radio" 
+              name="permission"
+              value="read"
+              [checked]="permission() === 'read'"
+              (change)="setPermission('read')">
+            <span class="radio-custom"></span>
+            <span class="radio-label">Lecture seule</span>
+          </label>
+          <label class="radio-item">
+            <input 
+              type="radio" 
+              name="permission"
+              value="upload"
+              [checked]="permission() === 'upload'"
+              (change)="setPermission('upload')">
+            <span class="radio-custom"></span>
+            <span class="radio-label">Lecture + Upload de documents</span>
+          </label>
+          <label class="checkbox-item">
+            <input 
+              type="checkbox"
+              [checked]="allowDownload()"
+              (change)="toggleDownload()">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Autoriser le téléchargement</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Validity & Security -->
+      <section class="form-section">
+        <h2 class="section-label">VALIDITÉ ET SÉCURITÉ</h2>
+        <div class="validity-options">
+          <span class="validity-label">Durée de validité</span>
+          <div class="validity-buttons">
+            <button 
+              class="validity-btn"
+              [class.active]="validity() === 30"
+              (click)="setValidity(30)">
+              30 jours
+            </button>
+            <button 
+              class="validity-btn"
+              [class.active]="validity() === 7"
+              (click)="setValidity(7)">
+              7 jours
+            </button>
+            <button 
+              class="validity-btn"
+              [class.active]="validity() === 0"
+              (click)="setValidity(0)">
+              Illimité
+            </button>
+          </div>
+        </div>
+        <label class="checkbox-item">
+          <input 
+            type="checkbox"
+            [checked]="useCode()"
+            (change)="toggleCode()">
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-label">Protéger par un code</span>
+        </label>
+        @if (useCode()) {
+          <input 
+            type="text" 
+            class="code-input"
+            placeholder="Définir un code..."
+            [(ngModel)]="accessCode">
+        }
+      </section>
+    </div>
+
+    <!-- Summary Section -->
+    <section class="form-section summary-section">
+      <h2 class="section-label">RÉCAPITULATIF</h2>
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="summary-title">
+            Partage vers {{ getRecipientName() }}
+          </span>
+          <span class="summary-expiry">
+            {{ validity() > 0 ? 'Expire dans ' + validity() + ' jours' : 'Sans expiration' }}
+          </span>
+        </div>
+        <div class="summary-body">
+          <div class="summary-details">
+            <div class="summary-row">
+              <span class="detail-label">Contenu :</span>
+              <span class="detail-value">{{ getSelectedDocumentsText() }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="detail-label">Permissions :</span>
+              <span class="detail-value">{{ getPermissionsText() }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="detail-label">Sécurité :</span>
+              <span class="detail-value">
+                {{ useCode() ? 'Protégé par code' : 'Lien public (sans code)' }}
+              </span>
+            </div>
+          </div>
+          <div class="summary-actions">
+            <button class="btn btn-primary" (click)="generateLink()">
+              Générer le lien de partage
+            </button>
+            <button class="btn btn-secondary" (click)="generateQRCode()">
+              Générer un QR code
+            </button>
+          </div>
+        </div>
+
+        @if (generatedLink()) {
+          <div class="generated-link">
+            <span class="link-success">Lien généré avec succès</span>
+            <div class="link-row">
+              <input 
+                type="text" 
+                class="link-input" 
+                [value]="generatedLink()" 
+                readonly>
+              <button class="btn btn-copy" (click)="copyLink()">
+                {{ copied() ? 'Copié !' : 'Copier' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</div>
+

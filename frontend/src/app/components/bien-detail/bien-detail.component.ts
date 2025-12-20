@@ -59,6 +59,22 @@ export class BienDetailComponent implements OnInit {
     this.router.navigate(['/dossier', dossierId]);
   }
 
+  // Navigate to edit property page
+  editProperty(): void {
+    const id = this.propertyId();
+    if (id) {
+      this.router.navigate(['/biens', id, 'edit']);
+    }
+  }
+
+  // Navigate to generate candidature link page
+  generateLink(): void {
+    const id = this.propertyId();
+    if (id) {
+      this.router.navigate(['/biens', id, 'lien']);
+    }
+  }
+
   // Get status display label
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {

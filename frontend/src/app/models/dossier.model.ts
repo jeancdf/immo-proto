@@ -34,6 +34,15 @@ export interface Property {
   type: string;
   rent?: number;
   price?: number;
+  // Extended property details
+  description?: string;
+  surface?: number;
+  rooms?: number;
+  floor?: number;
+  hasParking?: boolean;
+  hasCellar?: boolean;
+  hasElevator?: boolean;
+  charges?: number;
 }
 
 export interface AiSummary {
@@ -134,5 +143,16 @@ export interface PropertyWithDossiers {
   };
   lastUpdate: string;
   lastUpdateFormatted: string;
+  // Extended property details
+  description?: string;
+  surface?: number;
+  rooms?: number;
+  floor?: number;
+  hasParking?: boolean;
+  hasCellar?: boolean;
+  hasElevator?: boolean;
+  rent?: number;
+  price?: number;
+  charges?: number;
 }
 

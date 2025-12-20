@@ -269,6 +269,43 @@ export class StateService {
   }
 
   // ============================================
+  // PROPERTY METHODS
+  // ============================================
+
+  /** Update property details */
+  updateProperty(id: number, data: Partial<PropertyWithDossiers>): Observable<PropertyWithDossiers> {
+    return this.http.patch<PropertyWithDossiers>(
+      `${this.baseUrl}/properties/${id}`, 
+      data
+    ).pipe(
+      tap(updatedProperty => {
+        // Update in properties list
+        this.properties.update(properties =>
+          properties.map(p => p.id === id ? { ...p, ...updatedProperty } : p)
+        );
+        // Also update any dossiers that have this property
+        this.dossiers.update(dossiers =>
+          dossiers.map(d => {
+            if (d.property.id === id) {
+              return {
+                ...d,
+                property: {
+                  ...d.property,
+                  address: updatedProperty.address,
+                  city: updatedProperty.city,
+                  zipCode: updatedProperty.zipCode,
+                  type: updatedProperty.type
+                }
+              };
+            }
+            return d;
+          })
+        );
+      })
+    );
+  }
+
+  // ============================================
   // HELPER METHODS
   // ============================================
 

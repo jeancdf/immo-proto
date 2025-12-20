@@ -58,31 +58,121 @@
         "city": "Paris",
         "zipCode": "75002",
         "type": "T2",
-        "rent": 950
+        "rent": 950,
+        "charges": 120,
+        "surface": 45,
+        "rooms": 2,
+        "floor": 3,
+        "hasParking": false,
+        "hasCellar": true,
+        "hasElevator": true,
+        "description": "Bel appartement lumineux au 3ème étage avec ascenseur. Parquet ancien, double vitrage."
       },
       "aiSummary": {
         "description": "Mme Martin est ingénieure en CDI depuis 3 ans chez Thales, avec des revenus nets mensuels de 3 200€ (3.5x le loyer). Situation professionnelle très stable. Garant physique solide (père, retraité cadre sup). Dossier complet et réactif.",
-        "strengths": ["CDI confirmé > 3 ans", "Revenus 3.5x loyer", "Garant solide"],
-        "warnings": ["Dernière quittance de loyer manquante", "Animal de compagnie (chat)"]
+        "strengths": [
+          "CDI confirmé > 3 ans",
+          "Revenus 3.5x loyer",
+          "Garant solide"
+        ],
+        "warnings": [
+          "Dernière quittance de loyer manquante",
+          "Animal de compagnie (chat)"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Dernier avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "3 dernières quittances de loyer", "status": "partial", "received": 2, "total": 3, "required": true },
-        { "id": 6, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de travail",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Dernier avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "3 dernières quittances de loyer",
+          "status": "partial",
+          "received": 2,
+          "total": 3,
+          "required": true
+        },
+        {
+          "id": 6,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Sophie_Martin.pdf", "type": "Identité", "uploadDate": "2023-10-12", "origin": "client", "size": 245000 },
-        { "id": 2, "filename": "Fiches_Paie_Sept_Oct.pdf", "type": "Revenus", "uploadDate": "2023-10-12", "origin": "client", "size": 890000 },
-        { "id": 3, "filename": "Avis_Impot_2023.pdf", "type": "Fiscalité", "uploadDate": "2023-10-13", "origin": "agent", "size": 1200000 },
-        { "id": 4, "filename": "Contrat_Travail_Thales.pdf", "type": "Professionnel", "uploadDate": "2023-10-12", "origin": "client", "size": 560000 }
+        {
+          "id": 1,
+          "filename": "CNI_Sophie_Martin.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-10-12",
+          "origin": "client",
+          "size": 245000
+        },
+        {
+          "id": 2,
+          "filename": "Fiches_Paie_Sept_Oct.pdf",
+          "type": "Revenus",
+          "uploadDate": "2023-10-12",
+          "origin": "client",
+          "size": 890000
+        },
+        {
+          "id": 3,
+          "filename": "Avis_Impot_2023.pdf",
+          "type": "Fiscalité",
+          "uploadDate": "2023-10-13",
+          "origin": "agent",
+          "size": 1200000
+        },
+        {
+          "id": 4,
+          "filename": "Contrat_Travail_Thales.pdf",
+          "type": "Professionnel",
+          "uploadDate": "2023-10-12",
+          "origin": "client",
+          "size": 560000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T10:30:00Z", "action": "Avis d'imposition ajouté par Thomas D.", "type": "document" },
-        { "id": 2, "date": "2023-12-18T18:45:00Z", "action": "Relance automatique envoyée (Email)", "type": "notification" },
-        { "id": 3, "date": "2023-10-12T09:15:00Z", "action": "Dossier créé par Sophie Martin", "type": "creation" }
+        {
+          "id": 1,
+          "date": "2023-12-19T10:30:00Z",
+          "action": "Avis d'imposition ajouté par Thomas D.",
+          "type": "document"
+        },
+        {
+          "id": 2,
+          "date": "2023-12-18T18:45:00Z",
+          "action": "Relance automatique envoyée (Email)",
+          "type": "notification"
+        },
+        {
+          "id": 3,
+          "date": "2023-10-12T09:15:00Z",
+          "action": "Dossier créé par Sophie Martin",
+          "type": "creation"
+        }
       ]
     },
     {
@@ -112,24 +202,82 @@
       },
       "aiSummary": {
         "description": "M. Dubois est directeur commercial avec 8 ans d'ancienneté. Revenus confortables de 5 500€/mois. Dossier exemplaire avec tous les documents fournis rapidement.",
-        "strengths": ["Revenus élevés (3x loyer)", "Ancienneté professionnelle", "Dossier complet"],
+        "strengths": [
+          "Revenus élevés (3x loyer)",
+          "Ancienneté professionnelle",
+          "Dossier complet"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Dernier avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "3 dernières quittances de loyer", "status": "received", "required": true },
-        { "id": 6, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de travail",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Dernier avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "3 dernières quittances de loyer",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 6,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Marc_Dubois.pdf", "type": "Identité", "uploadDate": "2023-10-10", "origin": "client", "size": 312000 },
-        { "id": 2, "filename": "Contrat_CDI_Dubois.pdf", "type": "Professionnel", "uploadDate": "2023-10-10", "origin": "client", "size": 445000 }
+        {
+          "id": 1,
+          "filename": "CNI_Marc_Dubois.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-10-10",
+          "origin": "client",
+          "size": 312000
+        },
+        {
+          "id": 2,
+          "filename": "Contrat_CDI_Dubois.pdf",
+          "type": "Professionnel",
+          "uploadDate": "2023-10-10",
+          "origin": "client",
+          "size": 445000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-18T14:15:00Z", "action": "Dossier validé - Complet", "type": "update" },
-        { "id": 2, "date": "2023-10-10T14:00:00Z", "action": "Dossier créé", "type": "creation" }
+        {
+          "id": 1,
+          "date": "2023-12-18T14:15:00Z",
+          "action": "Dossier validé - Complet",
+          "type": "update"
+        },
+        {
+          "id": 2,
+          "date": "2023-10-10T14:00:00Z",
+          "action": "Dossier créé",
+          "type": "creation"
+        }
       ]
     },
     {
@@ -159,20 +307,59 @@
       },
       "aiSummary": {
         "description": "Mme Fontaine vend son appartement familial suite à un déménagement professionnel. Bien en bon état, diagnostics à jour. Négociation en cours.",
-        "strengths": ["Propriétaire depuis 15 ans", "Diagnostics complets", "Prix cohérent avec le marché"],
-        "warnings": ["Travaux de copropriété prévus", "Délai de vente souhaité court"]
+        "strengths": [
+          "Propriétaire depuis 15 ans",
+          "Diagnostics complets",
+          "Prix cohérent avec le marché"
+        ],
+        "warnings": [
+          "Travaux de copropriété prévus",
+          "Délai de vente souhaité court"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
-        { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
-        { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Diagnostics techniques",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "PV assemblée générale",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Règlement de copropriété",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Titre_Propriete_Fontaine.pdf", "type": "Propriété", "uploadDate": "2023-10-20", "origin": "client", "size": 2100000 }
+        {
+          "id": 1,
+          "filename": "Titre_Propriete_Fontaine.pdf",
+          "type": "Propriété",
+          "uploadDate": "2023-10-20",
+          "origin": "client",
+          "size": 2100000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-17T16:00:00Z", "action": "Visite programmée avec acheteur potentiel", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-17T16:00:00Z",
+          "action": "Visite programmée avec acheteur potentiel",
+          "type": "update"
+        }
       ]
     },
     {
@@ -182,7 +369,7 @@
       "status": "archive",
       "score": null,
       "createdAt": "2023-09-01T08:00:00Z",
-      "updatedAt": "2023-09-15T12:00:00Z",
+      "updatedAt": "2025-12-20T18:22:41.862Z",
       "agentId": 2,
       "client": {
         "id": 4,
@@ -198,7 +385,16 @@
         "city": "Paris",
         "zipCode": "75009",
         "type": "Studio",
-        "rent": 750
+        "rent": 780,
+        "description": "",
+        "surface": 40,
+        "rooms": null,
+        "floor": null,
+        "hasParking": false,
+        "hasCellar": false,
+        "hasElevator": false,
+        "price": null,
+        "charges": 148
       },
       "aiSummary": {
         "description": "Dossier archivé - Le candidat a trouvé un autre logement.",
@@ -208,7 +404,12 @@
       "checklist": [],
       "documents": [],
       "history": [
-        { "id": 1, "date": "2023-09-15T12:00:00Z", "action": "Dossier archivé - Candidat désisté", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-09-15T12:00:00Z",
+          "action": "Dossier archivé - Candidat désisté",
+          "type": "update"
+        }
       ]
     },
     {
@@ -238,21 +439,65 @@
       },
       "aiSummary": {
         "description": "Mme Bernard est avocate associée dans un cabinet renommé. Revenus très élevés (8 500€/mois). Excellente solvabilité. Dossier impeccable.",
-        "strengths": ["Profession libérale stable", "Revenus 4x le loyer", "Références excellentes", "Pas d'animaux"],
+        "strengths": [
+          "Profession libérale stable",
+          "Revenus 4x le loyer",
+          "Références excellentes",
+          "Pas d'animaux"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Justificatif de revenus", "status": "received", "required": true },
-        { "id": 3, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 4, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Justificatif de revenus",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Bernard.pdf", "type": "Identité", "uploadDate": "2023-11-05", "origin": "client", "size": 289000 },
-        { "id": 2, "filename": "Revenus_2023_Bernard.pdf", "type": "Revenus", "uploadDate": "2023-11-05", "origin": "client", "size": 567000 }
+        {
+          "id": 1,
+          "filename": "CNI_Bernard.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-11-05",
+          "origin": "client",
+          "size": 289000
+        },
+        {
+          "id": 2,
+          "filename": "Revenus_2023_Bernard.pdf",
+          "type": "Revenus",
+          "uploadDate": "2023-11-05",
+          "origin": "client",
+          "size": 567000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T09:00:00Z", "action": "Bail signé", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T09:00:00Z",
+          "action": "Bail signé",
+          "type": "update"
+        }
       ]
     },
     {
@@ -282,21 +527,65 @@
       },
       "aiSummary": {
         "description": "M. Moreau vend son appartement de prestige Place Vendôme. Bien d'exception en parfait état. Vente finalisée avec succès.",
-        "strengths": ["Emplacement premium", "État impeccable", "Documentation complète", "Acheteur solvable trouvé"],
+        "strengths": [
+          "Emplacement premium",
+          "État impeccable",
+          "Documentation complète",
+          "Acheteur solvable trouvé"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
-        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
-        { "id": 4, "name": "Compromis de vente", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Diagnostics techniques",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "PV assemblée générale",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Compromis de vente",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Diagnostics_Vendome.pdf", "type": "Diagnostics", "uploadDate": "2023-10-01", "origin": "agent", "size": 3400000 },
-        { "id": 2, "filename": "Compromis_Moreau.pdf", "type": "Juridique", "uploadDate": "2023-11-20", "origin": "agent", "size": 1200000 }
+        {
+          "id": 1,
+          "filename": "Diagnostics_Vendome.pdf",
+          "type": "Diagnostics",
+          "uploadDate": "2023-10-01",
+          "origin": "agent",
+          "size": 3400000
+        },
+        {
+          "id": 2,
+          "filename": "Compromis_Moreau.pdf",
+          "type": "Juridique",
+          "uploadDate": "2023-11-20",
+          "origin": "agent",
+          "size": 1200000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-15T11:00:00Z", "action": "Acte de vente signé chez le notaire", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-15T11:00:00Z",
+          "action": "Acte de vente signé chez le notaire",
+          "type": "update"
+        }
       ]
     },
     {
@@ -326,21 +615,67 @@
       },
       "aiSummary": {
         "description": "M. Lefebvre est développeur freelance. Revenus variables mais moyens corrects. Nécessite un garant pour sécuriser le dossier.",
-        "strengths": ["Secteur professionnel porteur", "Épargne conséquente"],
-        "warnings": ["Revenus variables", "Pas de garant fourni", "Plusieurs documents manquants"]
+        "strengths": [
+          "Secteur professionnel porteur",
+          "Épargne conséquente"
+        ],
+        "warnings": [
+          "Revenus variables",
+          "Pas de garant fourni",
+          "Plusieurs documents manquants"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Justificatif de revenus", "status": "partial", "received": 1, "total": 3, "required": true },
-        { "id": 3, "name": "Avis d'imposition", "status": "pending", "required": true },
-        { "id": 4, "name": "Attestation garant", "status": "pending", "required": true },
-        { "id": 5, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Justificatif de revenus",
+          "status": "partial",
+          "received": 1,
+          "total": 3,
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "Avis d'imposition",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Attestation garant",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Lefebvre.pdf", "type": "Identité", "uploadDate": "2023-12-01", "origin": "client", "size": 256000 }
+        {
+          "id": 1,
+          "filename": "CNI_Lefebvre.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-12-01",
+          "origin": "client",
+          "size": 256000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-18T16:30:00Z", "action": "Relance envoyée pour documents manquants", "type": "notification" }
+        {
+          "id": 1,
+          "date": "2023-12-18T16:30:00Z",
+          "action": "Relance envoyée pour documents manquants",
+          "type": "notification"
+        }
       ]
     },
     {
@@ -370,22 +705,72 @@
       },
       "aiSummary": {
         "description": "Mme Rousseau est enseignante titulaire de l'Éducation Nationale. Revenus stables. Dossier en cours de validation finale.",
-        "strengths": ["Fonctionnaire titulaire", "Stabilité de l'emploi", "Revenus réguliers"],
-        "warnings": ["Revenus justes (2.5x loyer)"]
+        "strengths": [
+          "Fonctionnaire titulaire",
+          "Stabilité de l'emploi",
+          "Revenus réguliers"
+        ],
+        "warnings": [
+          "Revenus justes (2.5x loyer)"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Attestation employeur", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Attestation employeur",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Rousseau.pdf", "type": "Identité", "uploadDate": "2023-11-20", "origin": "client", "size": 278000 },
-        { "id": 2, "filename": "Attestation_Education_Nationale.pdf", "type": "Professionnel", "uploadDate": "2023-11-21", "origin": "client", "size": 145000 }
+        {
+          "id": 1,
+          "filename": "CNI_Rousseau.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-11-20",
+          "origin": "client",
+          "size": 278000
+        },
+        {
+          "id": 2,
+          "filename": "Attestation_Education_Nationale.pdf",
+          "type": "Professionnel",
+          "uploadDate": "2023-11-21",
+          "origin": "client",
+          "size": 145000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T14:00:00Z", "action": "Validation en cours par le propriétaire", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T14:00:00Z",
+          "action": "Validation en cours par le propriétaire",
+          "type": "update"
+        }
       ]
     },
     {
@@ -415,20 +800,59 @@
       },
       "aiSummary": {
         "description": "M. Garnier souhaite vendre rapidement pour un projet à l'étranger. Plusieurs diagnostics à refaire, dossier incomplet.",
-        "strengths": ["Motivation forte du vendeur", "Prix attractif"],
-        "warnings": ["Diagnostics expirés", "Travaux à prévoir", "Charges de copropriété élevées"]
+        "strengths": [
+          "Motivation forte du vendeur",
+          "Prix attractif"
+        ],
+        "warnings": [
+          "Diagnostics expirés",
+          "Travaux à prévoir",
+          "Charges de copropriété élevées"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Diagnostics techniques", "status": "pending", "required": true },
-        { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
-        { "id": 4, "name": "Règlement de copropriété", "status": "pending", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Diagnostics techniques",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "PV assemblée générale",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Règlement de copropriété",
+          "status": "pending",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Titre_Garnier.pdf", "type": "Propriété", "uploadDate": "2023-12-10", "origin": "client", "size": 1890000 }
+        {
+          "id": 1,
+          "filename": "Titre_Garnier.pdf",
+          "type": "Propriété",
+          "uploadDate": "2023-12-10",
+          "origin": "client",
+          "size": 1890000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T11:00:00Z", "action": "Diagnostiqueur contacté", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T11:00:00Z",
+          "action": "Diagnostiqueur contacté",
+          "type": "update"
+        }
       ]
     },
     {
@@ -458,21 +882,63 @@
       },
       "aiSummary": {
         "description": "Mme Petit est directrice marketing chez L'Oréal. Excellents revenus et stabilité professionnelle. Dossier parfait.",
-        "strengths": ["CDI cadre supérieur", "Revenus 4x loyer", "Employeur de renom", "Aucun incident bancaire"],
+        "strengths": [
+          "CDI cadre supérieur",
+          "Revenus 4x loyer",
+          "Employeur de renom",
+          "Aucun incident bancaire"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de travail",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Dossier_Complet_Petit.pdf", "type": "Dossier", "uploadDate": "2023-11-01", "origin": "client", "size": 4500000 }
+        {
+          "id": 1,
+          "filename": "Dossier_Complet_Petit.pdf",
+          "type": "Dossier",
+          "uploadDate": "2023-11-01",
+          "origin": "client",
+          "size": 4500000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-10T17:00:00Z", "action": "Bail signé - Entrée le 01/01/2024", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-10T17:00:00Z",
+          "action": "Bail signé - Entrée le 01/01/2024",
+          "type": "update"
+        }
       ]
     },
     {
@@ -503,15 +969,34 @@
       "aiSummary": {
         "description": "Dossier refusé - Revenus insuffisants et aucun garant acceptable.",
         "strengths": [],
-        "warnings": ["Revenus insuffisants", "Garant non éligible", "Historique bancaire problématique"]
+        "warnings": [
+          "Revenus insuffisants",
+          "Garant non éligible",
+          "Historique bancaire problématique"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Justificatif de revenus", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Justificatif de revenus",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [],
       "history": [
-        { "id": 1, "date": "2023-09-01T09:00:00Z", "action": "Dossier refusé par le propriétaire", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-09-01T09:00:00Z",
+          "action": "Dossier refusé par le propriétaire",
+          "type": "update"
+        }
       ]
     },
     {
@@ -519,7 +1004,7 @@
       "reference": "DOS-2023-012",
       "type": "vente",
       "status": "en_cours",
-      "score": 8.0,
+      "score": 8,
       "createdAt": "2023-11-25T14:00:00Z",
       "updatedAt": "2023-12-19T10:00:00Z",
       "agentId": 2,
@@ -541,20 +1026,58 @@
       },
       "aiSummary": {
         "description": "Mme Simon vend pour financer l'achat d'une maison en banlieue. Bien en bon état, visites en cours.",
-        "strengths": ["Bien entretenu", "Quartier recherché", "Prix dans le marché"],
-        "warnings": ["Copropriété avec travaux votés"]
+        "strengths": [
+          "Bien entretenu",
+          "Quartier recherché",
+          "Prix dans le marché"
+        ],
+        "warnings": [
+          "Copropriété avec travaux votés"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
-        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
-        { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Diagnostics techniques",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "PV assemblée générale",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Règlement de copropriété",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Diagnostics_Simon.pdf", "type": "Diagnostics", "uploadDate": "2023-11-25", "origin": "agent", "size": 2800000 }
+        {
+          "id": 1,
+          "filename": "Diagnostics_Simon.pdf",
+          "type": "Diagnostics",
+          "uploadDate": "2023-11-25",
+          "origin": "agent",
+          "size": 2800000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T10:00:00Z", "action": "3ème visite programmée", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T10:00:00Z",
+          "action": "3ème visite programmée",
+          "type": "update"
+        }
       ]
     },
     {
@@ -584,22 +1107,75 @@
       },
       "aiSummary": {
         "description": "M. Mercier est consultant en stratégie. Bons revenus mais contrat de mission. Garant Visale accepté.",
-        "strengths": ["Revenus corrects", "Garant Visale validé", "Profil professionnel sérieux"],
-        "warnings": ["Contrat de mission (pas de CDI)", "Historique locatif court"]
+        "strengths": [
+          "Revenus corrects",
+          "Garant Visale validé",
+          "Profil professionnel sérieux"
+        ],
+        "warnings": [
+          "Contrat de mission (pas de CDI)",
+          "Historique locatif court"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de mission", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "partial", "received": 2, "total": 3, "required": true },
-        { "id": 4, "name": "Attestation Visale", "status": "received", "required": true },
-        { "id": 5, "name": "RIB", "status": "pending", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de mission",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "partial",
+          "received": 2,
+          "total": 3,
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Attestation Visale",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "RIB",
+          "status": "pending",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Mercier.pdf", "type": "Identité", "uploadDate": "2023-12-15", "origin": "client", "size": 234000 },
-        { "id": 2, "filename": "Visale_Mercier.pdf", "type": "Garantie", "uploadDate": "2023-12-16", "origin": "client", "size": 89000 }
+        {
+          "id": 1,
+          "filename": "CNI_Mercier.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-12-15",
+          "origin": "client",
+          "size": 234000
+        },
+        {
+          "id": 2,
+          "filename": "Visale_Mercier.pdf",
+          "type": "Garantie",
+          "uploadDate": "2023-12-16",
+          "origin": "client",
+          "size": 89000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T15:00:00Z", "action": "RIB demandé au candidat", "type": "notification" }
+        {
+          "id": 1,
+          "date": "2023-12-19T15:00:00Z",
+          "action": "RIB demandé au candidat",
+          "type": "notification"
+        }
       ]
     },
     {
@@ -635,7 +1211,12 @@
       "checklist": [],
       "documents": [],
       "history": [
-        { "id": 1, "date": "2023-08-15T14:00:00Z", "action": "Mandat annulé à la demande du vendeur", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-08-15T14:00:00Z",
+          "action": "Mandat annulé à la demande du vendeur",
+          "type": "update"
+        }
       ]
     },
     {
@@ -665,21 +1246,64 @@
       },
       "aiSummary": {
         "description": "Mme Blanc est médecin hospitalier. Revenus stables et élevés. Dossier en attente de décision du propriétaire.",
-        "strengths": ["Profession médicale", "Revenus 4x loyer", "CDI fonction publique hospitalière"],
-        "warnings": ["Horaires de travail décalés"]
+        "strengths": [
+          "Profession médicale",
+          "Revenus 4x loyer",
+          "CDI fonction publique hospitalière"
+        ],
+        "warnings": [
+          "Horaires de travail décalés"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Attestation employeur", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Attestation employeur",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Dossier_Blanc.pdf", "type": "Dossier", "uploadDate": "2023-12-05", "origin": "client", "size": 3200000 }
+        {
+          "id": 1,
+          "filename": "Dossier_Blanc.pdf",
+          "type": "Dossier",
+          "uploadDate": "2023-12-05",
+          "origin": "client",
+          "size": 3200000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T12:00:00Z", "action": "Dossier transmis au propriétaire", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T12:00:00Z",
+          "action": "Dossier transmis au propriétaire",
+          "type": "update"
+        }
       ]
     },
     {
@@ -709,22 +1333,69 @@
       },
       "aiSummary": {
         "description": "M. Roux est banquier d'affaires. Revenus exceptionnels. Dossier validé immédiatement.",
-        "strengths": ["Revenus très élevés (6x loyer)", "Employeur prestigieux", "Patrimoine solide", "Excellent historique locatif"],
+        "strengths": [
+          "Revenus très élevés (6x loyer)",
+          "Employeur prestigieux",
+          "Patrimoine solide",
+          "Excellent historique locatif"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "Quittances de loyer", "status": "received", "required": true },
-        { "id": 6, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de travail",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "Quittances de loyer",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 6,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Dossier_Complet_Roux.pdf", "type": "Dossier", "uploadDate": "2023-10-25", "origin": "client", "size": 5100000 }
+        {
+          "id": 1,
+          "filename": "Dossier_Complet_Roux.pdf",
+          "type": "Dossier",
+          "uploadDate": "2023-10-25",
+          "origin": "client",
+          "size": 5100000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-11-30T10:00:00Z", "action": "Locataire installé", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-11-30T10:00:00Z",
+          "action": "Locataire installé",
+          "type": "update"
+        }
       ]
     },
     {
@@ -754,20 +1425,56 @@
       },
       "aiSummary": {
         "description": "Vente réussie. Appartement familial vendu à un couple avec enfants. Transaction fluide.",
-        "strengths": ["Bien en excellent état", "Quartier familial", "Transaction rapide"],
+        "strengths": [
+          "Bien en excellent état",
+          "Quartier familial",
+          "Transaction rapide"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
-        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
-        { "id": 4, "name": "Acte de vente", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Diagnostics techniques",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "PV assemblée générale",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Acte de vente",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Acte_Vente_Vincent.pdf", "type": "Juridique", "uploadDate": "2023-12-01", "origin": "agent", "size": 2300000 }
+        {
+          "id": 1,
+          "filename": "Acte_Vente_Vincent.pdf",
+          "type": "Juridique",
+          "uploadDate": "2023-12-01",
+          "origin": "agent",
+          "size": 2300000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-01T15:00:00Z", "action": "Vente finalisée", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-01T15:00:00Z",
+          "action": "Vente finalisée",
+          "type": "update"
+        }
       ]
     },
     {
@@ -777,7 +1484,7 @@
       "status": "a_completer",
       "score": 6.8,
       "createdAt": "2023-12-18T10:00:00Z",
-      "updatedAt": "2023-12-19T16:00:00Z",
+      "updatedAt": "2025-12-20T18:22:41.864Z",
       "agentId": 4,
       "client": {
         "id": 18,
@@ -793,25 +1500,81 @@
         "city": "Paris",
         "zipCode": "75009",
         "type": "Studio",
-        "rent": 750
+        "rent": 780,
+        "description": "",
+        "surface": 40,
+        "rooms": null,
+        "floor": null,
+        "hasParking": false,
+        "hasCellar": false,
+        "hasElevator": false,
+        "price": null,
+        "charges": 148
       },
       "aiSummary": {
         "description": "M. Girard est étudiant en Master avec un job étudiant. Parents garants solides.",
-        "strengths": ["Garants parentaux solides", "Étudiant sérieux"],
-        "warnings": ["Revenus personnels faibles", "Premier logement"]
+        "strengths": [
+          "Garants parentaux solides",
+          "Étudiant sérieux"
+        ],
+        "warnings": [
+          "Revenus personnels faibles",
+          "Premier logement"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Certificat de scolarité", "status": "received", "required": true },
-        { "id": 3, "name": "Justificatifs garants", "status": "partial", "received": 1, "total": 2, "required": true },
-        { "id": 4, "name": "RIB", "status": "pending", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Certificat de scolarité",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "Justificatifs garants",
+          "status": "partial",
+          "received": 1,
+          "total": 2,
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "RIB",
+          "status": "pending",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "CNI_Girard.pdf", "type": "Identité", "uploadDate": "2023-12-18", "origin": "client", "size": 198000 },
-        { "id": 2, "filename": "Certificat_Scolarite.pdf", "type": "Scolarité", "uploadDate": "2023-12-18", "origin": "client", "size": 67000 }
+        {
+          "id": 1,
+          "filename": "CNI_Girard.pdf",
+          "type": "Identité",
+          "uploadDate": "2023-12-18",
+          "origin": "client",
+          "size": 198000
+        },
+        {
+          "id": 2,
+          "filename": "Certificat_Scolarite.pdf",
+          "type": "Scolarité",
+          "uploadDate": "2023-12-18",
+          "origin": "client",
+          "size": 67000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T16:00:00Z", "action": "En attente des justificatifs des garants", "type": "notification" }
+        {
+          "id": 1,
+          "date": "2023-12-19T16:00:00Z",
+          "action": "En attente des justificatifs des garants",
+          "type": "notification"
+        }
       ]
     },
     {
@@ -841,20 +1604,59 @@
       },
       "aiSummary": {
         "description": "Mme Morel vend l'appartement de ses parents décédés. Succession en cours, quelques formalités à régler.",
-        "strengths": ["Emplacement exceptionnel", "Grand volume", "Beaux éléments d'époque"],
-        "warnings": ["Succession en cours", "Travaux de rafraîchissement nécessaires"]
+        "strengths": [
+          "Emplacement exceptionnel",
+          "Grand volume",
+          "Beaux éléments d'époque"
+        ],
+        "warnings": [
+          "Succession en cours",
+          "Travaux de rafraîchissement nécessaires"
+        ]
       },
       "checklist": [
-        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
-        { "id": 2, "name": "Acte de succession", "status": "pending", "required": true },
-        { "id": 3, "name": "Diagnostics techniques", "status": "received", "required": true },
-        { "id": 4, "name": "PV assemblée générale", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Titre de propriété",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Acte de succession",
+          "status": "pending",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "Diagnostics techniques",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "PV assemblée générale",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Diagnostics_Morel.pdf", "type": "Diagnostics", "uploadDate": "2023-12-12", "origin": "agent", "size": 4100000 }
+        {
+          "id": 1,
+          "filename": "Diagnostics_Morel.pdf",
+          "type": "Diagnostics",
+          "uploadDate": "2023-12-12",
+          "origin": "agent",
+          "size": 4100000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-19T11:30:00Z", "action": "Notaire contacté pour acte de succession", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-19T11:30:00Z",
+          "action": "Notaire contacté pour acte de succession",
+          "type": "update"
+        }
       ]
     },
     {
@@ -884,22 +1686,69 @@
       },
       "aiSummary": {
         "description": "M. Faure est chef de projet digital. CDI solide, revenus confortables. Dossier parfait.",
-        "strengths": ["CDI confirmé", "Revenus 3.5x loyer", "Très bon historique locatif", "Profil stable"],
+        "strengths": [
+          "CDI confirmé",
+          "Revenus 3.5x loyer",
+          "Très bon historique locatif",
+          "Profil stable"
+        ],
         "warnings": []
       },
       "checklist": [
-        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
-        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
-        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
-        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
-        { "id": 5, "name": "Quittances de loyer", "status": "received", "required": true },
-        { "id": 6, "name": "RIB", "status": "received", "required": true }
+        {
+          "id": 1,
+          "name": "Carte d'identité R/V",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "Contrat de travail",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 3,
+          "name": "3 dernières fiches de paie",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 4,
+          "name": "Avis d'imposition",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 5,
+          "name": "Quittances de loyer",
+          "status": "received",
+          "required": true
+        },
+        {
+          "id": 6,
+          "name": "RIB",
+          "status": "received",
+          "required": true
+        }
       ],
       "documents": [
-        { "id": 1, "filename": "Dossier_Faure.pdf", "type": "Dossier", "uploadDate": "2023-11-15", "origin": "client", "size": 3800000 }
+        {
+          "id": 1,
+          "filename": "Dossier_Faure.pdf",
+          "type": "Dossier",
+          "uploadDate": "2023-11-15",
+          "origin": "client",
+          "size": 3800000
+        }
       ],
       "history": [
-        { "id": 1, "date": "2023-12-05T14:00:00Z", "action": "Bail signé, entrée le 15/12", "type": "update" }
+        {
+          "id": 1,
+          "date": "2023-12-05T14:00:00Z",
+          "action": "Bail signé, entrée le 15/12",
+          "type": "update"
+        }
       ]
     }
   ],

@@ -177,7 +177,7 @@
         <div class="card actions-card">
           <h3 class="sidebar-title">Actions rapides</h3>
 
-          <button class="action-btn primary">
+          <button class="action-btn primary" (click)="shareDossier()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                  stroke-width="2">
               <circle cx="18" cy="5" r="3"/>
@@ -189,7 +189,7 @@
             Partager le dossier
           </button>
 
-          <button class="action-btn secondary">
+          <button class="action-btn secondary" (click)="sendReminder()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                  stroke-width="2">
               <line x1="22" y1="2" x2="11" y2="13"/>
@@ -198,13 +198,13 @@
             Relancer pièces manquantes
           </button>
 
-          <button class="action-btn secondary">
+          <button class="action-btn secondary" (click)="copyDepositLink()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                  stroke-width="2">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
             </svg>
-            Copier lien de dépôt
+            {{ linkCopied() ? 'Lien copié !' : 'Copier lien de dépôt' }}
           </button>
         </div>
 

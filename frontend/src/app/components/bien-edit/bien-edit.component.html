@@ -1,0 +1,271 @@
+<div class="edit-page">
+  <!-- Header with breadcrumb -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a routerLink="/biens" class="breadcrumb-link">Biens</a>
+      <span class="breadcrumb-sep">/</span>
+      @if (property(); as prop) {
+        <a [routerLink]="['/biens', propertyId()]" class="breadcrumb-link">
+          {{ prop.address }}
+        </a>
+        <span class="breadcrumb-sep">/</span>
+      }
+      <span class="breadcrumb-current">Modifier</span>
+    </div>
+    <h1 class="page-title">Modifier le bien</h1>
+    @if (property(); as prop) {
+      <p class="page-subtitle">
+        {{ prop.dossierCount }} dossier(s) associé(s) à ce bien
+      </p>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement du bien...</p>
+    </div>
+  } @else {
+    <form (ngSubmit)="onSubmit()" class="edit-form">
+      <div class="form-grid">
+        <!-- Left Column: Address & Location -->
+        <div class="form-column">
+          <!-- Address Section -->
+          <div class="form-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2" class="card-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <h2 class="card-title">Adresse du bien</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Adresse *</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.address" 
+                  name="address"
+                  placeholder="12 rue de la Paix"
+                  required>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Ville *</label>
+                  <input 
+                    type="text" 
+                    class="form-input"
+                    [(ngModel)]="formData.city" 
+                    name="city"
+                    placeholder="Paris"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Code postal *</label>
+                  <input 
+                    type="text" 
+                    class="form-input"
+                    [(ngModel)]="formData.zipCode" 
+                    name="zipCode"
+                    placeholder="75001"
+                    required>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description Section -->
+          <div class="form-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2" class="card-icon">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <h2 class="card-title">Description</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">
+                  Description du bien
+                  <span class="label-hint">(optionnel)</span>
+                </label>
+                <textarea 
+                  class="form-textarea"
+                  [(ngModel)]="formData.description" 
+                  name="description"
+                  rows="4"
+                  placeholder="Décrivez le bien : état général, équipements, particularités...">
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Details & Features -->
+        <div class="form-column">
+          <!-- Property Details Section -->
+          <div class="form-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2" class="card-icon">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9,22 9,12 15,12 15,22"/>
+              </svg>
+              <h2 class="card-title">Caractéristiques</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Type de bien *</label>
+                <select 
+                  class="form-select"
+                  [(ngModel)]="formData.type" 
+                  name="type"
+                  required>
+                  @for (type of propertyTypes; track type) {
+                    <option [value]="type">{{ type }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-row three-cols">
+                <div class="form-group">
+                  <label class="form-label">Surface (m²)</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.surface" 
+                    name="surface"
+                    placeholder="45">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Pièces</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.rooms" 
+                    name="rooms"
+                    placeholder="2">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Étage</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.floor" 
+                    name="floor"
+                    placeholder="3">
+                </div>
+              </div>
+
+              <!-- Features Checkboxes -->
+              <div class="form-group">
+                <label class="form-label">Équipements</label>
+                <div class="checkbox-grid">
+                  <label class="checkbox-item">
+                    <input 
+                      type="checkbox"
+                      [(ngModel)]="formData.hasParking"
+                      name="hasParking">
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Parking</span>
+                  </label>
+                  <label class="checkbox-item">
+                    <input 
+                      type="checkbox"
+                      [(ngModel)]="formData.hasCellar"
+                      name="hasCellar">
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Cave</span>
+                  </label>
+                  <label class="checkbox-item">
+                    <input 
+                      type="checkbox"
+                      [(ngModel)]="formData.hasElevator"
+                      name="hasElevator">
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Ascenseur</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Details -->
+          <div class="form-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2" class="card-icon">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <h2 class="card-title">Informations financières</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Loyer mensuel (€)</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.rent" 
+                    name="rent"
+                    placeholder="950">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Charges (€/mois)</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.charges" 
+                    name="charges"
+                    placeholder="150">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Prix de vente (€)</label>
+                <input 
+                  type="number" 
+                  class="form-input"
+                  [(ngModel)]="formData.price" 
+                  name="price"
+                  placeholder="350000">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Footer -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="cancel()">
+          Annuler
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Enregistrement...
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2" class="btn-icon">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17,21 17,13 7,13 7,21"/>
+              <polyline points="7,3 7,8 15,8"/>
+            </svg>
+            Enregistrer les modifications
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>
+

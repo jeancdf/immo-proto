@@ -54,9 +54,39 @@
   margin: 0;
 }
 
-.header-stats {
+.header-actions {
   display: flex;
+  align-items: center;
   gap: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-edit {
+  background: #fff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-edit:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .stat-box {
