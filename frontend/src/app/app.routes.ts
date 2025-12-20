@@ -18,6 +18,8 @@ import { PropertyLinkComponent } from
   './components/property-link/property-link.component';
 import { PublicApplicationComponent } from 
   './components/public-application/public-application.component';
+import { ParametresComponent } from 
+  './components/parametres/parametres.component';
 
 /**
  * Application Routes
