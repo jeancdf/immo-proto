@@ -1,0 +1,912 @@
+{
+  "agency": {
+    "id": 1,
+    "name": "Agence ImmoParis",
+    "address": "25 Avenue des Champs-Élysées, 75008 Paris"
+  },
+  "agents": [
+    {
+      "id": 1,
+      "name": "Thomas D.",
+      "fullName": "Thomas Dupont",
+      "email": "thomas.dupont@immoparis.fr",
+      "role": "agent"
+    },
+    {
+      "id": 2,
+      "name": "Julie M.",
+      "fullName": "Julie Martin",
+      "email": "julie.martin@immoparis.fr",
+      "role": "agent"
+    },
+    {
+      "id": 3,
+      "name": "Paul H.",
+      "fullName": "Paul Hernandez",
+      "email": "paul.hernandez@immoparis.fr",
+      "role": "agent"
+    },
+    {
+      "id": 4,
+      "name": "Marie L.",
+      "fullName": "Marie Leroy",
+      "email": "marie.leroy@immoparis.fr",
+      "role": "agent"
+    }
+  ],
+  "dossiers": [
+    {
+      "id": 1,
+      "reference": "DOS-2023-001",
+      "type": "location",
+      "status": "a_completer",
+      "score": 8.4,
+      "createdAt": "2023-10-12T09:15:00Z",
+      "updatedAt": "2023-12-19T10:30:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 1,
+        "firstName": "Sophie",
+        "lastName": "Martin",
+        "email": "sophie.martin@email.com",
+        "phone": "06 12 34 56 78",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 1,
+        "address": "12 rue de la Paix",
+        "city": "Paris",
+        "zipCode": "75002",
+        "type": "T2",
+        "rent": 950
+      },
+      "aiSummary": {
+        "description": "Mme Martin est ingénieure en CDI depuis 3 ans chez Thales, avec des revenus nets mensuels de 3 200€ (3.5x le loyer). Situation professionnelle très stable. Garant physique solide (père, retraité cadre sup). Dossier complet et réactif.",
+        "strengths": ["CDI confirmé > 3 ans", "Revenus 3.5x loyer", "Garant solide"],
+        "warnings": ["Dernière quittance de loyer manquante", "Animal de compagnie (chat)"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Dernier avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "3 dernières quittances de loyer", "status": "partial", "received": 2, "total": 3, "required": true },
+        { "id": 6, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Sophie_Martin.pdf", "type": "Identité", "uploadDate": "2023-10-12", "origin": "client", "size": 245000 },
+        { "id": 2, "filename": "Fiches_Paie_Sept_Oct.pdf", "type": "Revenus", "uploadDate": "2023-10-12", "origin": "client", "size": 890000 },
+        { "id": 3, "filename": "Avis_Impot_2023.pdf", "type": "Fiscalité", "uploadDate": "2023-10-13", "origin": "agent", "size": 1200000 },
+        { "id": 4, "filename": "Contrat_Travail_Thales.pdf", "type": "Professionnel", "uploadDate": "2023-10-12", "origin": "client", "size": 560000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T10:30:00Z", "action": "Avis d'imposition ajouté par Thomas D.", "type": "document" },
+        { "id": 2, "date": "2023-12-18T18:45:00Z", "action": "Relance automatique envoyée (Email)", "type": "notification" },
+        { "id": 3, "date": "2023-10-12T09:15:00Z", "action": "Dossier créé par Sophie Martin", "type": "creation" }
+      ]
+    },
+    {
+      "id": 2,
+      "reference": "DOS-2023-002",
+      "type": "location",
+      "status": "complet",
+      "score": 9,
+      "createdAt": "2023-10-10T14:00:00Z",
+      "updatedAt": "2023-12-18T14:15:00Z",
+      "agentId": 2,
+      "client": {
+        "id": 2,
+        "firstName": "Marc",
+        "lastName": "Dubois",
+        "email": "marc.dubois@email.com",
+        "phone": "06 98 76 54 32",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 2,
+        "address": "88 Av. des Champs-Élysées",
+        "city": "Paris",
+        "zipCode": "75008",
+        "type": "T3",
+        "rent": 1800
+      },
+      "aiSummary": {
+        "description": "M. Dubois est directeur commercial avec 8 ans d'ancienneté. Revenus confortables de 5 500€/mois. Dossier exemplaire avec tous les documents fournis rapidement.",
+        "strengths": ["Revenus élevés (3x loyer)", "Ancienneté professionnelle", "Dossier complet"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Dernier avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "3 dernières quittances de loyer", "status": "received", "required": true },
+        { "id": 6, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Marc_Dubois.pdf", "type": "Identité", "uploadDate": "2023-10-10", "origin": "client", "size": 312000 },
+        { "id": 2, "filename": "Contrat_CDI_Dubois.pdf", "type": "Professionnel", "uploadDate": "2023-10-10", "origin": "client", "size": 445000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-18T14:15:00Z", "action": "Dossier validé - Complet", "type": "update" },
+        { "id": 2, "date": "2023-10-10T14:00:00Z", "action": "Dossier créé", "type": "creation" }
+      ]
+    },
+    {
+      "id": 3,
+      "reference": "DOS-2023-003",
+      "type": "vente",
+      "status": "en_cours",
+      "score": 7,
+      "createdAt": "2023-10-20T10:00:00Z",
+      "updatedAt": "2023-12-17T16:00:00Z",
+      "agentId": 3,
+      "client": {
+        "id": 3,
+        "firstName": "Claire",
+        "lastName": "Fontaine",
+        "email": "claire.fontaine@email.com",
+        "phone": "06 55 44 33 22",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 3,
+        "address": "45 rue Lepic",
+        "city": "Paris",
+        "zipCode": "75018",
+        "type": "T4",
+        "price": 650000
+      },
+      "aiSummary": {
+        "description": "Mme Fontaine vend son appartement familial suite à un déménagement professionnel. Bien en bon état, diagnostics à jour. Négociation en cours.",
+        "strengths": ["Propriétaire depuis 15 ans", "Diagnostics complets", "Prix cohérent avec le marché"],
+        "warnings": ["Travaux de copropriété prévus", "Délai de vente souhaité court"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+        { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
+        { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Titre_Propriete_Fontaine.pdf", "type": "Propriété", "uploadDate": "2023-10-20", "origin": "client", "size": 2100000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-17T16:00:00Z", "action": "Visite programmée avec acheteur potentiel", "type": "update" }
+      ]
+    },
+    {
+      "id": 4,
+      "reference": "DOS-2023-004",
+      "type": "location",
+      "status": "archive",
+      "score": null,
+      "createdAt": "2023-09-01T08:00:00Z",
+      "updatedAt": "2023-09-15T12:00:00Z",
+      "agentId": 2,
+      "client": {
+        "id": 4,
+        "firstName": "Lucas",
+        "lastName": "Perrin",
+        "email": "lucas.perrin@email.com",
+        "phone": "06 11 22 33 44",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 4,
+        "address": "10 Bd Haussmann",
+        "city": "Paris",
+        "zipCode": "75009",
+        "type": "Studio",
+        "rent": 750
+      },
+      "aiSummary": {
+        "description": "Dossier archivé - Le candidat a trouvé un autre logement.",
+        "strengths": [],
+        "warnings": []
+      },
+      "checklist": [],
+      "documents": [],
+      "history": [
+        { "id": 1, "date": "2023-09-15T12:00:00Z", "action": "Dossier archivé - Candidat désisté", "type": "update" }
+      ]
+    },
+    {
+      "id": 5,
+      "reference": "DOS-2023-005",
+      "type": "location",
+      "status": "complet",
+      "score": 9.2,
+      "createdAt": "2023-11-05T11:00:00Z",
+      "updatedAt": "2023-12-19T09:00:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 5,
+        "firstName": "Émilie",
+        "lastName": "Bernard",
+        "email": "emilie.bernard@email.com",
+        "phone": "06 77 88 99 00",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 5,
+        "address": "25 rue du Faubourg Saint-Honoré",
+        "city": "Paris",
+        "zipCode": "75008",
+        "type": "T3",
+        "rent": 2200
+      },
+      "aiSummary": {
+        "description": "Mme Bernard est avocate associée dans un cabinet renommé. Revenus très élevés (8 500€/mois). Excellente solvabilité. Dossier impeccable.",
+        "strengths": ["Profession libérale stable", "Revenus 4x le loyer", "Références excellentes", "Pas d'animaux"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Justificatif de revenus", "status": "received", "required": true },
+        { "id": 3, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 4, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Bernard.pdf", "type": "Identité", "uploadDate": "2023-11-05", "origin": "client", "size": 289000 },
+        { "id": 2, "filename": "Revenus_2023_Bernard.pdf", "type": "Revenus", "uploadDate": "2023-11-05", "origin": "client", "size": 567000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T09:00:00Z", "action": "Bail signé", "type": "update" }
+      ]
+    },
+    {
+      "id": 6,
+      "reference": "DOS-2023-006",
+      "type": "vente",
+      "status": "complet",
+      "score": 8.5,
+      "createdAt": "2023-10-01T09:30:00Z",
+      "updatedAt": "2023-12-15T11:00:00Z",
+      "agentId": 3,
+      "client": {
+        "id": 6,
+        "firstName": "Jean-Pierre",
+        "lastName": "Moreau",
+        "email": "jp.moreau@email.com",
+        "phone": "06 22 33 44 55",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 6,
+        "address": "8 Place Vendôme",
+        "city": "Paris",
+        "zipCode": "75001",
+        "type": "T5",
+        "price": 1850000
+      },
+      "aiSummary": {
+        "description": "M. Moreau vend son appartement de prestige Place Vendôme. Bien d'exception en parfait état. Vente finalisée avec succès.",
+        "strengths": ["Emplacement premium", "État impeccable", "Documentation complète", "Acheteur solvable trouvé"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+        { "id": 4, "name": "Compromis de vente", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Diagnostics_Vendome.pdf", "type": "Diagnostics", "uploadDate": "2023-10-01", "origin": "agent", "size": 3400000 },
+        { "id": 2, "filename": "Compromis_Moreau.pdf", "type": "Juridique", "uploadDate": "2023-11-20", "origin": "agent", "size": 1200000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-15T11:00:00Z", "action": "Acte de vente signé chez le notaire", "type": "update" }
+      ]
+    },
+    {
+      "id": 7,
+      "reference": "DOS-2023-007",
+      "type": "location",
+      "status": "a_completer",
+      "score": 6.5,
+      "createdAt": "2023-12-01T14:00:00Z",
+      "updatedAt": "2023-12-18T16:30:00Z",
+      "agentId": 4,
+      "client": {
+        "id": 7,
+        "firstName": "Antoine",
+        "lastName": "Lefebvre",
+        "email": "a.lefebvre@email.com",
+        "phone": "06 33 44 55 66",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 7,
+        "address": "156 rue de Rivoli",
+        "city": "Paris",
+        "zipCode": "75001",
+        "type": "T2",
+        "rent": 1450
+      },
+      "aiSummary": {
+        "description": "M. Lefebvre est développeur freelance. Revenus variables mais moyens corrects. Nécessite un garant pour sécuriser le dossier.",
+        "strengths": ["Secteur professionnel porteur", "Épargne conséquente"],
+        "warnings": ["Revenus variables", "Pas de garant fourni", "Plusieurs documents manquants"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Justificatif de revenus", "status": "partial", "received": 1, "total": 3, "required": true },
+        { "id": 3, "name": "Avis d'imposition", "status": "pending", "required": true },
+        { "id": 4, "name": "Attestation garant", "status": "pending", "required": true },
+        { "id": 5, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Lefebvre.pdf", "type": "Identité", "uploadDate": "2023-12-01", "origin": "client", "size": 256000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-18T16:30:00Z", "action": "Relance envoyée pour documents manquants", "type": "notification" }
+      ]
+    },
+    {
+      "id": 8,
+      "reference": "DOS-2023-008",
+      "type": "location",
+      "status": "en_cours",
+      "score": 7.8,
+      "createdAt": "2023-11-20T10:00:00Z",
+      "updatedAt": "2023-12-19T14:00:00Z",
+      "agentId": 2,
+      "client": {
+        "id": 8,
+        "firstName": "Camille",
+        "lastName": "Rousseau",
+        "email": "c.rousseau@email.com",
+        "phone": "06 44 55 66 77",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 1,
+        "address": "12 rue de la Paix",
+        "city": "Paris",
+        "zipCode": "75002",
+        "type": "T2",
+        "rent": 950
+      },
+      "aiSummary": {
+        "description": "Mme Rousseau est enseignante titulaire de l'Éducation Nationale. Revenus stables. Dossier en cours de validation finale.",
+        "strengths": ["Fonctionnaire titulaire", "Stabilité de l'emploi", "Revenus réguliers"],
+        "warnings": ["Revenus justes (2.5x loyer)"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Attestation employeur", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Rousseau.pdf", "type": "Identité", "uploadDate": "2023-11-20", "origin": "client", "size": 278000 },
+        { "id": 2, "filename": "Attestation_Education_Nationale.pdf", "type": "Professionnel", "uploadDate": "2023-11-21", "origin": "client", "size": 145000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T14:00:00Z", "action": "Validation en cours par le propriétaire", "type": "update" }
+      ]
+    },
+    {
+      "id": 9,
+      "reference": "DOS-2023-009",
+      "type": "vente",
+      "status": "a_completer",
+      "score": 5.5,
+      "createdAt": "2023-12-10T09:00:00Z",
+      "updatedAt": "2023-12-19T11:00:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 9,
+        "firstName": "Philippe",
+        "lastName": "Garnier",
+        "email": "p.garnier@email.com",
+        "phone": "06 55 66 77 88",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 8,
+        "address": "33 rue de la Roquette",
+        "city": "Paris",
+        "zipCode": "75011",
+        "type": "T3",
+        "price": 485000
+      },
+      "aiSummary": {
+        "description": "M. Garnier souhaite vendre rapidement pour un projet à l'étranger. Plusieurs diagnostics à refaire, dossier incomplet.",
+        "strengths": ["Motivation forte du vendeur", "Prix attractif"],
+        "warnings": ["Diagnostics expirés", "Travaux à prévoir", "Charges de copropriété élevées"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Diagnostics techniques", "status": "pending", "required": true },
+        { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
+        { "id": 4, "name": "Règlement de copropriété", "status": "pending", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Titre_Garnier.pdf", "type": "Propriété", "uploadDate": "2023-12-10", "origin": "client", "size": 1890000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T11:00:00Z", "action": "Diagnostiqueur contacté", "type": "update" }
+      ]
+    },
+    {
+      "id": 10,
+      "reference": "DOS-2023-010",
+      "type": "location",
+      "status": "complet",
+      "score": 8.8,
+      "createdAt": "2023-11-01T08:30:00Z",
+      "updatedAt": "2023-12-10T17:00:00Z",
+      "agentId": 4,
+      "client": {
+        "id": 10,
+        "firstName": "Marie",
+        "lastName": "Petit",
+        "email": "m.petit@email.com",
+        "phone": "06 66 77 88 99",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 9,
+        "address": "72 Avenue Montaigne",
+        "city": "Paris",
+        "zipCode": "75008",
+        "type": "T4",
+        "rent": 3500
+      },
+      "aiSummary": {
+        "description": "Mme Petit est directrice marketing chez L'Oréal. Excellents revenus et stabilité professionnelle. Dossier parfait.",
+        "strengths": ["CDI cadre supérieur", "Revenus 4x loyer", "Employeur de renom", "Aucun incident bancaire"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Dossier_Complet_Petit.pdf", "type": "Dossier", "uploadDate": "2023-11-01", "origin": "client", "size": 4500000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-10T17:00:00Z", "action": "Bail signé - Entrée le 01/01/2024", "type": "update" }
+      ]
+    },
+    {
+      "id": 11,
+      "reference": "DOS-2023-011",
+      "type": "location",
+      "status": "archive",
+      "score": 4.2,
+      "createdAt": "2023-08-15T10:00:00Z",
+      "updatedAt": "2023-09-01T09:00:00Z",
+      "agentId": 3,
+      "client": {
+        "id": 11,
+        "firstName": "Nicolas",
+        "lastName": "Durand",
+        "email": "n.durand@email.com",
+        "phone": "06 77 88 99 00",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 2,
+        "address": "88 Av. des Champs-Élysées",
+        "city": "Paris",
+        "zipCode": "75008",
+        "type": "T3",
+        "rent": 1800
+      },
+      "aiSummary": {
+        "description": "Dossier refusé - Revenus insuffisants et aucun garant acceptable.",
+        "strengths": [],
+        "warnings": ["Revenus insuffisants", "Garant non éligible", "Historique bancaire problématique"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Justificatif de revenus", "status": "received", "required": true }
+      ],
+      "documents": [],
+      "history": [
+        { "id": 1, "date": "2023-09-01T09:00:00Z", "action": "Dossier refusé par le propriétaire", "type": "update" }
+      ]
+    },
+    {
+      "id": 12,
+      "reference": "DOS-2023-012",
+      "type": "vente",
+      "status": "en_cours",
+      "score": 8.0,
+      "createdAt": "2023-11-25T14:00:00Z",
+      "updatedAt": "2023-12-19T10:00:00Z",
+      "agentId": 2,
+      "client": {
+        "id": 12,
+        "firstName": "Isabelle",
+        "lastName": "Simon",
+        "email": "i.simon@email.com",
+        "phone": "06 88 99 00 11",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 10,
+        "address": "15 rue du Bac",
+        "city": "Paris",
+        "zipCode": "75007",
+        "type": "T2",
+        "price": 520000
+      },
+      "aiSummary": {
+        "description": "Mme Simon vend pour financer l'achat d'une maison en banlieue. Bien en bon état, visites en cours.",
+        "strengths": ["Bien entretenu", "Quartier recherché", "Prix dans le marché"],
+        "warnings": ["Copropriété avec travaux votés"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+        { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Diagnostics_Simon.pdf", "type": "Diagnostics", "uploadDate": "2023-11-25", "origin": "agent", "size": 2800000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T10:00:00Z", "action": "3ème visite programmée", "type": "update" }
+      ]
+    },
+    {
+      "id": 13,
+      "reference": "DOS-2023-013",
+      "type": "location",
+      "status": "a_completer",
+      "score": 7.2,
+      "createdAt": "2023-12-15T11:00:00Z",
+      "updatedAt": "2023-12-19T15:00:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 13,
+        "firstName": "Alexandre",
+        "lastName": "Mercier",
+        "email": "a.mercier@email.com",
+        "phone": "06 99 00 11 22",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 11,
+        "address": "42 rue de Passy",
+        "city": "Paris",
+        "zipCode": "75016",
+        "type": "T3",
+        "rent": 2100
+      },
+      "aiSummary": {
+        "description": "M. Mercier est consultant en stratégie. Bons revenus mais contrat de mission. Garant Visale accepté.",
+        "strengths": ["Revenus corrects", "Garant Visale validé", "Profil professionnel sérieux"],
+        "warnings": ["Contrat de mission (pas de CDI)", "Historique locatif court"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de mission", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "partial", "received": 2, "total": 3, "required": true },
+        { "id": 4, "name": "Attestation Visale", "status": "received", "required": true },
+        { "id": 5, "name": "RIB", "status": "pending", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Mercier.pdf", "type": "Identité", "uploadDate": "2023-12-15", "origin": "client", "size": 234000 },
+        { "id": 2, "filename": "Visale_Mercier.pdf", "type": "Garantie", "uploadDate": "2023-12-16", "origin": "client", "size": 89000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T15:00:00Z", "action": "RIB demandé au candidat", "type": "notification" }
+      ]
+    },
+    {
+      "id": 14,
+      "reference": "DOS-2023-014",
+      "type": "vente",
+      "status": "archive",
+      "score": null,
+      "createdAt": "2023-07-01T09:00:00Z",
+      "updatedAt": "2023-08-15T14:00:00Z",
+      "agentId": 4,
+      "client": {
+        "id": 14,
+        "firstName": "François",
+        "lastName": "Lambert",
+        "email": "f.lambert@email.com",
+        "phone": "06 00 11 22 33",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 12,
+        "address": "5 rue de Sèvres",
+        "city": "Paris",
+        "zipCode": "75006",
+        "type": "T2",
+        "price": 395000
+      },
+      "aiSummary": {
+        "description": "Vente annulée - Le vendeur a changé d'avis suite à un héritage.",
+        "strengths": [],
+        "warnings": []
+      },
+      "checklist": [],
+      "documents": [],
+      "history": [
+        { "id": 1, "date": "2023-08-15T14:00:00Z", "action": "Mandat annulé à la demande du vendeur", "type": "update" }
+      ]
+    },
+    {
+      "id": 15,
+      "reference": "DOS-2023-015",
+      "type": "location",
+      "status": "en_cours",
+      "score": 8.1,
+      "createdAt": "2023-12-05T16:00:00Z",
+      "updatedAt": "2023-12-19T12:00:00Z",
+      "agentId": 3,
+      "client": {
+        "id": 15,
+        "firstName": "Charlotte",
+        "lastName": "Blanc",
+        "email": "c.blanc@email.com",
+        "phone": "06 11 22 33 44",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 13,
+        "address": "28 rue Saint-Dominique",
+        "city": "Paris",
+        "zipCode": "75007",
+        "type": "T2",
+        "rent": 1650
+      },
+      "aiSummary": {
+        "description": "Mme Blanc est médecin hospitalier. Revenus stables et élevés. Dossier en attente de décision du propriétaire.",
+        "strengths": ["Profession médicale", "Revenus 4x loyer", "CDI fonction publique hospitalière"],
+        "warnings": ["Horaires de travail décalés"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Attestation employeur", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Dossier_Blanc.pdf", "type": "Dossier", "uploadDate": "2023-12-05", "origin": "client", "size": 3200000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T12:00:00Z", "action": "Dossier transmis au propriétaire", "type": "update" }
+      ]
+    },
+    {
+      "id": 16,
+      "reference": "DOS-2023-016",
+      "type": "location",
+      "status": "complet",
+      "score": 9.5,
+      "createdAt": "2023-10-25T09:00:00Z",
+      "updatedAt": "2023-11-30T10:00:00Z",
+      "agentId": 2,
+      "client": {
+        "id": 16,
+        "firstName": "Thomas",
+        "lastName": "Roux",
+        "email": "t.roux@email.com",
+        "phone": "06 22 33 44 55",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 14,
+        "address": "100 rue de la Pompe",
+        "city": "Paris",
+        "zipCode": "75016",
+        "type": "T4",
+        "rent": 2800
+      },
+      "aiSummary": {
+        "description": "M. Roux est banquier d'affaires. Revenus exceptionnels. Dossier validé immédiatement.",
+        "strengths": ["Revenus très élevés (6x loyer)", "Employeur prestigieux", "Patrimoine solide", "Excellent historique locatif"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "Quittances de loyer", "status": "received", "required": true },
+        { "id": 6, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Dossier_Complet_Roux.pdf", "type": "Dossier", "uploadDate": "2023-10-25", "origin": "client", "size": 5100000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-11-30T10:00:00Z", "action": "Locataire installé", "type": "update" }
+      ]
+    },
+    {
+      "id": 17,
+      "reference": "DOS-2023-017",
+      "type": "vente",
+      "status": "complet",
+      "score": 8.7,
+      "createdAt": "2023-09-10T11:00:00Z",
+      "updatedAt": "2023-12-01T15:00:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 17,
+        "firstName": "Nathalie",
+        "lastName": "Vincent",
+        "email": "n.vincent@email.com",
+        "phone": "06 33 44 55 66",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 15,
+        "address": "18 rue de Vaugirard",
+        "city": "Paris",
+        "zipCode": "75006",
+        "type": "T3",
+        "price": 780000
+      },
+      "aiSummary": {
+        "description": "Vente réussie. Appartement familial vendu à un couple avec enfants. Transaction fluide.",
+        "strengths": ["Bien en excellent état", "Quartier familial", "Transaction rapide"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+        { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+        { "id": 4, "name": "Acte de vente", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Acte_Vente_Vincent.pdf", "type": "Juridique", "uploadDate": "2023-12-01", "origin": "agent", "size": 2300000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-01T15:00:00Z", "action": "Vente finalisée", "type": "update" }
+      ]
+    },
+    {
+      "id": 18,
+      "reference": "DOS-2023-018",
+      "type": "location",
+      "status": "a_completer",
+      "score": 6.8,
+      "createdAt": "2023-12-18T10:00:00Z",
+      "updatedAt": "2023-12-19T16:00:00Z",
+      "agentId": 4,
+      "client": {
+        "id": 18,
+        "firstName": "Julien",
+        "lastName": "Girard",
+        "email": "j.girard@email.com",
+        "phone": "06 44 55 66 77",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 4,
+        "address": "10 Bd Haussmann",
+        "city": "Paris",
+        "zipCode": "75009",
+        "type": "Studio",
+        "rent": 750
+      },
+      "aiSummary": {
+        "description": "M. Girard est étudiant en Master avec un job étudiant. Parents garants solides.",
+        "strengths": ["Garants parentaux solides", "Étudiant sérieux"],
+        "warnings": ["Revenus personnels faibles", "Premier logement"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Certificat de scolarité", "status": "received", "required": true },
+        { "id": 3, "name": "Justificatifs garants", "status": "partial", "received": 1, "total": 2, "required": true },
+        { "id": 4, "name": "RIB", "status": "pending", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "CNI_Girard.pdf", "type": "Identité", "uploadDate": "2023-12-18", "origin": "client", "size": 198000 },
+        { "id": 2, "filename": "Certificat_Scolarite.pdf", "type": "Scolarité", "uploadDate": "2023-12-18", "origin": "client", "size": 67000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T16:00:00Z", "action": "En attente des justificatifs des garants", "type": "notification" }
+      ]
+    },
+    {
+      "id": 19,
+      "reference": "DOS-2023-019",
+      "type": "vente",
+      "status": "en_cours",
+      "score": 7.5,
+      "createdAt": "2023-12-12T14:00:00Z",
+      "updatedAt": "2023-12-19T11:30:00Z",
+      "agentId": 3,
+      "client": {
+        "id": 19,
+        "firstName": "Catherine",
+        "lastName": "Morel",
+        "email": "c.morel@email.com",
+        "phone": "06 55 66 77 88",
+        "type": "vendeur"
+      },
+      "property": {
+        "id": 16,
+        "address": "64 Boulevard Saint-Germain",
+        "city": "Paris",
+        "zipCode": "75005",
+        "type": "T5",
+        "price": 1250000
+      },
+      "aiSummary": {
+        "description": "Mme Morel vend l'appartement de ses parents décédés. Succession en cours, quelques formalités à régler.",
+        "strengths": ["Emplacement exceptionnel", "Grand volume", "Beaux éléments d'époque"],
+        "warnings": ["Succession en cours", "Travaux de rafraîchissement nécessaires"]
+      },
+      "checklist": [
+        { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+        { "id": 2, "name": "Acte de succession", "status": "pending", "required": true },
+        { "id": 3, "name": "Diagnostics techniques", "status": "received", "required": true },
+        { "id": 4, "name": "PV assemblée générale", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Diagnostics_Morel.pdf", "type": "Diagnostics", "uploadDate": "2023-12-12", "origin": "agent", "size": 4100000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-19T11:30:00Z", "action": "Notaire contacté pour acte de succession", "type": "update" }
+      ]
+    },
+    {
+      "id": 20,
+      "reference": "DOS-2023-020",
+      "type": "location",
+      "status": "complet",
+      "score": 8.9,
+      "createdAt": "2023-11-15T09:30:00Z",
+      "updatedAt": "2023-12-05T14:00:00Z",
+      "agentId": 1,
+      "client": {
+        "id": 20,
+        "firstName": "Pierre",
+        "lastName": "Faure",
+        "email": "p.faure@email.com",
+        "phone": "06 66 77 88 99",
+        "type": "locataire"
+      },
+      "property": {
+        "id": 17,
+        "address": "3 rue de Turenne",
+        "city": "Paris",
+        "zipCode": "75003",
+        "type": "T2",
+        "rent": 1350
+      },
+      "aiSummary": {
+        "description": "M. Faure est chef de projet digital. CDI solide, revenus confortables. Dossier parfait.",
+        "strengths": ["CDI confirmé", "Revenus 3.5x loyer", "Très bon historique locatif", "Profil stable"],
+        "warnings": []
+      },
+      "checklist": [
+        { "id": 1, "name": "Carte d'identité R/V", "status": "received", "required": true },
+        { "id": 2, "name": "Contrat de travail", "status": "received", "required": true },
+        { "id": 3, "name": "3 dernières fiches de paie", "status": "received", "required": true },
+        { "id": 4, "name": "Avis d'imposition", "status": "received", "required": true },
+        { "id": 5, "name": "Quittances de loyer", "status": "received", "required": true },
+        { "id": 6, "name": "RIB", "status": "received", "required": true }
+      ],
+      "documents": [
+        { "id": 1, "filename": "Dossier_Faure.pdf", "type": "Dossier", "uploadDate": "2023-11-15", "origin": "client", "size": 3800000 }
+      ],
+      "history": [
+        { "id": 1, "date": "2023-12-05T14:00:00Z", "action": "Bail signé, entrée le 15/12", "type": "update" }
+      ]
+    }
+  ],
+  "currentUser": {
+    "id": 1,
+    "name": "Admin",
+    "role": "admin",
+    "agencyId": 1
+  }
+}

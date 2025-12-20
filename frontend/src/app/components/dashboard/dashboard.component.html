@@ -1,0 +1,223 @@
+<div class="dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <h1 class="page-title">Dashboard des dossiers</h1>
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2" class="btn-icon">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17,8 12,3 7,8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Importer depuis fichier
+      </button>
+      <button class="btn btn-primary" (click)="createNewDossier()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2" class="btn-icon">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Créer un nouveau dossier
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <span class="filter-label">Type</span>
+      <div class="filter-buttons">
+        <button 
+          class="filter-btn" 
+          [class.active]="filters().type === 'tous'"
+          (click)="setFilter('type', 'tous')">
+          Tous
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="filters().type === 'location'"
+          (click)="setFilter('type', 'location')">
+          Location
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="filters().type === 'vente'"
+          (click)="setFilter('type', 'vente')">
+          Vente
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Statut</span>
+      <select 
+        class="filter-select"
+        [ngModel]="filters().status"
+        (ngModelChange)="setFilter('status', $event)">
+        <option value="tous">Tous les statuts</option>
+        <option value="a_completer">À compléter</option>
+        <option value="complet">Complet</option>
+        <option value="en_cours">En cours</option>
+        <option value="archive">Archivé</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Note</span>
+      <div class="note-filter">
+        <span class="note-prefix">≥</span>
+        <input 
+          type="number" 
+          class="note-input"
+          min="0" 
+          max="10"
+          placeholder="7/10"
+          [ngModel]="filters().minScore"
+          (ngModelChange)="setFilter('minScore', $event)">
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Agent</span>
+      <select 
+        class="filter-select"
+        [ngModel]="filters().agentId"
+        (ngModelChange)="setFilter('agentId', $event)">
+        <option [ngValue]="null">Tous les agents</option>
+        @for (agent of agents(); track agent.id) {
+          <option [ngValue]="agent.id">{{ agent.name }}</option>
+        }
+      </select>
+    </div>
+
+    <button class="reset-btn" (click)="resetFilters()">
+      Réinitialiser
+    </button>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-container">
+    @if (loading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Chargement des dossiers...</p>
+      </div>
+    } @else {
+      <table class="dossiers-table">
+        <thead>
+          <tr>
+            <th>TYPE DE DOSSIER</th>
+            <th>CLIENT</th>
+            <th>BIEN</th>
+            <th>STATUT</th>
+            <th>NOTE DOSSIER</th>
+            <th>DERNIÈRE MAJ</th>
+            <th>AGENT EN CHARGE</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dossier of dossiers(); track dossier.id) {
+          <tr (click)="viewDossier(dossier.id)" class="clickable-row">
+            <td>
+              <span class="type-badge" [class]="dossier.type">
+                {{ dossier.type === 'location' ? 'Location' : 'Vente' }}
+              </span>
+            </td>
+            <td>
+              <div class="client-info">
+                <span class="client-name">
+                  {{ dossier.client.firstName }} {{ dossier.client.lastName }}
+                </span>
+                <span class="client-type">
+                  {{ getClientTypeLabel(dossier.client.type) }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="property-info">
+                <span class="property-address">
+                  {{ truncateAddress(dossier.property.address) }}
+                </span>
+                <span class="property-location">
+                  {{ dossier.property.zipCode }} {{ dossier.property.city }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [class]="dossier.status">
+                <span class="status-dot"></span>
+                {{ getStatusLabel(dossier.status) }}
+              </span>
+            </td>
+            <td>
+              <span class="score" [class.na]="!dossier.score">
+                {{ dossier.score ? dossier.score + '/10' : 'NA' }}
+              </span>
+            </td>
+            <td class="date-cell">
+              {{ dossier.updatedAtFormatted }}
+            </td>
+            <td class="agent-cell">
+              {{ dossier.agentName }}
+            </td>
+            <td class="actions-cell" (click)="$event.stopPropagation()">
+              <button 
+                class="action-btn view" 
+                title="Voir le dossier"
+                (click)="viewDossier(dossier.id)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+              <button 
+                class="action-btn edit" 
+                title="Modifier le dossier"
+                (click)="editDossier(dossier)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button 
+                class="action-btn delete" 
+                title="Supprimer le dossier"
+                (click)="confirmDelete(dossier)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <polyline points="3,6 5,6 21,6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+            <tr>
+              <td colspan="8" class="empty-state">
+                <p>Aucun dossier trouvé</p>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+  [isOpen]="showDeleteConfirm()"
+  [title]="'Supprimer le dossier'"
+  [message]="'Êtes-vous sûr de vouloir supprimer le dossier de ' + 
+    (deletingDossier()?.client?.firstName || '') + ' ' + 
+    (deletingDossier()?.client?.lastName || '') + ' ? Cette action est irréversible.'"
+  [confirmText]="'Supprimer'"
+  [cancelText]="'Annuler'"
+  [type]="'danger'"
+  [loading]="deleteLoading()"
+  (confirmed)="executeDelete()"
+  (cancelled)="cancelDelete()" />

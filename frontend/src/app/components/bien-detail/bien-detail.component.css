@@ -1,0 +1,355 @@
+.bien-detail {
+  max-width: 1200px;
+}
+
+/* Header */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #fff;
+  border-radius: 10px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.back-btn:hover {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.header-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-box {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-text {
+  display: block;
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+/* Status Summary */
+.status-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.status-card {
+  flex: 1;
+  max-width: 160px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.status-count {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.status-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-card.complet {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-card.en_cours {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-card.a_completer {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-card.archive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Dossiers Section */
+.dossiers-section {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.dossiers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Dossier Card */
+.dossier-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.dossier-card:hover {
+  background: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.1);
+}
+
+.dossier-main {
+  flex: 1;
+}
+
+.dossier-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.type-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.type-badge.location {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.type-badge.vente {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-badge.a_completer {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.a_completer .status-dot {
+  background: #d97706;
+}
+
+.status-badge.complet {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.complet .status-dot {
+  background: #16a34a;
+}
+
+.status-badge.en_cours {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badge.en_cours .status-dot {
+  background: #2563eb;
+}
+
+.status-badge.archive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-badge.archive .status-dot {
+  background: #64748b;
+}
+
+/* Client Info */
+.client-info {
+  margin-bottom: 12px;
+}
+
+.client-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 2px 0;
+}
+
+.client-type {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Dossier Meta */
+.dossier-meta {
+  display: flex;
+  gap: 20px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.meta-item svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Dossier Score */
+.dossier-score {
+  text-align: center;
+  min-width: 60px;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.score-max {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.score-na {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Empty State */
+.empty-dossiers {
+  text-align: center;
+  padding: 40px 20px;
+  color: #64748b;
+}
+
+/* Loading & Error States */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #64748b;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.back-btn-large {
+  margin-top: 16px;
+  padding: 10px 24px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+

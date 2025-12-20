@@ -1,0 +1,217 @@
+@if (isOpen()) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-container">
+      <!-- Header -->
+      <div class="modal-header">
+        <h2 class="modal-title">
+          {{ isEditMode() ? 'Modifier le dossier' : 'Nouveau dossier' }}
+        </h2>
+        <button class="close-btn" (click)="close()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()">
+          <!-- Type & Status Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Type de dossier</label>
+              <select 
+                class="form-select"
+                [(ngModel)]="formData.type" 
+                name="type">
+                <option value="location">Location</option>
+                <option value="vente">Vente</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Statut</label>
+              <select 
+                class="form-select"
+                [(ngModel)]="formData.status" 
+                name="status">
+                <option value="a_completer">À compléter</option>
+                <option value="en_cours">En cours</option>
+                <option value="complet">Complet</option>
+                <option value="archive">Archivé</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Client Section -->
+          <div class="form-section">
+            <h3 class="section-title">Informations client</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.client.firstName" 
+                  name="clientFirstName"
+                  placeholder="Prénom du client">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.client.lastName" 
+                  name="clientLastName"
+                  placeholder="Nom du client">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-input"
+                  [(ngModel)]="formData.client.email" 
+                  name="clientEmail"
+                  placeholder="email@exemple.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Téléphone</label>
+                <input 
+                  type="tel" 
+                  class="form-input"
+                  [(ngModel)]="formData.client.phone" 
+                  name="clientPhone"
+                  placeholder="06 12 34 56 78">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type de client</label>
+              <select 
+                class="form-select"
+                [(ngModel)]="formData.client.type" 
+                name="clientType">
+                <option value="locataire">Locataire</option>
+                <option value="vendeur">Vendeur</option>
+                <option value="acheteur">Acheteur</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Property Section -->
+          <div class="form-section">
+            <h3 class="section-title">Informations bien</h3>
+            <div class="form-group">
+              <label class="form-label">Adresse</label>
+              <input 
+                type="text" 
+                class="form-input"
+                [(ngModel)]="formData.property.address" 
+                name="propertyAddress"
+                placeholder="12 rue de la Paix">
+            </div>
+            <div class="form-row three-cols">
+              <div class="form-group">
+                <label class="form-label">Ville</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.property.city" 
+                  name="propertyCity"
+                  placeholder="Paris">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Code postal</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.property.zipCode" 
+                  name="propertyZipCode"
+                  placeholder="75001">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type de bien</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [(ngModel)]="formData.property.type" 
+                  name="propertyType"
+                  placeholder="T2, Studio, T3...">
+              </div>
+            </div>
+            <div class="form-row">
+              @if (formData.type === 'location') {
+                <div class="form-group">
+                  <label class="form-label">Loyer (€/mois)</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.property.rent" 
+                    name="propertyRent"
+                    placeholder="950">
+                </div>
+              } @else {
+                <div class="form-group">
+                  <label class="form-label">Prix de vente (€)</label>
+                  <input 
+                    type="number" 
+                    class="form-input"
+                    [(ngModel)]="formData.property.price" 
+                    name="propertyPrice"
+                    placeholder="350000">
+                </div>
+              }
+              <div class="form-group">
+                <label class="form-label">Agent en charge</label>
+                <select 
+                  class="form-select"
+                  [(ngModel)]="formData.agentId" 
+                  name="agentId">
+                  @for (agent of agents(); track agent.id) {
+                    <option [ngValue]="agent.id">{{ agent.fullName }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score -->
+          <div class="form-group">
+            <label class="form-label">Score du dossier (optionnel)</label>
+            <input 
+              type="number" 
+              class="form-input score-input"
+              [(ngModel)]="formData.score" 
+              name="score"
+              min="0"
+              max="10"
+              step="0.1"
+              placeholder="8.5">
+            <span class="form-hint">Note de 0 à 10</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="close()">
+          Annuler
+        </button>
+        <button 
+          class="btn btn-primary" 
+          (click)="onSubmit()"
+          [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Enregistrement...
+          } @else {
+            {{ isEditMode() ? 'Enregistrer' : 'Créer le dossier' }}
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+

@@ -1,0 +1,135 @@
+@if (property(); as prop) {
+  <div class="bien-detail">
+    <!-- Header -->
+    <div class="detail-header">
+      <div class="header-left">
+        <button class="back-btn" (click)="goBack()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12,19 5,12 12,5"/>
+          </svg>
+        </button>
+        <div class="title-section">
+          <h1 class="page-title">{{ prop.address }}</h1>
+          <p class="subtitle">
+            {{ prop.zipCode }} {{ prop.city }} · {{ prop.type }}
+          </p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-box">
+          <span class="stat-number">{{ prop.dossierCount }}</span>
+          <span class="stat-text">dossier(s)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Summary -->
+    <div class="status-summary">
+      @if (prop.statuses.complet > 0) {
+        <div class="status-card complet">
+          <span class="status-count">{{ prop.statuses.complet }}</span>
+          <span class="status-name">Complet</span>
+        </div>
+      }
+      @if (prop.statuses.en_cours > 0) {
+        <div class="status-card en_cours">
+          <span class="status-count">{{ prop.statuses.en_cours }}</span>
+          <span class="status-name">En cours</span>
+        </div>
+      }
+      @if (prop.statuses.a_completer > 0) {
+        <div class="status-card a_completer">
+          <span class="status-count">{{ prop.statuses.a_completer }}</span>
+          <span class="status-name">À compléter</span>
+        </div>
+      }
+      @if (prop.statuses.archive > 0) {
+        <div class="status-card archive">
+          <span class="status-count">{{ prop.statuses.archive }}</span>
+          <span class="status-name">Archivé</span>
+        </div>
+      }
+    </div>
+
+    <!-- Dossiers List -->
+    <div class="dossiers-section">
+      <h2 class="section-title">Dossiers associés</h2>
+      
+      <div class="dossiers-list">
+        @for (dossier of dossiers(); track dossier.id) {
+          <div class="dossier-card" (click)="viewDossier(dossier.id)">
+            <div class="dossier-main">
+              <div class="dossier-header">
+                <span class="type-badge" [class]="dossier.type">
+                  {{ dossier.type === 'location' ? 'Location' : 'Vente' }}
+                </span>
+                <span class="status-badge" [class]="dossier.status">
+                  <span class="status-dot"></span>
+                  {{ getStatusLabel(dossier.status) }}
+                </span>
+              </div>
+              
+              <div class="client-info">
+                <h3 class="client-name">
+                  {{ dossier.client.firstName }} {{ dossier.client.lastName }}
+                </h3>
+                <span class="client-type">
+                  {{ getClientTypeLabel(dossier.client.type) }}
+                </span>
+              </div>
+              
+              <div class="dossier-meta">
+                <span class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  {{ dossier.updatedAtFormatted }}
+                </span>
+                <span class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  {{ dossier.agentName }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="dossier-score">
+              @if (dossier.score) {
+                <span class="score-value">{{ dossier.score }}</span>
+                <span class="score-max">/10</span>
+              } @else {
+                <span class="score-na">NA</span>
+              }
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-dossiers">
+            <p>Aucun dossier trouvé pour ce bien</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+} @else if (loading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement du bien...</p>
+  </div>
+} @else {
+  <div class="error-state">
+    <p>Bien introuvable</p>
+    <button class="back-btn-large" (click)="goBack()">
+      Retour aux biens
+    </button>
+  </div>
+}
+

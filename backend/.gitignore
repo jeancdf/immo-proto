@@ -1,0 +1,42 @@
+# Node.js Backend
+
+# Dependencies
+/node_modules/
+package-lock.json
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+/dist/
+/build/
+
+# Testing
+/coverage/
+
+# Misc
+*.bak
+*.tmp
+
+# Keep db.json tracked (remove this line if you don't want to track it)
+# !db.json
+
