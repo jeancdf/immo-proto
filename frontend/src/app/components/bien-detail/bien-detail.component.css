@@ -78,6 +78,16 @@
   height: 18px;
 }
 
+.btn-link {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border: none;
+}
+
+.btn-link:hover {
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
 .btn-edit {
   background: #fff;
   color: #334155;

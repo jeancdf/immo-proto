@@ -1,0 +1,369 @@
+<div class="parametres-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">Paramètres généraux</h1>
+      <p class="page-subtitle">
+        Configurez les préférences de votre agence pour tous les dossiers.
+      </p>
+    </div>
+    <button class="btn btn-outline agency-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+           stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      Paramètres agence
+    </button>
+  </div>
+
+  <!-- Agency Information Card -->
+  <div class="settings-card">
+    <div class="card-header">
+      <h2 class="card-title">Informations de l'agence</h2>
+      <p class="card-description">
+        Ces informations apparaissent sur les portails clients et les e-mails 
+        envoyés.
+      </p>
+    </div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div class="info-row">
+          <span class="info-label">Nom de l'agence</span>
+          <input 
+            type="text" 
+            class="info-input"
+            [(ngModel)]="agencySettings.name"
+            placeholder="Ex : Agence ImmoParis">
+        </div>
+        <div class="info-row">
+          <span class="info-label">Adresse</span>
+          <input 
+            type="text" 
+            class="info-input"
+            [(ngModel)]="agencySettings.address"
+            placeholder="Rue, code postal, ville">
+        </div>
+        <div class="info-row">
+          <span class="info-label">Coordonnées</span>
+          <div class="info-inputs-row">
+            <input 
+              type="tel" 
+              class="info-input"
+              [(ngModel)]="agencySettings.phone"
+              placeholder="Téléphone">
+            <input 
+              type="email" 
+              class="info-input"
+              [(ngModel)]="agencySettings.email"
+              placeholder="E-mail de contact">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-secondary" (click)="agencySettings.name = ''">
+        Annuler
+      </button>
+      <button 
+        class="btn btn-primary"
+        [disabled]="saving()"
+        (click)="saveAgencySettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17,21 17,13 7,13 7,21"/>
+          <polyline points="7,3 7,8 15,8"/>
+        </svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div class="two-column-grid">
+    <!-- Modules Card -->
+    <div class="settings-card">
+      <div class="card-header with-badge">
+        <div>
+          <h2 class="card-title">Modules utilisés</h2>
+          <p class="card-description">
+            Activez uniquement les modules que vous utilisez au quotidien.
+          </p>
+        </div>
+        <span class="badge badge-info">Facturé par module</span>
+      </div>
+      <div class="card-body">
+        <div class="module-list">
+          <!-- Module Location -->
+          <div class="module-item">
+            <div class="module-info">
+              <span class="module-name">Module Location</span>
+              <span class="module-description">
+                Gestion des dossiers locataires et portails de dépôt.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [checked]="moduleSettings.location"
+                (change)="toggleModule('location')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Module Vente -->
+          <div class="module-item">
+            <div class="module-info">
+              <span class="module-name">Module Vente</span>
+              <span class="module-description">
+                Suivi des dossiers vendeurs et documents notaires.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [checked]="moduleSettings.vente"
+                (change)="toggleModule('vente')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Partage avec professionnels -->
+          <div class="module-item">
+            <div class="module-info">
+              <span class="module-name">Partage avec professionnels</span>
+              <span class="module-description">
+                Liens sécurisés pour notaire, banque, diagnostiqueur, etc.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [checked]="moduleSettings.partage"
+                (change)="toggleModule('partage')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn btn-link-text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          Ajuster les options de facturation
+        </button>
+      </div>
+    </div>
+
+    <!-- Security Preferences Card -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Préférences de sécurité</h2>
+        <p class="card-description">
+          Définissez vos règles par défaut pour les liens de partage.
+        </p>
+      </div>
+      <div class="card-body">
+        <div class="security-grid">
+          <!-- Durée par défaut -->
+          <div class="security-item">
+            <div class="security-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <div class="security-content">
+              <span class="security-title">Durée par défaut</span>
+              <span class="security-description">
+                Les liens expirent par défaut après 30 jours. Modifiable à 
+                chaque partage.
+              </span>
+            </div>
+          </div>
+
+          <!-- Protection par code -->
+          <div class="security-item">
+            <div class="security-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="security-content">
+              <span class="security-title">Protection par code</span>
+              <span class="security-description">
+                Imposer un code d'accès pour tous les nouveaux partages.
+              </span>
+            </div>
+          </div>
+
+          <!-- Téléchargement des documents -->
+          <div class="security-item">
+            <div class="security-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <div class="security-content">
+              <span class="security-title">Téléchargement des documents</span>
+              <span class="security-description">
+                Autoriser le téléchargement hors de DossierHub pour les 
+                professionnels de confiance.
+              </span>
+            </div>
+          </div>
+
+          <!-- Journal des accès -->
+          <div class="security-item">
+            <div class="security-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <div class="security-content">
+              <span class="security-title">Journal des accès</span>
+              <span class="security-description">
+                Conserver un historique des connexions pendant 24 mois.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-footer">
+          <p class="security-note">
+            Ces préférences sont utilisées par défaut lors du partage 
+            d'un dossier.
+          </p>
+          <span class="badge badge-rgpd">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            RGPD
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Card -->
+  <div class="settings-card notifications-card">
+    <div class="card-header">
+      <h2 class="card-title">Notifications & e-mails</h2>
+      <p class="card-description">
+        Choisissez comment vous et vos clients êtes informés.
+      </p>
+    </div>
+    <div class="card-body">
+      <div class="notifications-grid">
+        <!-- Pour l'agence -->
+        <div class="notification-column">
+          <h3 class="column-title">Pour l'agence</h3>
+          
+          <div class="notification-item">
+            <div class="notification-info">
+              <span class="notification-name">Nouveau dossier créé</span>
+              <span class="notification-description">
+                Recevoir un e-mail lorsqu'un nouveau dossier est ouvert.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="notificationSettings.agency.newDossier">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-info">
+              <span class="notification-name">Documents manquants</span>
+              <span class="notification-description">
+                Résumé quotidien des dossiers en attente de pièces.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="notificationSettings.agency.missingDocuments">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Pour vos clients -->
+        <div class="notification-column">
+          <h3 class="column-title">Pour vos clients</h3>
+          
+          <div class="notification-item">
+            <div class="notification-info">
+              <span class="notification-name">Rappel automatique</span>
+              <span class="notification-description">
+                Relance automatique si des documents manquent après 3 jours.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="notificationSettings.clients.autoReminder">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-info">
+              <span class="notification-name">Confirmation de réception</span>
+              <span class="notification-description">
+                Envoyer un e-mail quand tous les documents ont été reçus.
+              </span>
+            </div>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="notificationSettings.clients.confirmReceipt">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-secondary" (click)="resetSettings()">
+        Réinitialiser
+      </button>
+      <button 
+        class="btn btn-primary"
+        [disabled]="saving()"
+        (click)="saveAllSettings()">
+        @if (saved()) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <polyline points="20,6 9,17 4,12"/>
+          </svg>
+          Enregistré !
+        } @else {
+          Enregistrer les paramètres
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <span class="footer-text">© 2024 DossierHub</span>
+  </div>
+</div>
+
