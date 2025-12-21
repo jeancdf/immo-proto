@@ -62,20 +62,28 @@
       </div>
     </div>
     <div class="card-footer">
-      <button class="btn btn-secondary" (click)="agencySettings.name = ''">
+      <button class="btn btn-secondary" (click)="cancelAgencyEdit()">
         Annuler
       </button>
       <button 
         class="btn btn-primary"
         [disabled]="saving()"
         (click)="saveAgencySettings()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-             stroke-width="2">
-          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-          <polyline points="17,21 17,13 7,13 7,21"/>
-          <polyline points="7,3 7,8 15,8"/>
-        </svg>
-        Enregistrer
+        @if (saved()) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <polyline points="20,6 9,17 4,12"/>
+          </svg>
+          Enregistré !
+        } @else {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17,21 17,13 7,13 7,21"/>
+            <polyline points="7,3 7,8 15,8"/>
+          </svg>
+          Enregistrer
+        }
       </button>
     </div>
   </div>

@@ -28,6 +28,10 @@ export class ApiService {
     return this.http.get<Agency>(`${this.baseUrl}/agency`);
   }
 
+  updateAgency(data: Partial<Agency>): Observable<Agency> {
+    return this.http.patch<Agency>(`${this.baseUrl}/agency`, data);
+  }
+
   // Agent endpoints
   getAgents(): Observable<Agent[]> {
     return this.http.get<Agent[]>(`${this.baseUrl}/agents`);
@@ -95,6 +99,20 @@ export class ApiService {
     return this.http.get<Dossier[]>(
       `${this.baseUrl}/properties/${propertyId}/dossiers`
     );
+  }
+
+  updateProperty(
+    propertyId: number, 
+    data: Partial<PropertyWithDossiers>
+  ): Observable<PropertyWithDossiers> {
+    return this.http.patch<PropertyWithDossiers>(
+      `${this.baseUrl}/properties/${propertyId}`, 
+      data
+    );
+  }
+
+  deleteDossier(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/dossiers/${id}`);
   }
 }
 

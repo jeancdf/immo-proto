@@ -1,0 +1,461 @@
+<div class="clients-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Gestion Clients</h1>
+      <p class="subtitle">
+        Gérez vos relations clients et suivez leurs dossiers
+      </p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-card">
+        <span class="stat-value">{{ clients().length }}</span>
+        <span class="stat-label">Clients</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input 
+      type="text" 
+      placeholder="Rechercher un client par nom, email ou téléphone..."
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)">
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.has-detail]="selectedClient()">
+    <!-- Client List -->
+    <div class="clients-list">
+      @if (loading()) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <span>Chargement des clients...</span>
+        </div>
+      } @else if (filteredClients().length === 0) {
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+            <path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+          <span>Aucun client trouvé</span>
+        </div>
+      } @else {
+        @for (client of filteredClients(); track client.email) {
+          <div 
+            class="client-card" 
+            [class.selected]="selectedClient()?.email === client.email"
+            (click)="selectClient(client)">
+            
+            <div class="client-avatar">
+              {{ client.firstName[0] }}{{ client.lastName[0] }}
+            </div>
+            
+            <div class="client-info">
+              <div class="client-name">
+                {{ client.firstName }} {{ client.lastName }}
+              </div>
+              <div class="client-meta">
+                <span class="client-type-badge" 
+                      [class]="'type-' + client.type">
+                  {{ getTypeLabel(client.type) }}
+                </span>
+                <span class="client-email">{{ client.email }}</span>
+              </div>
+            </div>
+            
+            <div class="client-stats-mini">
+              <div class="stat-mini" title="Dossiers actifs">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                </svg>
+                <span>{{ client.stats.active }}</span>
+              </div>
+              <div class="stat-mini" title="Interactions">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+                <span>{{ client.interactionsCount || 0 }}</span>
+              </div>
+            </div>
+            
+            <div class="client-last-activity">
+              {{ client.lastActivityFormatted }}
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Client Detail Panel -->
+    @if (selectedClient()) {
+      <div class="client-detail">
+        @if (loadingDetail()) {
+          <div class="loading-state">
+            <div class="spinner"></div>
+          </div>
+        } @else {
+          <!-- Detail Header -->
+          <div class="detail-header">
+            <button class="close-btn" (click)="closeDetail()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            
+            <div class="detail-avatar">
+              {{ selectedClient()!.firstName[0] }}{{ selectedClient()!.lastName[0] }}
+            </div>
+            
+            <h2>
+              {{ selectedClient()!.firstName }} {{ selectedClient()!.lastName }}
+            </h2>
+            
+            <span class="detail-type" 
+                  [class]="'type-' + selectedClient()!.type">
+              {{ getTypeLabel(selectedClient()!.type) }}
+            </span>
+            
+            <div class="detail-contact">
+              <a href="mailto:{{ selectedClient()!.email }}" class="contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                {{ selectedClient()!.email }}
+              </a>
+              <a href="tel:{{ selectedClient()!.phone }}" class="contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72"/>
+                </svg>
+                {{ selectedClient()!.phone }}
+              </a>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="detail-stats">
+              <div class="detail-stat">
+                <span class="value">{{ selectedClient()!.stats.total }}</span>
+                <span class="label">Dossiers</span>
+              </div>
+              <div class="detail-stat">
+                <span class="value active">{{ selectedClient()!.stats.active }}</span>
+                <span class="label">Actifs</span>
+              </div>
+              <div class="detail-stat">
+                <span class="value completed">{{ selectedClient()!.stats.completed }}</span>
+                <span class="label">Terminés</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Reminders -->
+          @if (pendingReminders().length > 0) {
+            <div class="reminders-alert">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              <span>{{ pendingReminders().length }} rappel(s) en attente</span>
+            </div>
+          }
+
+          <!-- Tabs -->
+          <div class="detail-tabs">
+            <button 
+              class="tab-btn" 
+              [class.active]="activeTab() === 'timeline'"
+              (click)="setTab('timeline')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+              Timeline
+            </button>
+            <button 
+              class="tab-btn" 
+              [class.active]="activeTab() === 'dossiers'"
+              (click)="setTab('dossiers')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+              </svg>
+              Dossiers
+            </button>
+            <button 
+              class="tab-btn" 
+              [class.active]="activeTab() === 'preferences'"
+              (click)="setTab('preferences')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+              Préférences
+            </button>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="tab-content">
+            <!-- Timeline Tab -->
+            @if (activeTab() === 'timeline') {
+              <div class="timeline-tab">
+                <!-- Add Interaction Button -->
+                <button 
+                  class="add-interaction-btn"
+                  (click)="toggleAddInteraction()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Ajouter une interaction
+                </button>
+
+                <!-- Add Interaction Form -->
+                @if (showAddInteraction()) {
+                  <div class="add-interaction-form">
+                    <div class="form-row">
+                      <label>Type</label>
+                      <select [(ngModel)]="newInteraction.type">
+                        <option value="note">📝 Note</option>
+                        <option value="call">📞 Appel</option>
+                        <option value="email">✉️ Email</option>
+                        <option value="meeting">👥 Rendez-vous</option>
+                        <option value="reminder">⏰ Rappel</option>
+                      </select>
+                    </div>
+                    
+                    @if (newInteraction.type === 'reminder') {
+                      <div class="form-row">
+                        <label>Date du rappel</label>
+                        <input type="datetime-local" 
+                               [(ngModel)]="newInteraction.dueDate">
+                      </div>
+                    }
+                    
+                    <div class="form-row">
+                      <label>Contenu</label>
+                      <textarea 
+                        [(ngModel)]="newInteraction.content"
+                        placeholder="Décrivez l'interaction..."
+                        rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                      <button 
+                        class="btn-secondary" 
+                        (click)="toggleAddInteraction()">
+                        Annuler
+                      </button>
+                      <button 
+                        class="btn-primary" 
+                        (click)="addInteraction()"
+                        [disabled]="!newInteraction.content.trim()">
+                        Enregistrer
+                      </button>
+                    </div>
+                  </div>
+                }
+
+                <!-- Timeline -->
+                <div class="timeline">
+                  @for (interaction of selectedClient()!.interactions; 
+                        track interaction.id) {
+                    <div class="timeline-item" 
+                         [class.reminder]="interaction.type === 'reminder'"
+                         [class.completed]="interaction.completed">
+                      <div class="timeline-icon" [class]="'icon-' + interaction.type">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                             stroke-width="2">
+                          <path [attr.d]="getInteractionIcon(interaction.type)"/>
+                        </svg>
+                      </div>
+                      <div class="timeline-content">
+                        <div class="timeline-header">
+                          <span class="interaction-type">
+                            {{ getInteractionTypeLabel(interaction.type) }}
+                          </span>
+                          <span class="interaction-date">
+                            {{ interaction.createdAtFormatted }}
+                          </span>
+                        </div>
+                        <p class="interaction-text">{{ interaction.content }}</p>
+                        <div class="timeline-footer">
+                          <span class="agent-name">{{ interaction.agentName }}</span>
+                          @if (interaction.type === 'reminder' && !interaction.completed) {
+                            <button 
+                              class="complete-btn"
+                              (click)="completeReminder(interaction)">
+                              ✓ Marquer comme fait
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  } @empty {
+                    <div class="empty-timeline">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                           stroke-width="1.5">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                      </svg>
+                      <span>Aucune interaction enregistrée</span>
+                      <p>Ajoutez une note ou un rappel pour commencer</p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Dossiers Tab -->
+            @if (activeTab() === 'dossiers') {
+              <div class="dossiers-tab">
+                @for (dossier of selectedClient()!.dossiers; track dossier.id) {
+                  <a [routerLink]="['/dossier', dossier.id]" class="dossier-card">
+                    <div class="dossier-header">
+                      <span class="dossier-ref">{{ dossier.reference }}</span>
+                      <span class="dossier-status" 
+                            [class]="'status-' + dossier.status">
+                        {{ getStatusLabel(dossier.status) }}
+                      </span>
+                    </div>
+                    <div class="dossier-property">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                           stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                      </svg>
+                      <span>
+                        {{ dossier.property.address }}, 
+                        {{ dossier.property.zipCode }} {{ dossier.property.city }}
+                      </span>
+                    </div>
+                    <div class="dossier-meta">
+                      <span class="dossier-type" 
+                            [class]="'type-' + dossier.type">
+                        {{ dossier.type === 'location' ? 'Location' : 'Vente' }}
+                      </span>
+                      @if (dossier.score) {
+                        <span class="dossier-score">
+                          Note: {{ dossier.score }}/10
+                        </span>
+                      }
+                      <span class="dossier-date">
+                        {{ dossier.updatedAtFormatted }}
+                      </span>
+                    </div>
+                  </a>
+                } @empty {
+                  <div class="empty-dossiers">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="1.5">
+                      <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                    </svg>
+                    <span>Aucun dossier</span>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Preferences Tab -->
+            @if (activeTab() === 'preferences') {
+              <div class="preferences-tab">
+                @if (selectedClient()!.preferences) {
+                  <div class="pref-section">
+                    <h4>Budget</h4>
+                    <div class="pref-value">
+                      {{ formatCurrency(selectedClient()!.preferences!.budget?.min || 0) }}
+                      - 
+                      {{ formatCurrency(selectedClient()!.preferences!.budget?.max || 0) }}
+                      /mois
+                    </div>
+                  </div>
+
+                  <div class="pref-section">
+                    <h4>Surface recherchée</h4>
+                    <div class="pref-value">
+                      {{ selectedClient()!.preferences!.surface?.min || 0 }}
+                      - 
+                      {{ selectedClient()!.preferences!.surface?.max || 0 }} m²
+                    </div>
+                  </div>
+
+                  @if (selectedClient()!.preferences!.rooms) {
+                    <div class="pref-section">
+                      <h4>Nombre de pièces</h4>
+                      <div class="pref-value">
+                        {{ selectedClient()!.preferences!.rooms }} pièces
+                      </div>
+                    </div>
+                  }
+
+                  @if (selectedClient()!.preferences!.zones?.length) {
+                    <div class="pref-section">
+                      <h4>Zones souhaitées</h4>
+                      <div class="pref-tags">
+                        @for (zone of selectedClient()!.preferences!.zones; 
+                              track zone) {
+                          <span class="tag">{{ zone }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+
+                  @if (selectedClient()!.preferences!.criteria?.length) {
+                    <div class="pref-section">
+                      <h4>Critères importants</h4>
+                      <div class="pref-tags">
+                        @for (criterion of selectedClient()!.preferences!.criteria; 
+                              track criterion) {
+                          <span class="tag criteria">{{ criterion }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+
+                  @if (selectedClient()!.preferences!.notes) {
+                    <div class="pref-section">
+                      <h4>Notes</h4>
+                      <p class="pref-notes">
+                        {{ selectedClient()!.preferences!.notes }}
+                      </p>
+                    </div>
+                  }
+                } @else {
+                  <div class="empty-preferences">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="1.5">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <span>Aucune préférence enregistrée</span>
+                    <p>
+                      Les préférences permettent de mieux cibler les biens 
+                      pour ce client
+                    </p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

@@ -57,6 +57,22 @@ app.get('/api/agency', (req, res) => {
   res.json(db.agency);
 });
 
+// PATCH /api/agency - Update agency info
+app.patch('/api/agency', (req, res) => {
+  const db = readDb();
+  const updates = req.body;
+  
+  // Update agency fields
+  if (updates.name !== undefined) db.agency.name = updates.name;
+  if (updates.address !== undefined) db.agency.address = updates.address;
+  if (updates.phone !== undefined) db.agency.phone = updates.phone;
+  if (updates.email !== undefined) db.agency.email = updates.email;
+  
+  writeDb(db);
+  
+  res.json(db.agency);
+});
+
 // GET /api/agents - Get all agents
 app.get('/api/agents', (req, res) => {
   const db = readDb();
@@ -382,6 +398,333 @@ app.patch('/api/properties/:id', (req, res) => {
     dossierCount: dossiersWithProperty.length,
     message: `Updated property in ${dossiersWithProperty.length} dossier(s)`
   });
+});
+
+// GET /api/search - Global search across clients, properties, dossiers
+app.get('/api/search', (req, res) => {
+  const db = readDb();
+  const query = (req.query.q || '').toLowerCase().trim();
+  
+  if (!query || query.length < 2) {
+    return res.json({ clients: [], properties: [], dossiers: [] });
+  }
+  
+  const results = {
+    clients: [],
+    properties: [],
+    dossiers: []
+  };
+  
+  // Search in dossiers and extract unique clients
+  const clientsMap = new Map();
+  const propertiesMap = new Map();
+  
+  db.dossiers.forEach(dossier => {
+    const client = dossier.client;
+    const property = dossier.property;
+    const clientFullName = `${client.firstName} ${client.lastName}`.toLowerCase();
+    const clientKey = `${client.firstName}-${client.lastName}-${client.email}`;
+    
+    // Search clients
+    if (
+      clientFullName.includes(query) ||
+      client.email.toLowerCase().includes(query) ||
+      client.phone.includes(query)
+    ) {
+      if (!clientsMap.has(clientKey)) {
+        clientsMap.set(clientKey, {
+          id: client.id,
+          firstName: client.firstName,
+          lastName: client.lastName,
+          email: client.email,
+          phone: client.phone,
+          type: client.type,
+          dossierId: dossier.id
+        });
+      }
+    }
+    
+    // Search properties
+    const propertyKey = `${property.address}-${property.zipCode}`;
+    const propertySearch = `${property.address} ${property.city} ${property.zipCode}`.toLowerCase();
+    
+    if (propertySearch.includes(query)) {
+      if (!propertiesMap.has(propertyKey)) {
+        propertiesMap.set(propertyKey, {
+          id: property.id,
+          address: property.address,
+          city: property.city,
+          zipCode: property.zipCode,
+          type: property.type
+        });
+      }
+    }
+    
+    // Search dossiers by reference
+    if (
+      dossier.reference.toLowerCase().includes(query) ||
+      clientFullName.includes(query) ||
+      propertySearch.includes(query)
+    ) {
+      results.dossiers.push({
+        id: dossier.id,
+        reference: dossier.reference,
+        type: dossier.type,
+        status: dossier.status,
+        clientName: `${client.firstName} ${client.lastName}`,
+        propertyAddress: property.address
+      });
+    }
+  });
+  
+  results.clients = Array.from(clientsMap.values()).slice(0, 5);
+  results.properties = Array.from(propertiesMap.values()).slice(0, 5);
+  results.dossiers = results.dossiers.slice(0, 5);
+  
+  res.json(results);
+});
+
+// ============================================
+// CLIENT CRM ENDPOINTS
+// ============================================
+
+// GET /api/clients - Get all unique clients with stats
+app.get('/api/clients', (req, res) => {
+  const db = readDb();
+  const clientsMap = new Map();
+  
+  // Extract unique clients from dossiers
+  db.dossiers.forEach(dossier => {
+    const client = dossier.client;
+    const key = client.email;
+    
+    if (!clientsMap.has(key)) {
+      clientsMap.set(key, {
+        id: client.id,
+        firstName: client.firstName,
+        lastName: client.lastName,
+        email: client.email,
+        phone: client.phone,
+        type: client.type,
+        dossiers: [],
+        stats: {
+          total: 0,
+          active: 0,
+          completed: 0,
+          archived: 0
+        },
+        lastActivity: dossier.updatedAt,
+        firstContact: dossier.createdAt
+      });
+    }
+    
+    const clientData = clientsMap.get(key);
+    clientData.dossiers.push({
+      id: dossier.id,
+      reference: dossier.reference,
+      type: dossier.type,
+      status: dossier.status,
+      property: dossier.property,
+      createdAt: dossier.createdAt,
+      updatedAt: dossier.updatedAt
+    });
+    
+    clientData.stats.total++;
+    if (dossier.status === 'archive') {
+      clientData.stats.archived++;
+    } else if (dossier.status === 'complet') {
+      clientData.stats.completed++;
+    } else {
+      clientData.stats.active++;
+    }
+    
+    // Track latest activity
+    if (new Date(dossier.updatedAt) > new Date(clientData.lastActivity)) {
+      clientData.lastActivity = dossier.updatedAt;
+    }
+    if (new Date(dossier.createdAt) < new Date(clientData.firstContact)) {
+      clientData.firstContact = dossier.createdAt;
+    }
+  });
+  
+  // Add interactions count and preferences
+  const clients = Array.from(clientsMap.values()).map(client => {
+    const interactions = (db.clientInteractions || [])
+      .filter(i => i.clientEmail === client.email);
+    const preferences = (db.clientPreferences || [])
+      .find(p => p.clientEmail === client.email);
+    
+    return {
+      ...client,
+      interactionsCount: interactions.length,
+      hasPreferences: !!preferences,
+      lastActivityFormatted: formatRelativeDate(client.lastActivity)
+    };
+  });
+  
+  // Sort by last activity (most recent first)
+  clients.sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity));
+  
+  res.json(clients);
+});
+
+// GET /api/clients/:email - Get single client with full details
+app.get('/api/clients/:email', (req, res) => {
+  const db = readDb();
+  const email = decodeURIComponent(req.params.email);
+  
+  // Find all dossiers for this client
+  const dossiers = db.dossiers.filter(d => d.client.email === email);
+  
+  if (dossiers.length === 0) {
+    return res.status(404).json({ error: 'Client not found' });
+  }
+  
+  const client = dossiers[0].client;
+  
+  // Get interactions
+  const interactions = (db.clientInteractions || [])
+    .filter(i => i.clientEmail === email)
+    .map(i => ({
+      ...i,
+      agentName: db.agents.find(a => a.id === i.agentId)?.name || 'Agent',
+      createdAtFormatted: formatRelativeDate(i.createdAt)
+    }))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  // Get preferences
+  const preferences = (db.clientPreferences || [])
+    .find(p => p.clientEmail === email) || null;
+  
+  // Calculate stats
+  const stats = {
+    total: dossiers.length,
+    active: dossiers.filter(d => !['archive', 'complet'].includes(d.status)).length,
+    completed: dossiers.filter(d => d.status === 'complet').length,
+    archived: dossiers.filter(d => d.status === 'archive').length
+  };
+  
+  // Format dossiers with additional info
+  const formattedDossiers = dossiers.map(d => ({
+    id: d.id,
+    reference: d.reference,
+    type: d.type,
+    status: d.status,
+    score: d.score,
+    property: d.property,
+    agentName: db.agents.find(a => a.id === d.agentId)?.name || 'Agent',
+    createdAt: d.createdAt,
+    updatedAt: d.updatedAt,
+    createdAtFormatted: formatRelativeDate(d.createdAt),
+    updatedAtFormatted: formatRelativeDate(d.updatedAt)
+  })).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  
+  res.json({
+    id: client.id,
+    firstName: client.firstName,
+    lastName: client.lastName,
+    email: client.email,
+    phone: client.phone,
+    type: client.type,
+    profession: client.profession,
+    income: client.income,
+    dossiers: formattedDossiers,
+    interactions,
+    preferences,
+    stats,
+    firstContact: dossiers.reduce((min, d) => 
+      new Date(d.createdAt) < new Date(min) ? d.createdAt : min, 
+      dossiers[0].createdAt
+    ),
+    lastActivity: dossiers.reduce((max, d) => 
+      new Date(d.updatedAt) > new Date(max) ? d.updatedAt : max, 
+      dossiers[0].updatedAt
+    )
+  });
+});
+
+// POST /api/clients/:email/interactions - Add interaction
+app.post('/api/clients/:email/interactions', (req, res) => {
+  const db = readDb();
+  const email = decodeURIComponent(req.params.email);
+  const { type, content, dueDate } = req.body;
+  
+  if (!db.clientInteractions) {
+    db.clientInteractions = [];
+  }
+  
+  const newId = db.clientInteractions.length > 0 
+    ? Math.max(...db.clientInteractions.map(i => i.id)) + 1 
+    : 1;
+  
+  const interaction = {
+    id: newId,
+    clientEmail: email,
+    type,
+    content,
+    createdAt: new Date().toISOString(),
+    agentId: db.currentUser.id
+  };
+  
+  if (type === 'reminder' && dueDate) {
+    interaction.dueDate = dueDate;
+    interaction.completed = false;
+  }
+  
+  db.clientInteractions.push(interaction);
+  writeDb(db);
+  
+  // Return with agent name
+  interaction.agentName = db.agents.find(a => a.id === interaction.agentId)?.name;
+  interaction.createdAtFormatted = formatRelativeDate(interaction.createdAt);
+  
+  res.status(201).json(interaction);
+});
+
+// PATCH /api/clients/:email/preferences - Update preferences
+app.patch('/api/clients/:email/preferences', (req, res) => {
+  const db = readDb();
+  const email = decodeURIComponent(req.params.email);
+  
+  if (!db.clientPreferences) {
+    db.clientPreferences = [];
+  }
+  
+  const existingIndex = db.clientPreferences
+    .findIndex(p => p.clientEmail === email);
+  
+  const preferences = {
+    clientEmail: email,
+    ...req.body
+  };
+  
+  if (existingIndex >= 0) {
+    db.clientPreferences[existingIndex] = {
+      ...db.clientPreferences[existingIndex],
+      ...preferences
+    };
+  } else {
+    db.clientPreferences.push(preferences);
+  }
+  
+  writeDb(db);
+  res.json(db.clientPreferences.find(p => p.clientEmail === email));
+});
+
+// PATCH /api/interactions/:id - Update interaction (e.g., complete reminder)
+app.patch('/api/interactions/:id', (req, res) => {
+  const db = readDb();
+  const id = parseInt(req.params.id);
+  
+  const interaction = db.clientInteractions?.find(i => i.id === id);
+  if (!interaction) {
+    return res.status(404).json({ error: 'Interaction not found' });
+  }
+  
+  Object.assign(interaction, req.body);
+  writeDb(db);
+  
+  res.json(interaction);
 });
 
 // GET /api/stats - Get dashboard statistics

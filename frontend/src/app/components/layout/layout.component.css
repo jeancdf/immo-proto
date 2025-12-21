@@ -210,3 +210,148 @@
   padding: 24px 32px;
 }
 
+/* Search Results Dropdown */
+.search-results {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 
+              0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  max-height: 420px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.search-category {
+  padding: 8px 0;
+}
+
+.search-category:not(:last-child) {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.category-header svg {
+  width: 14px;
+  height: 14px;
+}
+
+.search-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.search-item:hover {
+  background: #f8fafc;
+}
+
+.item-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.item-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.item-badge.client-type {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.item-badge.property-type {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.item-badge.status-a_completer {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.item-badge.status-complet {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.item-badge.status-en_cours {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.item-badge.status-archive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.item-sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* No results */
+.no-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.no-results svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Loading spinner */
+.search-loading {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.spinner-small {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+

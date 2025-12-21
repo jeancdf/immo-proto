@@ -104,6 +104,13 @@ export class StateService {
     );
   }
 
+  /** Update agency information */
+  updateAgency(data: Partial<Agency>): Observable<Agency> {
+    return this.http.patch<Agency>(`${this.baseUrl}/agency`, data).pipe(
+      tap(agency => this.agency.set(agency))
+    );
+  }
+
   /** Load current user */
   loadCurrentUser(): void {
     this.http.get<CurrentUser>(`${this.baseUrl}/current-user`).subscribe(

@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state.service';
@@ -89,31 +89,77 @@ export class ParametresComponent implements OnInit {
   readonly saving = signal(false);
   readonly saved = signal(false);
 
+  constructor() {
+    // Watch for agency changes and update form
+    effect(() => {
+      const agency = this.agency();
+      if (agency) {
+        this.agencySettings = {
+          name: agency.name || '',
+          address: agency.address || '',
+          phone: agency.phone || '',
+          email: agency.email || ''
+        };
+      }
+    });
+  }
+
   ngOnInit(): void {
-    // Initialize with agency data
-    const agency = this.agency();
-    if (agency) {
-      this.agencySettings.name = agency.name;
-      this.agencySettings.address = agency.address;
+    // Load agency if not already loaded
+    if (!this.agency()) {
+      this.state.loadAgency();
     }
   }
 
   saveAgencySettings(): void {
     this.saving.set(true);
-    // Simulate save
-    setTimeout(() => {
-      this.saving.set(false);
-      this.showSavedMessage();
-    }, 500);
+    
+    this.state.updateAgency({
+      name: this.agencySettings.name,
+      address: this.agencySettings.address,
+      phone: this.agencySettings.phone,
+      email: this.agencySettings.email
+    }).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.showSavedMessage();
+      },
+      error: () => {
+        this.saving.set(false);
+      }
+    });
+  }
+
+  cancelAgencyEdit(): void {
+    // Reset to original agency data
+    const agency = this.agency();
+    if (agency) {
+      this.agencySettings = {
+        name: agency.name || '',
+        address: agency.address || '',
+        phone: agency.phone || '',
+        email: agency.email || ''
+      };
+    }
   }
 
   saveAllSettings(): void {
     this.saving.set(true);
-    // Simulate save
-    setTimeout(() => {
-      this.saving.set(false);
-      this.showSavedMessage();
-    }, 500);
+    // Save agency settings first
+    this.state.updateAgency({
+      name: this.agencySettings.name,
+      address: this.agencySettings.address,
+      phone: this.agencySettings.phone,
+      email: this.agencySettings.email
+    }).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.showSavedMessage();
+      },
+      error: () => {
+        this.saving.set(false);
+      }
+    });
   }
 
   resetSettings(): void {

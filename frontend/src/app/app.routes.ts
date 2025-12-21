@@ -20,6 +20,8 @@ import { PublicApplicationComponent } from
   './components/public-application/public-application.component';
 import { ParametresComponent } from 
   './components/parametres/parametres.component';
+import { ClientsComponent } from 
+  './components/clients/clients.component';
 
 /**
  * Application Routes
@@ -48,8 +50,8 @@ export const routes: Routes = [
       { path: 'biens/:id/edit', component: BienEditComponent },
       { path: 'biens/:id', component: BienDetailComponent },
       { path: 'mes-dossiers', component: DashboardComponent },
-      { path: 'clients', component: DashboardComponent },
-      { path: 'parametres', component: DashboardComponent }
+      { path: 'clients', component: ClientsComponent },
+      { path: 'parametres', component: ParametresComponent }
     ]
   },
   { path: '**', redirectTo: 'dashboard' }

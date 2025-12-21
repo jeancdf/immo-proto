@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 
 /**
@@ -12,7 +12,7 @@ import { StateService } from '../../services/state.service';
 @Component({
   selector: 'app-property-link',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './property-link.component.html',
   styleUrl: './property-link.component.css'
 })
