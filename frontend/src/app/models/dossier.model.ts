@@ -69,6 +69,30 @@ export interface Document {
   uploadDate: string;
   origin: 'client' | 'agent';
   size: number;
+  // AI Analysis fields
+  analysis?: DocumentAnalysis;
+}
+
+/**
+ * AI Document Analysis result
+ * Simulates OCR + AI analysis of uploaded documents
+ */
+export interface DocumentAnalysis {
+  status: 'pending' | 'analyzing' | 'validated' | 'warning' | 'rejected';
+  confidence: number; // 0-100%
+  detectedType: string;
+  isCorrectType: boolean;
+  isComplete: boolean;
+  isReadable: boolean;
+  extractedData: Record<string, string>;
+  summary: string;
+  alerts: DocumentAlert[];
+  analyzedAt: string;
+}
+
+export interface DocumentAlert {
+  type: 'info' | 'warning' | 'error';
+  message: string;
 }
 
 export interface HistoryEntry {
@@ -142,6 +166,11 @@ export interface PropertyWithDossiers {
     complet: number;
     en_cours: number;
     archive: number;
+  };
+  // Dossier types count (location/vente)
+  dossierTypes: {
+    location: number;
+    vente: number;
   };
   lastUpdate: string;
   lastUpdateFormatted: string;

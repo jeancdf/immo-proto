@@ -1,0 +1,420 @@
+.public-collect-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #64748b;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 24px;
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  background: #fee2e2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.error-icon svg {
+  width: 40px;
+  height: 40px;
+  color: #dc2626;
+}
+
+.error-container h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.error-container p {
+  color: #64748b;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Collect Container */
+.collect-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Header */
+.collect-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.agency-badge {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.source-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.source-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Main */
+.collect-main {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+}
+
+/* Welcome Section */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.welcome-section h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.welcome-text {
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.property-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.property-card svg {
+  width: 24px;
+  height: 24px;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.property-address {
+  display: block;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 15px;
+}
+
+.property-city {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* Progress */
+.progress-section {
+  margin-bottom: 28px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.progress-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.progress-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+/* Documents */
+.documents-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.document-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.document-card.uploaded {
+  background: #f0fdf4;
+}
+
+.doc-icon {
+  width: 44px;
+  height: 44px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.doc-icon svg {
+  width: 22px;
+  height: 22px;
+  color: #64748b;
+}
+
+.doc-icon.success {
+  background: #dcfce7;
+}
+
+.doc-icon.success svg {
+  color: #16a34a;
+}
+
+.doc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.required-star {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.doc-condition {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.doc-uploaded {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #16a34a;
+  margin-top: 4px;
+}
+
+.doc-uploaded svg {
+  width: 14px;
+  height: 14px;
+}
+
+.doc-action {
+  flex-shrink: 0;
+}
+
+.btn-upload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-upload:hover {
+  background: #2563eb;
+}
+
+.btn-upload:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-upload svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.btn-uploaded {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: #dcfce7;
+  color: #16a34a;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-uploaded svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Footer */
+.info-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.required-note {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 8px 0;
+}
+
+.expiry-note {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Completion Banner */
+.completion-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-radius: 16px;
+  color: white;
+}
+
+.completion-banner svg {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.completion-banner strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.completion-banner span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .collect-container {
+    padding: 16px;
+  }
+
+  .collect-main {
+    padding: 24px;
+  }
+
+  .document-card {
+    flex-wrap: wrap;
+  }
+
+  .doc-action {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .btn-upload,
+  .btn-uploaded {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

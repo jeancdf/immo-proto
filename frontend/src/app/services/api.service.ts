@@ -111,6 +111,10 @@ export class ApiService {
     );
   }
 
+  createProperty(data: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/properties`, data);
+  }
+
   deleteDossier(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/dossiers/${id}`);
   }

@@ -27,29 +27,65 @@ export class BiensComponent {
 
   // Local search state
   readonly searchQuery = signal('');
+  
+  // Filter by dossier type (location/vente)
+  readonly dossierTypeFilter = signal<'tous' | 'location' | 'vente'>('tous');
 
-  // Computed filtered properties based on search
+  // Computed filtered properties based on search and type filter
   readonly filteredProperties = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
-    const props = this.properties();
+    const typeFilter = this.dossierTypeFilter();
+    let props = this.properties();
     
-    if (!query) return props;
+    // Filter by dossier type
+    if (typeFilter !== 'tous') {
+      props = props.filter(prop => {
+        if (typeFilter === 'location') return prop.dossierTypes.location > 0;
+        if (typeFilter === 'vente') return prop.dossierTypes.vente > 0;
+        return true;
+      });
+    }
+    
+    // Filter by search query
+    if (query) {
+      props = props.filter(prop =>
+        prop.address.toLowerCase().includes(query) ||
+        prop.city.toLowerCase().includes(query) ||
+        prop.zipCode.includes(query) ||
+        prop.type.toLowerCase().includes(query)
+      );
+    }
 
-    return props.filter(prop =>
-      prop.address.toLowerCase().includes(query) ||
-      prop.city.toLowerCase().includes(query) ||
-      prop.zipCode.includes(query) ||
-      prop.type.toLowerCase().includes(query)
-    );
+    return props;
   });
 
   // Handle search input
   onSearch(query: string): void {
     this.searchQuery.set(query);
   }
+  
+  // Handle type filter change
+  setTypeFilter(type: 'tous' | 'location' | 'vente'): void {
+    this.dossierTypeFilter.set(type);
+  }
 
   // Navigate to property detail
   viewProperty(property: PropertyWithDossiers): void {
     this.router.navigate(['/biens', property.id]);
+  }
+  
+  // Navigate to create new property
+  createProperty(): void {
+    this.router.navigate(['/biens/new']);
+  }
+  
+  // Get primary dossier type for display
+  getPrimaryType(property: PropertyWithDossiers): 'location' | 'vente' | 'mixte' {
+    const hasLocation = property.dossierTypes.location > 0;
+    const hasVente = property.dossierTypes.vente > 0;
+    
+    if (hasLocation && hasVente) return 'mixte';
+    if (hasVente) return 'vente';
+    return 'location';
   }
 }

@@ -1,0 +1,359 @@
+{
+  "analyses": {
+    "1-1": {
+      "status": "validated",
+      "confidence": 97,
+      "detectedType": "Carte Nationale d'Identité",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CNI",
+        "nom": "MARTIN",
+        "prenom": "Sophie",
+        "dateNaissance": "15/03/1990",
+        "lieuNaissance": "Lyon (69)",
+        "numeroDocument": "900315XXXXXX",
+        "dateExpiration": "28/09/2028",
+        "sexe": "F"
+      },
+      "summary": "CNI valide de Mme Sophie MARTIN, née le 15/03/1990 à Lyon. Document en cours de validité jusqu'au 28/09/2028. Photo et informations lisibles.",
+      "alerts": [],
+      "analyzedAt": "2023-12-19T10:05:00Z"
+    },
+    "1-2": {
+      "status": "validated",
+      "confidence": 94,
+      "detectedType": "Bulletins de salaire",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Fiches de paie",
+        "employeur": "Thales Services",
+        "periode": "Sept-Oct 2023",
+        "salaireBrut": "4 850 €",
+        "salaireNet": "3 780 €",
+        "primes": "250 € (prime ancienneté)"
+      },
+      "summary": "2 bulletins de salaire (Sept-Oct 2023) de Thales Services. Salaire net moyen: 3 780€. CDI confirmé, ancienneté 5 ans. Revenus stables.",
+      "alerts": [],
+      "analyzedAt": "2023-12-19T10:06:00Z"
+    },
+    "1-3": {
+      "status": "validated",
+      "confidence": 92,
+      "detectedType": "Avis d'imposition",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Avis d'imposition 2023",
+        "anneeRevenus": "2022",
+        "revenuFiscal": "42 500 €",
+        "nombreParts": "1",
+        "montantImpot": "4 250 €",
+        "adresseFiscale": "12 rue Victor Hugo, 69001 Lyon"
+      },
+      "summary": "Avis d'imposition 2023 (revenus 2022). Revenu fiscal de référence: 42 500€. 1 part fiscale. Cohérent avec les bulletins de salaire fournis.",
+      "alerts": [],
+      "analyzedAt": "2023-12-19T10:07:00Z"
+    },
+    "1-4": {
+      "status": "validated",
+      "confidence": 96,
+      "detectedType": "Contrat de travail",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CDI",
+        "employeur": "Thales Services SAS",
+        "poste": "Ingénieure Systèmes",
+        "dateDebut": "01/09/2018",
+        "lieuTravail": "La Défense (92)",
+        "classification": "Cadre - Position II",
+        "salaireAnnuel": "58 200 €"
+      },
+      "summary": "CDI chez Thales Services depuis 2018. Poste: Ingénieure Systèmes, statut Cadre. Salaire annuel: 58 200€. Stabilité professionnelle confirmée.",
+      "alerts": [],
+      "analyzedAt": "2023-12-19T10:08:00Z"
+    },
+    "2-1": {
+      "status": "validated",
+      "confidence": 95,
+      "detectedType": "Carte Nationale d'Identité",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CNI",
+        "nom": "DUBOIS",
+        "prenom": "Marc",
+        "dateNaissance": "22/07/1985",
+        "lieuNaissance": "Marseille (13)",
+        "numeroDocument": "850722XXXXXX",
+        "dateExpiration": "15/04/2030"
+      },
+      "summary": "CNI valide de M. Marc DUBOIS, né le 22/07/1985 à Marseille. Document valide jusqu'au 15/04/2030.",
+      "alerts": [],
+      "analyzedAt": "2023-12-18T14:00:00Z"
+    },
+    "2-2": {
+      "status": "validated",
+      "confidence": 93,
+      "detectedType": "Contrat de travail",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CDI",
+        "employeur": "BNP Paribas SA",
+        "poste": "Chargé de clientèle",
+        "dateDebut": "15/03/2019",
+        "salaireAnnuel": "45 000 €"
+      },
+      "summary": "CDI chez BNP Paribas depuis mars 2019. Poste: Chargé de clientèle. Ancienneté: 4 ans. Emploi stable dans le secteur bancaire.",
+      "alerts": [],
+      "analyzedAt": "2023-12-18T14:05:00Z"
+    },
+    "3-1": {
+      "status": "validated",
+      "confidence": 98,
+      "detectedType": "Titre de propriété",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Acte de vente authentique",
+        "dateActe": "15/06/2018",
+        "vendeur": "M. et Mme DURAND",
+        "acquereur": "M. Robert FONTAINE",
+        "bien": "Appartement T4, 45 rue Lepic, 75018 Paris",
+        "surface": "92 m²",
+        "prix": "580 000 €",
+        "notaire": "Me Leblanc, Paris 8ème"
+      },
+      "summary": "Acte de vente du 15/06/2018. Appartement T4 de 92m² au 45 rue Lepic, Paris 18ème. Acquis par M. Fontaine pour 580 000€. Document complet et authentique.",
+      "alerts": [],
+      "analyzedAt": "2023-12-17T16:30:00Z"
+    },
+    "5-1": {
+      "status": "validated",
+      "confidence": 96,
+      "detectedType": "Carte Nationale d'Identité",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CNI",
+        "nom": "BERNARD",
+        "prenom": "Émilie",
+        "dateNaissance": "08/11/1992",
+        "dateExpiration": "12/06/2029"
+      },
+      "summary": "CNI valide de Mme Émilie BERNARD, née le 08/11/1992. Document valide jusqu'au 12/06/2029. Qualité excellent.",
+      "alerts": [],
+      "analyzedAt": "2023-11-05T11:30:00Z"
+    },
+    "5-2": {
+      "status": "warning",
+      "confidence": 78,
+      "detectedType": "Bulletins de salaire",
+      "isCorrectType": true,
+      "isComplete": false,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Fiches de paie",
+        "employeur": "Société Générale",
+        "periode": "2023",
+        "salaireMoyen": "3 200 €"
+      },
+      "summary": "Bulletins de salaire 2023 - Société Générale. ⚠️ Seulement 2 mois fournis au lieu de 3 demandés. Salaire moyen: 3 200€ net.",
+      "alerts": [
+        { "type": "warning", "message": "Document incomplet: 2 fiches de paie sur 3 demandées" }
+      ],
+      "analyzedAt": "2023-11-05T11:35:00Z"
+    },
+    "6-1": {
+      "status": "validated",
+      "confidence": 99,
+      "detectedType": "Dossier de diagnostics immobiliers",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Pack diagnostics complet",
+        "dpe": "Classe C (145 kWh/m²/an)",
+        "ges": "Classe B (18 kg CO2/m²/an)",
+        "amiante": "Négatif",
+        "plomb": "Non applicable (> 1949)",
+        "electricite": "Conforme",
+        "gaz": "Conforme",
+        "validite": "16/12/2033"
+      },
+      "summary": "Pack diagnostics complet et valide. DPE classe C, GES classe B. Tous diagnostics conformes, aucune anomalie détectée. Valide jusqu'au 16/12/2033.",
+      "alerts": [],
+      "analyzedAt": "2023-10-01T10:00:00Z"
+    },
+    "6-2": {
+      "status": "validated",
+      "confidence": 97,
+      "detectedType": "Compromis de vente",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Compromis de vente",
+        "dateSignature": "20/11/2023",
+        "vendeur": "M. Thomas MOREAU",
+        "acquereur": "M. et Mme LAMBERT",
+        "prix": "1 250 000 €",
+        "conditionsSuspensives": "Prêt bancaire",
+        "dateButoir": "20/02/2024"
+      },
+      "summary": "Compromis de vente signé le 20/11/2023. Prix: 1 250 000€. Condition suspensive: obtention prêt avant le 20/02/2024. Document juridiquement conforme.",
+      "alerts": [],
+      "analyzedAt": "2023-11-20T15:00:00Z"
+    },
+    "7-1": {
+      "status": "warning",
+      "confidence": 72,
+      "detectedType": "Carte Nationale d'Identité",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": false,
+      "extractedData": {
+        "type": "CNI",
+        "nom": "LEFEBVRE",
+        "prenom": "Antoine",
+        "dateNaissance": "Non lisible",
+        "dateExpiration": "Non lisible"
+      },
+      "summary": "CNI de M. Antoine LEFEBVRE détectée. ⚠️ Qualité de scan insuffisante - certaines informations illisibles. Demander un nouveau scan.",
+      "alerts": [
+        { "type": "warning", "message": "Qualité de scan insuffisante - informations partiellement illisibles" },
+        { "type": "info", "message": "Demander au client de refaire un scan en haute résolution" }
+      ],
+      "analyzedAt": "2023-12-01T09:00:00Z"
+    },
+    "8-1": {
+      "status": "validated",
+      "confidence": 94,
+      "detectedType": "Carte Nationale d'Identité",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "CNI",
+        "nom": "ROUSSEAU",
+        "prenom": "Camille",
+        "dateNaissance": "03/04/1988",
+        "dateExpiration": "22/08/2027"
+      },
+      "summary": "CNI valide de Mme Camille ROUSSEAU, née le 03/04/1988. Document valide jusqu'au 22/08/2027.",
+      "alerts": [],
+      "analyzedAt": "2023-11-20T10:30:00Z"
+    },
+    "8-2": {
+      "status": "validated",
+      "confidence": 91,
+      "detectedType": "Attestation d'emploi",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Attestation employeur",
+        "employeur": "Ministère de l'Éducation Nationale",
+        "statut": "Fonctionnaire titulaire",
+        "poste": "Professeure certifiée",
+        "echelon": "Classe normale, échelon 7",
+        "dateEmbauche": "01/09/2012"
+      },
+      "summary": "Attestation Éducation Nationale. Fonctionnaire titulaire depuis 2012. Poste: Professeure certifiée. Statut très stable (fonction publique).",
+      "alerts": [],
+      "analyzedAt": "2023-11-21T09:15:00Z"
+    },
+    "9-1": {
+      "status": "validated",
+      "confidence": 96,
+      "detectedType": "Titre de propriété",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Acte de vente authentique",
+        "dateActe": "08/03/2010",
+        "acquereur": "M. Olivier GARNIER",
+        "bien": "Maison individuelle",
+        "surface": "180 m²",
+        "terrain": "850 m²",
+        "prix": "420 000 €"
+      },
+      "summary": "Titre de propriété de 2010. Maison de 180m² sur terrain de 850m². Acquis pour 420 000€. Document authentique complet.",
+      "alerts": [],
+      "analyzedAt": "2023-12-10T14:00:00Z"
+    },
+    "10-1": {
+      "status": "validated",
+      "confidence": 89,
+      "detectedType": "Dossier complet candidature",
+      "isCorrectType": true,
+      "isComplete": true,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Dossier groupé",
+        "contenu": "CNI, 3 fiches de paie, avis d'imposition, contrat de travail",
+        "revenus": "4 500 € net/mois",
+        "situation": "CDI depuis 2018"
+      },
+      "summary": "Dossier complet contenant: CNI valide, 3 bulletins de salaire, avis d'imposition 2023, contrat CDI. Revenus: 4 500€ net. Dossier solide.",
+      "alerts": [],
+      "analyzedAt": "2023-11-01T09:00:00Z"
+    },
+    "12-1": {
+      "status": "warning",
+      "confidence": 85,
+      "detectedType": "Dossier de diagnostics immobiliers",
+      "isCorrectType": true,
+      "isComplete": false,
+      "isReadable": true,
+      "extractedData": {
+        "type": "Diagnostics partiels",
+        "dpe": "Classe D (195 kWh/m²/an)",
+        "ges": "Classe C",
+        "amiante": "Présent (dalles sol)",
+        "electricite": "3 anomalies détectées"
+      },
+      "summary": "Diagnostics partiels. ⚠️ Amiante détecté (dalles de sol). 3 anomalies électriques à corriger. DPE classe D. Manque: diagnostic gaz.",
+      "alerts": [
+        { "type": "warning", "message": "Amiante détecté dans les dalles de sol - désamiantage à prévoir" },
+        { "type": "warning", "message": "3 anomalies électriques à mentionner dans le compromis" },
+        { "type": "error", "message": "Diagnostic gaz manquant - installation > 15 ans" }
+      ],
+      "analyzedAt": "2023-11-25T14:30:00Z"
+    }
+  },
+  "analysisConfig": {
+    "autoAnalyze": true,
+    "confidenceThreshold": 70,
+    "supportedTypes": [
+      "Carte Nationale d'Identité",
+      "Passeport",
+      "Titre de séjour",
+      "Bulletins de salaire",
+      "Avis d'imposition",
+      "Contrat de travail",
+      "Attestation employeur",
+      "Titre de propriété",
+      "Compromis de vente",
+      "Bail",
+      "Quittances de loyer",
+      "Diagnostics immobiliers",
+      "DPE",
+      "Règlement de copropriété",
+      "PV d'assemblée générale"
+    ]
+  }
+}
+

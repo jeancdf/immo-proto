@@ -1,0 +1,563 @@
+<div class="bien-create-page">
+  <!-- Header -->
+  <div class="page-header">
+    <button class="back-btn" (click)="cancel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12,19 5,12 12,5"/>
+      </svg>
+      Retour aux biens
+    </button>
+    <h1 class="page-title">Ajouter un nouveau bien</h1>
+  </div>
+
+  <!-- Progress Steps -->
+  <div class="steps-container">
+    <div class="steps-progress">
+      @for (step of [1, 2, 3, 4]; track step) {
+        <div 
+          class="step-item"
+          [class.active]="currentStep() === step"
+          [class.completed]="currentStep() > step"
+          [class.clickable]="step <= currentStep() || isStepValid(step - 1)"
+          (click)="goToStep(step)">
+          <div class="step-number">
+            @if (currentStep() > step) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+            } @else {
+              {{ step }}
+            }
+          </div>
+          <span class="step-title">{{ getStepTitle(step) }}</span>
+        </div>
+        @if (step < 4) {
+          <div class="step-line" [class.completed]="currentStep() > step"></div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()">
+      
+      <!-- Step 1: Transaction Type & Address -->
+      @if (currentStep() === 1) {
+        <div class="form-step">
+          <h2 class="step-heading">Type de transaction et adresse</h2>
+          
+          <!-- Transaction Type -->
+          <div class="form-section">
+            <label class="section-label">Type de transaction *</label>
+            <div class="transaction-cards">
+              <div 
+                class="transaction-card"
+                [class.selected]="formData.transactionType === 'location'"
+                (click)="formData.transactionType = 'location'">
+                <div class="card-icon location">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                  </svg>
+                </div>
+                <span class="card-title">Location</span>
+                <span class="card-desc">Bien à louer</span>
+              </div>
+              <div 
+                class="transaction-card"
+                [class.selected]="formData.transactionType === 'vente'"
+                (click)="formData.transactionType = 'vente'">
+                <div class="card-icon vente">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                </div>
+                <span class="card-title">Vente</span>
+                <span class="card-desc">Bien à vendre</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="form-section">
+            <label class="section-label">Adresse du bien *</label>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label>Adresse *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="formData.address"
+                  name="address"
+                  placeholder="123 rue de la République"
+                  required>
+              </div>
+              <div class="form-group">
+                <label>Code postal *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="formData.zipCode"
+                  name="zipCode"
+                  placeholder="75001"
+                  maxlength="5"
+                  required>
+              </div>
+              <div class="form-group">
+                <label>Ville *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="formData.city"
+                  name="city"
+                  placeholder="Paris"
+                  required>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Characteristics -->
+      @if (currentStep() === 2) {
+        <div class="form-step">
+          <h2 class="step-heading">Caractéristiques du bien</h2>
+          
+          <!-- Property Type -->
+          <div class="form-section">
+            <label class="section-label">Type de bien *</label>
+            <div class="type-grid">
+              @for (type of propertyTypes; track type) {
+                <button 
+                  type="button"
+                  class="type-btn"
+                  [class.selected]="formData.propertyType === type"
+                  (click)="formData.propertyType = type">
+                  {{ type }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Surface & Rooms -->
+          <div class="form-section">
+            <label class="section-label">Surface et pièces</label>
+            <div class="form-grid four-cols">
+              <div class="form-group">
+                <label>Surface (m²) *</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.surface"
+                  name="surface"
+                  placeholder="65"
+                  min="1"
+                  (change)="calculatePricePerSqm()"
+                  required>
+              </div>
+              <div class="form-group">
+                <label>Pièces</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.rooms"
+                  name="rooms"
+                  placeholder="3"
+                  min="1">
+              </div>
+              <div class="form-group">
+                <label>Chambres</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.bedrooms"
+                  name="bedrooms"
+                  placeholder="2"
+                  min="0">
+              </div>
+              <div class="form-group">
+                <label>SDB</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.bathrooms"
+                  name="bathrooms"
+                  placeholder="1"
+                  min="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Floor & Building -->
+          <div class="form-section">
+            <label class="section-label">Étage et immeuble</label>
+            <div class="form-grid four-cols">
+              <div class="form-group">
+                <label>Étage</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.floor"
+                  name="floor"
+                  placeholder="3"
+                  min="0">
+              </div>
+              <div class="form-group">
+                <label>Étages total</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.totalFloors"
+                  name="totalFloors"
+                  placeholder="6"
+                  min="1">
+              </div>
+              <div class="form-group">
+                <label>Année construction</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="formData.buildYear"
+                  name="buildYear"
+                  placeholder="1995"
+                  min="1800"
+                  max="2030">
+              </div>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="form-section">
+            <label class="section-label">Équipements</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasParking" name="hasParking">
+                <span class="checkmark"></span>
+                <span>Parking</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasCellar" name="hasCellar">
+                <span class="checkmark"></span>
+                <span>Cave</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasElevator" name="hasElevator">
+                <span class="checkmark"></span>
+                <span>Ascenseur</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasBalcony" name="hasBalcony">
+                <span class="checkmark"></span>
+                <span>Balcon</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasTerrace" name="hasTerrace">
+                <span class="checkmark"></span>
+                <span>Terrasse</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.hasGarden" name="hasGarden">
+                <span class="checkmark"></span>
+                <span>Jardin</span>
+              </label>
+              @if (formData.transactionType === 'location') {
+                <label class="checkbox-item">
+                  <input type="checkbox" [(ngModel)]="formData.isFurnished" name="isFurnished">
+                  <span class="checkmark"></span>
+                  <span>Meublé</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-section">
+            <label class="section-label">Description</label>
+            <div class="form-group full-width">
+              <textarea 
+                [(ngModel)]="formData.description"
+                name="description"
+                rows="4"
+                placeholder="Décrivez le bien en détail..."></textarea>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Step 3: Price & Charges -->
+      @if (currentStep() === 3) {
+        <div class="form-step">
+          <h2 class="step-heading">
+            @if (formData.transactionType === 'location') {
+              Loyer et charges
+            } @else {
+              Prix de vente
+            }
+          </h2>
+          
+          @if (formData.transactionType === 'location') {
+            <!-- Location Pricing -->
+            <div class="form-section">
+              <label class="section-label">Loyer mensuel</label>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Loyer HC (€/mois) *</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.rent"
+                    name="rent"
+                    placeholder="950"
+                    min="0"
+                    (change)="calculateDeposit()"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label>Charges (€/mois)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.charges"
+                    name="charges"
+                    placeholder="150"
+                    min="0">
+                </div>
+                <div class="form-group">
+                  <label>Dépôt de garantie (€)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.deposit"
+                    name="deposit"
+                    placeholder="950"
+                    min="0">
+                </div>
+              </div>
+              @if (formData.rent && formData.charges) {
+                <div class="price-summary">
+                  <span class="summary-label">Loyer CC :</span>
+                  <span class="summary-value">
+                    {{ (formData.rent || 0) + (formData.charges || 0) }} €/mois
+                  </span>
+                </div>
+              }
+            </div>
+          } @else {
+            <!-- Vente Pricing -->
+            <div class="form-section">
+              <label class="section-label">Prix de vente</label>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Prix (€) *</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.price"
+                    name="price"
+                    placeholder="350000"
+                    min="0"
+                    (change)="calculatePricePerSqm()"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label>Prix/m² (€)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.pricePerSqm"
+                    name="pricePerSqm"
+                    placeholder="5385"
+                    [readonly]="true">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <label class="section-label">Frais</label>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Honoraires agence (€)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.agencyFees"
+                    name="agencyFees"
+                    placeholder="15000"
+                    min="0">
+                </div>
+                <div class="form-group">
+                  <label>Frais de notaire (estimés) (€)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.notaryFees"
+                    name="notaryFees"
+                    placeholder="25000"
+                    min="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- Energy Diagnostics -->
+            <div class="form-section">
+              <label class="section-label">Diagnostics énergétiques</label>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>DPE (Classe énergie)</label>
+                  <select [(ngModel)]="formData.dpeGrade" name="dpeGrade">
+                    @for (grade of energyGrades; track grade) {
+                      <option [value]="grade">{{ grade }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>GES (Émissions CO2)</label>
+                  <select [(ngModel)]="formData.gesGrade" name="gesGrade">
+                    @for (grade of energyGrades; track grade) {
+                      <option [value]="grade">{{ grade }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Copropriété -->
+          <div class="form-section">
+            <label class="section-label">Copropriété</label>
+            <div class="checkbox-grid single">
+              <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="formData.isInCopro" name="isInCopro">
+                <span class="checkmark"></span>
+                <span>Bien en copropriété</span>
+              </label>
+            </div>
+            @if (formData.isInCopro) {
+              <div class="form-grid copro-fields">
+                <div class="form-group">
+                  <label>Charges copro (€/an)</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.coproCharges"
+                    name="coproCharges"
+                    placeholder="2400"
+                    min="0">
+                </div>
+                <div class="form-group">
+                  <label>Nombre de lots</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="formData.coproLots"
+                    name="coproLots"
+                    placeholder="24"
+                    min="1">
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Step 4: Availability & Notes -->
+      @if (currentStep() === 4) {
+        <div class="form-step">
+          <h2 class="step-heading">Disponibilité et notes</h2>
+          
+          <!-- Availability -->
+          <div class="form-section">
+            <label class="section-label">Disponibilité</label>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Disponible à partir du</label>
+                <input 
+                  type="date" 
+                  [(ngModel)]="formData.availableFrom"
+                  name="availableFrom">
+              </div>
+            </div>
+          </div>
+
+          <!-- Internal Notes -->
+          <div class="form-section">
+            <label class="section-label">Notes internes</label>
+            <div class="form-group full-width">
+              <textarea 
+                [(ngModel)]="formData.internalNotes"
+                name="internalNotes"
+                rows="5"
+                placeholder="Notes visibles uniquement par l'agence..."></textarea>
+            </div>
+          </div>
+
+          <!-- Summary Card -->
+          <div class="summary-card">
+            <h3>Récapitulatif</h3>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span class="label">Type</span>
+                <span class="value badge" [class]="formData.transactionType">
+                  {{ formData.transactionType === 'location' ? 'Location' : 'Vente' }}
+                </span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Adresse</span>
+                <span class="value">{{ formData.address }}, {{ formData.zipCode }} {{ formData.city }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Bien</span>
+                <span class="value">{{ formData.propertyType }} - {{ formData.surface }} m²</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Prix</span>
+                <span class="value price">
+                  @if (formData.transactionType === 'location') {
+                    {{ formData.rent }} €/mois
+                    @if (formData.charges) {
+                      <small>(+ {{ formData.charges }} € charges)</small>
+                    }
+                  } @else {
+                    {{ formData.price?.toLocaleString('fr-FR') }} €
+                  }
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        @if (currentStep() > 1) {
+          <button type="button" class="btn-secondary" (click)="prevStep()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12,19 5,12 12,5"/>
+            </svg>
+            Précédent
+          </button>
+        } @else {
+          <button type="button" class="btn-secondary" (click)="cancel()">
+            Annuler
+          </button>
+        }
+
+        @if (currentStep() < totalSteps) {
+          <button 
+            type="button" 
+            class="btn-primary"
+            [disabled]="!canProceed()"
+            (click)="nextStep()">
+            Suivant
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12,5 19,12 12,19"/>
+            </svg>
+          </button>
+        } @else {
+          <button 
+            type="submit" 
+            class="btn-primary submit"
+            [disabled]="saving()">
+            @if (saving()) {
+              <div class="spinner-small"></div>
+              Création en cours...
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Créer le bien
+            }
+          </button>
+        }
+      </div>
+    </form>
+  </div>
+</div>
+

@@ -1,0 +1,392 @@
+<div class="analytics-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <h1 class="page-title">Mon tableau de bord</h1>
+      <p class="page-subtitle">Suivez vos performances et gérez vos priorités</p>
+    </div>
+    <div class="header-right">
+      <div class="period-selector">
+        <button 
+          class="period-btn"
+          [class.active]="selectedPeriod() === 'week'"
+          (click)="setPeriod('week')">
+          7 jours
+        </button>
+        <button 
+          class="period-btn"
+          [class.active]="selectedPeriod() === 'month'"
+          (click)="setPeriod('month')">
+          30 jours
+        </button>
+        <button 
+          class="period-btn"
+          [class.active]="selectedPeriod() === 'year'"
+          (click)="setPeriod('year')">
+          1 an
+        </button>
+      </div>
+      <button class="btn-primary" (click)="createDossier()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Nouveau dossier
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement des données...</p>
+    </div>
+  } @else {
+    <!-- KPI Cards Row -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon created">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value">{{ activityStats().created }}</span>
+          <span class="kpi-label">Dossiers créés</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon completed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value">{{ activityStats().completed }}</span>
+          <span class="kpi-label">Dossiers complets</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon in-progress">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value">{{ activityStats().inProgress }}</span>
+          <span class="kpi-label">En cours</span>
+        </div>
+      </div>
+
+      <div class="kpi-card" [class.alert]="activityStats().overdue > 0">
+        <div class="kpi-icon overdue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value">{{ activityStats().overdue }}</span>
+          <span class="kpi-label">En retard</span>
+        </div>
+      </div>
+
+      <div class="kpi-card large">
+        <div class="kpi-icon rate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20V10"/>
+            <path d="M18 20V4"/>
+            <path d="M6 20v-4"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <div class="rate-display">
+            <span class="kpi-value">{{ activityStats().completionRate }}%</span>
+            <div class="rate-bar">
+              <div 
+                class="rate-fill" 
+                [style.width.%]="activityStats().completionRate">
+              </div>
+            </div>
+          </div>
+          <span class="kpi-label">Taux de complétion</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+      <!-- Left Column -->
+      <div class="left-column">
+        <!-- Alerts Section -->
+        <div class="card alerts-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              Alertes
+              @if (alerts().length > 0) {
+                <span class="alert-count">{{ alerts().length }}</span>
+              }
+            </h2>
+          </div>
+          <div class="card-content">
+            @if (alerts().length === 0) {
+              <div class="empty-alerts">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22,4 12,14.01 9,11.01"/>
+                </svg>
+                <p>Aucune alerte - Tout va bien !</p>
+              </div>
+            } @else {
+              <div class="alerts-list">
+                @for (alert of alerts(); track alert.id) {
+                  <div 
+                    class="alert-item" 
+                    [class]="alert.type"
+                    (click)="viewDossier(alert.dossierId)">
+                    <span class="alert-icon">{{ getAlertIcon(alert.type) }}</span>
+                    <div class="alert-content">
+                      <span class="alert-client">{{ alert.clientName }}</span>
+                      <span class="alert-message">{{ alert.message }}</span>
+                    </div>
+                    <svg class="arrow" viewBox="0 0 24 24" fill="none" 
+                         stroke="currentColor" stroke-width="2">
+                      <polyline points="9,18 15,12 9,6"/>
+                    </svg>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Distribution Charts -->
+        <div class="card distribution-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+              </svg>
+              Répartition
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="distribution-section">
+              <h3>Par type</h3>
+              <div class="distribution-bars">
+                <div class="bar-item">
+                  <div class="bar-label">
+                    <span class="bar-name">Location</span>
+                    <span class="bar-value">
+                      {{ typeDistribution().location.count }} 
+                      ({{ typeDistribution().location.percent }}%)
+                    </span>
+                  </div>
+                  <div class="bar-track">
+                    <div 
+                      class="bar-fill location" 
+                      [style.width.%]="typeDistribution().location.percent">
+                    </div>
+                  </div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label">
+                    <span class="bar-name">Vente</span>
+                    <span class="bar-value">
+                      {{ typeDistribution().vente.count }} 
+                      ({{ typeDistribution().vente.percent }}%)
+                    </span>
+                  </div>
+                  <div class="bar-track">
+                    <div 
+                      class="bar-fill vente" 
+                      [style.width.%]="typeDistribution().vente.percent">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="distribution-section">
+              <h3>Par statut</h3>
+              <div class="status-grid">
+                <div class="status-item a_completer">
+                  <span class="status-count">
+                    {{ statusDistribution().a_completer.count }}
+                  </span>
+                  <span class="status-name">À compléter</span>
+                </div>
+                <div class="status-item en_cours">
+                  <span class="status-count">
+                    {{ statusDistribution().en_cours.count }}
+                  </span>
+                  <span class="status-name">En cours</span>
+                </div>
+                <div class="status-item complet">
+                  <span class="status-count">
+                    {{ statusDistribution().complet.count }}
+                  </span>
+                  <span class="status-name">Complet</span>
+                </div>
+                <div class="status-item archive">
+                  <span class="status-count">
+                    {{ statusDistribution().archive.count }}
+                  </span>
+                  <span class="status-name">Archivé</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <!-- Recent Activity -->
+        <div class="card activity-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+              </svg>
+              Activité récente
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="activity-list">
+              @for (dossier of recentActivity(); track dossier.id) {
+                <div class="activity-item" (click)="viewDossier(dossier.id)">
+                  <div class="activity-avatar">
+                    {{ dossier.client.firstName.charAt(0) }}{{ dossier.client.lastName.charAt(0) }}
+                  </div>
+                  <div class="activity-info">
+                    <span class="activity-name">
+                      {{ dossier.client.firstName }} {{ dossier.client.lastName }}
+                    </span>
+                    <span class="activity-property">
+                      {{ dossier.property.address }}
+                    </span>
+                  </div>
+                  <div class="activity-meta">
+                    <span class="activity-status" [class]="dossier.status">
+                      {{ getStatusLabel(dossier.status) }}
+                    </span>
+                    <span class="activity-date">
+                      {{ formatDate(dossier.updatedAt) }}
+                    </span>
+                  </div>
+                </div>
+              } @empty {
+                <div class="empty-activity">
+                  <p>Aucune activité récente</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Dossiers -->
+        <div class="card top-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+              </svg>
+              Meilleurs dossiers
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="top-list">
+              @for (dossier of topDossiers(); track dossier.id; let i = $index) {
+                <div class="top-item" (click)="viewDossier(dossier.id)">
+                  <span class="top-rank" [class]="'rank-' + (i + 1)">
+                    {{ i + 1 }}
+                  </span>
+                  <div class="top-info">
+                    <span class="top-name">
+                      {{ dossier.client.firstName }} {{ dossier.client.lastName }}
+                    </span>
+                    <span class="top-type" [class]="dossier.type">
+                      {{ dossier.type === 'location' ? 'Location' : 'Vente' }}
+                    </span>
+                  </div>
+                  <div class="top-score">
+                    <span class="score-value">{{ dossier.score }}/10</span>
+                    <div class="score-bar">
+                      <div 
+                        class="score-fill" 
+                        [style.width.%]="(dossier.score || 0) * 10">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              } @empty {
+                <div class="empty-top">
+                  <p>Aucun dossier noté</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Trend (Simple Bar Chart) -->
+        <div class="card trend-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="20" x2="12" y2="10"/>
+                <line x1="18" y1="20" x2="18" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="16"/>
+              </svg>
+              Tendance mensuelle
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="trend-chart">
+              @for (data of monthlyTrend(); track data.month) {
+                <div class="trend-bar-group">
+                  <div class="trend-bars">
+                    <div 
+                      class="trend-bar created" 
+                      [style.height.px]="data.created * 8"
+                      title="Créés: {{ data.created }}">
+                    </div>
+                    <div 
+                      class="trend-bar completed" 
+                      [style.height.px]="data.completed * 8"
+                      title="Complétés: {{ data.completed }}">
+                    </div>
+                  </div>
+                  <span class="trend-label">{{ data.month }}</span>
+                </div>
+              }
+            </div>
+            <div class="trend-legend">
+              <span class="legend-item">
+                <span class="legend-dot created"></span> Créés
+              </span>
+              <span class="legend-item">
+                <span class="legend-dot completed"></span> Complétés
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

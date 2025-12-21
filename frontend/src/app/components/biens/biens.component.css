@@ -4,7 +4,16 @@
 
 /* Header */
 .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  flex: 1;
 }
 
 .page-title {
@@ -20,14 +29,97 @@
   margin: 0;
 }
 
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* Search Section */
 .search-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 .search-box {
   position: relative;
+  flex: 1;
   max-width: 500px;
+  min-width: 280px;
+}
+
+/* Type Filter Buttons */
+.type-filter-group {
+  display: flex;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.filter-btn:hover {
+  background: #fff;
+  color: #334155;
+}
+
+.filter-btn.active {
+  background: #fff;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.filter-btn.location.active {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.filter-btn.vente.active {
+  color: #059669;
+  background: #ecfdf5;
 }
 
 .search-icon {
@@ -106,6 +198,39 @@
   width: 22px;
   height: 22px;
   color: #3b82f6;
+}
+
+.header-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dossier-type-badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.dossier-type-badge.location {
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.dossier-type-badge.vente {
+  background: linear-gradient(135deg, #dcfce7, #ecfdf5);
+  color: #059669;
+  border: 1px solid #6ee7b7;
+}
+
+.dossier-type-badge.mixte {
+  background: linear-gradient(135deg, #fef3c7, #fef9c3);
+  color: #b45309;
+  border: 1px solid #fcd34d;
 }
 
 .property-type {

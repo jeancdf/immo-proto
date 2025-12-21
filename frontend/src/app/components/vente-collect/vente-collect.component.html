@@ -1,0 +1,271 @@
+<div class="vente-collect">
+  <div class="section-header">
+    <div class="header-info">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+        Collecte de documents
+      </h3>
+      <p>Créez des liens pour collecter les documents auprès des différentes parties</p>
+    </div>
+    <button 
+      class="btn btn-primary"
+      (click)="toggleAddForm()"
+      [disabled]="getAvailableSources().length === 0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nouveau lien
+    </button>
+  </div>
+
+  <!-- Add Form -->
+  @if (showAddForm()) {
+    <div class="add-form">
+      <h4>Créer un lien de collecte</h4>
+      
+      <div class="form-row">
+        <label>Type de source</label>
+        <select [(ngModel)]="newLink.sourceType">
+          <option value="">Sélectionner...</option>
+          @for (source of getAvailableSources(); track source.id) {
+            <option [value]="source.id">{{ source.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>Nom / Société</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newLink.sourceName"
+          placeholder="Ex: M. Dupont, Cabinet Martin...">
+      </div>
+
+      <div class="form-row">
+        <label>Email (optionnel)</label>
+        <input 
+          type="email" 
+          [(ngModel)]="newLink.sourceEmail"
+          placeholder="contact@example.com">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" (click)="toggleAddForm()">
+          Annuler
+        </button>
+        <button 
+          class="btn btn-primary" 
+          (click)="createLink()"
+          [disabled]="!newLink.sourceType || !newLink.sourceName">
+          Créer le lien
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <span>Chargement...</span>
+    </div>
+  }
+
+  <!-- Links Grid -->
+  @if (!loading()) {
+    <div class="links-grid">
+      @for (link of collectLinks(); track link.id) {
+        <div class="link-card" [style.border-color]="link.sourceInfo.color">
+          <div class="card-header">
+            <div class="source-icon" [style.background-color]="link.sourceInfo.color">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path [attr.d]="getSourceIcon(link.sourceType)"/>
+              </svg>
+            </div>
+            <div class="source-info">
+              <span class="source-type">{{ link.sourceInfo.name }}</span>
+              <span class="source-name">{{ link.sourceName }}</span>
+            </div>
+            <button class="menu-btn" (click)="deleteLink(link)" title="Supprimer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <polyline points="3,6 5,6 21,6"/>
+                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 ' +
+                      '012-2h4a2 2 0 012 2v2"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="progress-section">
+            <div class="progress-header">
+              <span class="progress-text">
+                {{ link.stats.received }}/{{ link.stats.total }} documents
+              </span>
+              <span class="progress-percent">{{ link.stats.percentage }}%</span>
+            </div>
+            <div class="progress-bar">
+              <div 
+                class="progress-fill" 
+                [style.width.%]="link.stats.percentage"
+                [style.background-color]="link.sourceInfo.color">
+              </div>
+            </div>
+          </div>
+
+          <div class="card-meta">
+            <span class="meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              Dernier accès: {{ formatDate(link.lastAccessedAt) }}
+            </span>
+          </div>
+
+          <div class="card-actions">
+            <button class="action-btn" (click)="copyLink(link)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              {{ linkCopied() ? 'Copié !' : 'Copier lien' }}
+            </button>
+            <button class="action-btn primary" (click)="viewDetails(link)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Voir détails
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          <h4>Aucun lien de collecte</h4>
+          <p>Créez des liens pour collecter les documents auprès du vendeur, 
+             du syndic, de la banque, etc.</p>
+          <button class="btn btn-primary" (click)="toggleAddForm()">
+            Créer un premier lien
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Details Panel -->
+  @if (selectedLink()) {
+    <div class="details-overlay" (click)="closeDetails()"></div>
+    <div class="details-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <div class="source-icon" 
+               [style.background-color]="selectedLink()!.sourceInfo.color">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2">
+              <path [attr.d]="getSourceIcon(selectedLink()!.sourceType)"/>
+            </svg>
+          </div>
+          <div>
+            <h3>{{ selectedLink()!.sourceName }}</h3>
+            <span class="source-type-label">
+              {{ selectedLink()!.sourceInfo.name }}
+            </span>
+          </div>
+        </div>
+        <button class="close-btn" (click)="closeDetails()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="documents-list">
+        <h4>Documents demandés</h4>
+        @for (doc of selectedLink()!.documents; track doc.docId) {
+          <div class="document-item" [class]="'status-' + doc.status">
+            <div class="doc-status">
+              @if (doc.status === 'received') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              } @else if (doc.status === 'not_applicable') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              }
+            </div>
+            <div class="doc-info">
+              <span class="doc-name">
+                {{ doc.name }}
+                @if (doc.required) {
+                  <span class="required-badge">Obligatoire</span>
+                }
+              </span>
+              @if (doc.condition) {
+                <span class="doc-condition">{{ doc.condition }}</span>
+              }
+              @if (doc.fileName) {
+                <span class="doc-file">{{ doc.fileName }}</span>
+              }
+            </div>
+            <div class="doc-actions">
+              <select 
+                [value]="doc.status"
+                (change)="updateDocStatus(
+                  selectedLink()!, 
+                  doc.docId, 
+                  $any($event.target).value
+                )">
+                <option value="pending">En attente</option>
+                <option value="received">Reçu</option>
+                <option value="not_applicable">Non applicable</option>
+              </select>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="panel-footer">
+        <button class="btn btn-secondary" (click)="copyLink(selectedLink()!)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copier le lien
+        </button>
+      </div>
+    </div>
+  }
+</div>
+

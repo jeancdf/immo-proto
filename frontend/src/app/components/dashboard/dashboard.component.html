@@ -152,7 +152,10 @@
               </span>
             </td>
             <td>
-              <span class="score" [class.na]="!dossier.score">
+              <span 
+                class="score" 
+                [class.na]="!dossier.score"
+                [ngStyle]="getScoreStyle(dossier.score)">
                 {{ dossier.score ? dossier.score + '/10' : 'NA' }}
               </span>
             </td>

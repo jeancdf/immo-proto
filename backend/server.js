@@ -11,20 +11,57 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, 'db.json');
+const DOCS_TEMPLATES_PATH = path.join(__dirname, 'documents-templates.json');
+const DOC_ANALYSIS_PATH = path.join(__dirname, 'document-analysis.json');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Helper: Read database
+// Helper: Read main database
 function readDb() {
   const data = fs.readFileSync(DB_PATH, 'utf-8');
   return JSON.parse(data);
 }
 
-// Helper: Write database
+// Helper: Write main database
 function writeDb(data) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+}
+
+// Helper: Read documents templates database
+function readDocsDb() {
+  const data = fs.readFileSync(DOCS_TEMPLATES_PATH, 'utf-8');
+  return JSON.parse(data);
+}
+
+// Helper: Write documents templates database
+function writeDocsDb(data) {
+  fs.writeFileSync(DOCS_TEMPLATES_PATH, JSON.stringify(data, null, 2));
+}
+
+// Helper: Read document analysis database
+function readAnalysisDb() {
+  const data = fs.readFileSync(DOC_ANALYSIS_PATH, 'utf-8');
+  return JSON.parse(data);
+}
+
+// Helper: Write document analysis database
+function writeAnalysisDb(data) {
+  fs.writeFileSync(DOC_ANALYSIS_PATH, JSON.stringify(data, null, 2));
+}
+
+// Helper: Enrich documents with AI analysis data
+function enrichDocumentsWithAnalysis(dossierId, documents) {
+  const analysisDb = readAnalysisDb();
+  return documents.map(doc => {
+    const analysisKey = `${dossierId}-${doc.id}`;
+    const analysis = analysisDb.analyses[analysisKey];
+    return {
+      ...doc,
+      analysis: analysis || null
+    };
+  });
 }
 
 // Helper: Format date for display
@@ -145,9 +182,13 @@ app.get('/api/dossiers/:id', (req, res) => {
     dateFormatted: formatRelativeDate(h.date)
   }));
 
+  // Enrich documents with AI analysis
+  const documentsWithAnalysis = enrichDocumentsWithAnalysis(dossier.id, dossier.documents || []);
+
   res.json({
     ...dossier,
     agent,
+    documents: documentsWithAnalysis,
     history: historyFormatted
   });
 });
@@ -280,6 +321,11 @@ app.get('/api/properties', (req, res) => {
           en_cours: 0,
           archive: 0
         },
+        // Dossier types (location/vente)
+        dossierTypes: {
+          location: 0,
+          vente: 0
+        },
         lastUpdate: dossier.updatedAt
       });
     }
@@ -288,6 +334,9 @@ app.get('/api/properties', (req, res) => {
     entry.dossierCount++;
     entry.dossierIds.push(dossier.id);
     entry.statuses[dossier.status]++;
+    // Track dossier types
+    if (dossier.type === 'location') entry.dossierTypes.location++;
+    if (dossier.type === 'vente') entry.dossierTypes.vente++;
     
     // Track most recent update
     if (new Date(dossier.updatedAt) > new Date(entry.lastUpdate)) {
@@ -330,6 +379,62 @@ app.get('/api/properties/:id/dossiers', (req, res) => {
   );
   
   res.json(enrichedDossiers);
+});
+
+// POST /api/properties - Create a new property
+app.post('/api/properties', (req, res) => {
+  const db = readDb();
+  const data = req.body;
+  
+  // Generate new property ID
+  const maxPropertyId = db.dossiers.reduce((max, d) => 
+    Math.max(max, d.property.id), 0
+  );
+  const newPropertyId = maxPropertyId + 1;
+  
+  // Create property object
+  const newProperty = {
+    id: newPropertyId,
+    address: data.address,
+    city: data.city,
+    zipCode: data.zipCode,
+    type: data.type || data.propertyType,
+    transactionType: data.transactionType,
+    description: data.description || '',
+    surface: data.surface,
+    rooms: data.rooms,
+    bedrooms: data.bedrooms,
+    bathrooms: data.bathrooms,
+    floor: data.floor,
+    totalFloors: data.totalFloors,
+    buildYear: data.buildYear,
+    hasParking: data.hasParking || false,
+    hasCellar: data.hasCellar || false,
+    hasElevator: data.hasElevator || false,
+    hasBalcony: data.hasBalcony || false,
+    hasTerrace: data.hasTerrace || false,
+    hasGarden: data.hasGarden || false,
+    isFurnished: data.isFurnished || false,
+    rent: data.rent,
+    charges: data.charges,
+    deposit: data.deposit,
+    price: data.price,
+    pricePerSqm: data.pricePerSqm,
+    agencyFees: data.agencyFees,
+    notaryFees: data.notaryFees,
+    dpeGrade: data.dpeGrade,
+    gesGrade: data.gesGrade,
+    isInCopro: data.isInCopro || false,
+    coproCharges: data.coproCharges,
+    coproLots: data.coproLots,
+    availableFrom: data.availableFrom,
+    internalNotes: data.internalNotes
+  };
+  
+  // For now, we store the property without creating a dossier
+  // The property will appear when a dossier is created for it
+  // Return the property with ID so frontend can navigate
+  res.status(201).json(newProperty);
 });
 
 // PATCH /api/properties/:id - Update property details
@@ -748,6 +853,386 @@ app.get('/api/stats', (req, res) => {
 
   res.json(stats);
 });
+
+// ============================================
+// DOCUMENT COLLECTION ENDPOINTS (VENTE MODULE)
+// ============================================
+
+// GET /api/vente/templates - Get all document templates
+app.get('/api/vente/templates', (req, res) => {
+  const docsDb = readDocsDb();
+  res.json({
+    sources: docsDb.documentSources,
+    templates: docsDb.venteTemplates
+  });
+});
+
+// GET /api/vente/templates/:type - Get specific template
+app.get('/api/vente/templates/:type', (req, res) => {
+  const docsDb = readDocsDb();
+  const template = docsDb.venteTemplates[req.params.type];
+  
+  if (!template) {
+    return res.status(404).json({ error: 'Template not found' });
+  }
+  
+  res.json({
+    sources: docsDb.documentSources,
+    template
+  });
+});
+
+// GET /api/dossiers/:id/collect-links - Get all collect links for a dossier
+app.get('/api/dossiers/:id/collect-links', (req, res) => {
+  const docsDb = readDocsDb();
+  const dossierId = parseInt(req.params.id);
+  
+  const links = docsDb.collectLinks.filter(l => l.dossierId === dossierId);
+  
+  // Enrich with template info and stats
+  const enrichedLinks = links.map(link => {
+    const received = link.documents.filter(d => d.status === 'received').length;
+    const total = link.documents.filter(d => d.status !== 'not_applicable').length;
+    const source = docsDb.documentSources.find(s => s.id === link.sourceType);
+    
+    return {
+      ...link,
+      sourceInfo: source,
+      stats: { received, total, percentage: total > 0 ? Math.round(received / total * 100) : 0 }
+    };
+  });
+  
+  res.json(enrichedLinks);
+});
+
+// POST /api/dossiers/:id/collect-links - Create a new collect link
+app.post('/api/dossiers/:id/collect-links', (req, res) => {
+  const docsDb = readDocsDb();
+  const dossierId = parseInt(req.params.id);
+  const { sourceType, sourceName, sourceEmail, templateType } = req.body;
+  
+  // Get template documents for this source
+  const template = docsDb.venteTemplates[templateType];
+  if (!template) {
+    return res.status(400).json({ error: 'Invalid template type' });
+  }
+  
+  const sourceDocuments = template.documents[sourceType] || [];
+  
+  // Generate unique token
+  const token = `collect-${dossierId}-${sourceType}-${Date.now()}`;
+  
+  // Create new collect link
+  const newId = docsDb.collectLinks.length > 0
+    ? Math.max(...docsDb.collectLinks.map(l => l.id)) + 1
+    : 1;
+  
+  const newLink = {
+    id: newId,
+    token,
+    dossierId,
+    sourceType,
+    sourceName,
+    sourceEmail,
+    templateType,
+    documents: sourceDocuments.map(doc => ({
+      docId: doc.id,
+      status: 'pending'
+    })),
+    createdAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+    lastAccessedAt: null
+  };
+  
+  docsDb.collectLinks.push(newLink);
+  writeDocsDb(docsDb);
+  
+  // Return enriched link
+  const source = docsDb.documentSources.find(s => s.id === sourceType);
+  res.status(201).json({
+    ...newLink,
+    sourceInfo: source,
+    stats: { received: 0, total: sourceDocuments.length, percentage: 0 }
+  });
+});
+
+// GET /api/collect/:token - Public endpoint for third parties
+app.get('/api/collect/:token', (req, res) => {
+  const docsDb = readDocsDb();
+  const db = readDb();
+  const { token } = req.params;
+  
+  const link = docsDb.collectLinks.find(l => l.token === token);
+  if (!link) {
+    return res.status(404).json({ error: 'Link not found or expired' });
+  }
+  
+  // Check expiration
+  if (new Date(link.expiresAt) < new Date()) {
+    return res.status(410).json({ error: 'Link has expired' });
+  }
+  
+  // Update last accessed
+  link.lastAccessedAt = new Date().toISOString();
+  writeDocsDb(docsDb);
+  
+  // Get dossier info (property address)
+  const dossier = db.dossiers.find(d => d.id === link.dossierId);
+  
+  // Get template to enrich document names
+  const template = docsDb.venteTemplates[link.templateType];
+  const sourceDocuments = template?.documents[link.sourceType] || [];
+  
+  // Enrich documents with names
+  const enrichedDocuments = link.documents.map(doc => {
+    const templateDoc = sourceDocuments.find(td => td.id === doc.docId);
+    return {
+      ...doc,
+      name: templateDoc?.name || 'Document inconnu',
+      required: templateDoc?.required || false,
+      condition: templateDoc?.condition
+    };
+  });
+  
+  const source = docsDb.documentSources.find(s => s.id === link.sourceType);
+  
+  res.json({
+    sourceName: link.sourceName,
+    sourceType: link.sourceType,
+    sourceInfo: source,
+    property: dossier?.property || null,
+    agencyName: db.agency.name,
+    documents: enrichedDocuments,
+    expiresAt: link.expiresAt
+  });
+});
+
+// POST /api/collect/:token/upload - Upload a document (third party)
+app.post('/api/collect/:token/upload', (req, res) => {
+  const docsDb = readDocsDb();
+  const { token } = req.params;
+  const { docId, fileName } = req.body;
+  
+  const link = docsDb.collectLinks.find(l => l.token === token);
+  if (!link) {
+    return res.status(404).json({ error: 'Link not found' });
+  }
+  
+  // Check expiration
+  if (new Date(link.expiresAt) < new Date()) {
+    return res.status(410).json({ error: 'Link has expired' });
+  }
+  
+  // Find and update document
+  const doc = link.documents.find(d => d.docId === docId);
+  if (!doc) {
+    return res.status(400).json({ error: 'Document not found in this collection' });
+  }
+  
+  doc.status = 'received';
+  doc.fileName = fileName;
+  doc.uploadedAt = new Date().toISOString();
+  
+  link.lastAccessedAt = new Date().toISOString();
+  writeDocsDb(docsDb);
+  
+  res.json({ success: true, document: doc });
+});
+
+// PATCH /api/collect-links/:id/documents/:docId - Update document status (agent)
+app.patch('/api/collect-links/:id/documents/:docId', (req, res) => {
+  const docsDb = readDocsDb();
+  const linkId = parseInt(req.params.id);
+  const { docId } = req.params;
+  const { status } = req.body;
+  
+  const link = docsDb.collectLinks.find(l => l.id === linkId);
+  if (!link) {
+    return res.status(404).json({ error: 'Link not found' });
+  }
+  
+  const doc = link.documents.find(d => d.docId === docId);
+  if (!doc) {
+    return res.status(404).json({ error: 'Document not found' });
+  }
+  
+  doc.status = status;
+  if (status === 'not_applicable') {
+    delete doc.fileName;
+    delete doc.uploadedAt;
+  }
+  
+  writeDocsDb(docsDb);
+  res.json(doc);
+});
+
+// DELETE /api/collect-links/:id - Delete a collect link
+app.delete('/api/collect-links/:id', (req, res) => {
+  const docsDb = readDocsDb();
+  const linkId = parseInt(req.params.id);
+  
+  const index = docsDb.collectLinks.findIndex(l => l.id === linkId);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Link not found' });
+  }
+  
+  docsDb.collectLinks.splice(index, 1);
+  writeDocsDb(docsDb);
+  
+  res.json({ success: true });
+});
+
+// ============================================
+// DOCUMENT AI ANALYSIS ENDPOINTS
+// ============================================
+
+// GET /api/documents/:dossierId/:docId/analysis - Get analysis for a document
+app.get('/api/documents/:dossierId/:docId/analysis', (req, res) => {
+  const { dossierId, docId } = req.params;
+  const analysisDb = readAnalysisDb();
+  const analysisKey = `${dossierId}-${docId}`;
+  const analysis = analysisDb.analyses[analysisKey];
+  
+  if (!analysis) {
+    return res.status(404).json({ error: 'Analysis not found' });
+  }
+  
+  res.json(analysis);
+});
+
+// POST /api/documents/:dossierId/:docId/analyze - Trigger analysis for a document (simulation)
+app.post('/api/documents/:dossierId/:docId/analyze', (req, res) => {
+  const { dossierId, docId } = req.params;
+  const { filename, expectedType } = req.body;
+  
+  // Simulate AI analysis with random but realistic results
+  const simulatedAnalysis = generateSimulatedAnalysis(filename, expectedType);
+  
+  // Store the analysis
+  const analysisDb = readAnalysisDb();
+  const analysisKey = `${dossierId}-${docId}`;
+  analysisDb.analyses[analysisKey] = simulatedAnalysis;
+  writeAnalysisDb(analysisDb);
+  
+  res.json({
+    status: 'completed',
+    analysis: simulatedAnalysis
+  });
+});
+
+// Helper: Generate simulated AI analysis
+function generateSimulatedAnalysis(filename, expectedType) {
+  const templates = {
+    'Identité': {
+      detectedType: 'Carte Nationale d\'Identité',
+      extractedData: {
+        type: 'CNI',
+        nom: 'DUPONT',
+        prenom: 'Marie',
+        dateNaissance: '15/07/1985',
+        lieuNaissance: 'Paris (75)',
+        numeroDocument: '850715XXXXXX',
+        dateExpiration: '12/03/2029'
+      },
+      summary: 'CNI valide de Mme Marie DUPONT, née le 15/07/1985 à Paris. Document en cours de validité jusqu\'au 12/03/2029.',
+      alerts: []
+    },
+    'Revenus': {
+      detectedType: 'Bulletins de salaire',
+      extractedData: {
+        type: 'Fiches de paie',
+        employeur: 'Société ABC',
+        periode: 'Oct-Nov-Déc 2023',
+        salaireBrut: '4 200 €',
+        salaireNet: '3 280 €'
+      },
+      summary: '3 bulletins de salaire récents. Salaire net moyen: 3 280€. Emploi stable en CDI.',
+      alerts: []
+    },
+    'Fiscalité': {
+      detectedType: 'Avis d\'imposition',
+      extractedData: {
+        type: 'Avis d\'imposition 2023',
+        anneeRevenus: '2022',
+        revenuFiscal: '38 500 €',
+        nombreParts: '1',
+        montantImpot: '3 500 €'
+      },
+      summary: 'Avis d\'imposition 2023 (revenus 2022). Revenu fiscal: 38 500€. Cohérent avec les revenus déclarés.',
+      alerts: []
+    },
+    'Professionnel': {
+      detectedType: 'Contrat de travail',
+      extractedData: {
+        type: 'CDI',
+        employeur: 'Entreprise XYZ',
+        poste: 'Responsable projet',
+        dateDebut: '01/03/2020',
+        salaireAnnuel: '48 000 €'
+      },
+      summary: 'CDI depuis mars 2020. Poste: Responsable projet. Ancienneté: 3+ ans. Situation professionnelle stable.',
+      alerts: []
+    },
+    'Propriété': {
+      detectedType: 'Titre de propriété',
+      extractedData: {
+        type: 'Acte authentique',
+        dateActe: '2019',
+        bien: 'Appartement',
+        surface: '75 m²',
+        notaire: 'Me Durand'
+      },
+      summary: 'Titre de propriété authentique. Document complet et conforme. Propriétaire légitime confirmé.',
+      alerts: []
+    },
+    'Diagnostics': {
+      detectedType: 'Dossier de diagnostics',
+      extractedData: {
+        type: 'Pack diagnostics',
+        dpe: 'Classe C',
+        ges: 'Classe B',
+        validite: '2033'
+      },
+      summary: 'Pack diagnostics complet. DPE classe C. Tous diagnostics conformes et valides.',
+      alerts: []
+    }
+  };
+  
+  const template = templates[expectedType] || {
+    detectedType: expectedType || 'Document',
+    extractedData: { type: expectedType || 'Document non classifié' },
+    summary: 'Document analysé. Vérification manuelle recommandée.',
+    alerts: [{ type: 'info', message: 'Type de document non reconnu automatiquement' }]
+  };
+  
+  // Add some randomness for demo
+  const confidence = Math.floor(Math.random() * 15) + 85; // 85-100%
+  const isWarning = Math.random() < 0.15; // 15% chance of warning
+  
+  let status = 'validated';
+  let alerts = [...template.alerts];
+  
+  if (isWarning) {
+    status = 'warning';
+    alerts.push({ 
+      type: 'warning', 
+      message: 'Qualité de scan moyenne - certains détails peu lisibles' 
+    });
+  }
+  
+  return {
+    status,
+    confidence,
+    detectedType: template.detectedType,
+    isCorrectType: true,
+    isComplete: !isWarning,
+    isReadable: confidence > 80,
+    extractedData: template.extractedData,
+    summary: template.summary,
+    alerts,
+    analyzedAt: new Date().toISOString()
+  };
+}
 
 // Start server
 app.listen(PORT, () => {

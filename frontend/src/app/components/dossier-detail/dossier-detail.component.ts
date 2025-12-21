@@ -2,6 +2,9 @@ import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
+import { VenteCollectComponent } from '../vente-collect/vente-collect.component';
+import { DocumentAnalysisPanelComponent } from '../document-analysis-panel/document-analysis-panel.component';
+import { Document } from '../../models/dossier.model';
 
 /**
  * Dossier Detail Component
@@ -11,7 +14,7 @@ import { StateService } from '../../services/state.service';
 @Component({
   selector: 'app-dossier-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, VenteCollectComponent, DocumentAnalysisPanelComponent],
   templateUrl: './dossier-detail.component.html',
   styleUrl: './dossier-detail.component.css'
 })
@@ -27,6 +30,10 @@ export class DossierDetailComponent implements OnInit {
   // Local state
   readonly documentFilter = signal('');
   readonly linkCopied = signal(false);
+  
+  // Document analysis panel state
+  readonly selectedDocument = signal<Document | null>(null);
+  readonly isAnalysisPanelOpen = signal(false);
   
   // Computed filtered documents
   readonly filteredDocuments = computed(() => {
@@ -123,5 +130,45 @@ export class DossierDetailComponent implements OnInit {
       this.linkCopied.set(true);
       setTimeout(() => this.linkCopied.set(false), 2000);
     }
+  }
+
+  // Open document analysis panel
+  openDocumentAnalysis(doc: Document): void {
+    this.selectedDocument.set(doc);
+    this.isAnalysisPanelOpen.set(true);
+  }
+
+  // Close document analysis panel
+  closeDocumentAnalysis(): void {
+    this.isAnalysisPanelOpen.set(false);
+    // Delay clearing the document to allow animation
+    setTimeout(() => {
+      this.selectedDocument.set(null);
+    }, 300);
+  }
+
+  // Get analysis status class for badge
+  getAnalysisStatusClass(doc: Document): string {
+    if (!doc.analysis) return 'pending';
+    return doc.analysis.status;
+  }
+
+  // Get analysis status icon
+  getAnalysisStatusIcon(doc: Document): string {
+    if (!doc.analysis) return '⏳';
+    const icons: Record<string, string> = {
+      validated: '✓',
+      warning: '⚠',
+      rejected: '✗',
+      pending: '⏳',
+      analyzing: '⟳'
+    };
+    return icons[doc.analysis.status] || '?';
+  }
+
+  // Get short analysis summary for tooltip
+  getAnalysisSummary(doc: Document): string {
+    if (!doc.analysis) return 'Analyse en attente';
+    return doc.analysis.summary || 'Analyse disponible';
   }
 }

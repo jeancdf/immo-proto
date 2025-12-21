@@ -139,6 +139,7 @@
               <tr>
                 <th>NOM DU FICHIER</th>
                 <th>TYPE DÉTECTÉ</th>
+                <th>ANALYSE IA</th>
                 <th>DATE</th>
                 <th>ORIGINE</th>
                 <th>ACTIONS</th>
@@ -146,22 +147,43 @@
             </thead>
             <tbody>
               @for (doc of filteredDocuments(); track doc.id) {
-                <tr>
+                <tr class="document-row" 
+                    [class.has-warning]="doc.analysis?.status === 'warning'"
+                    [class.has-error]="doc.analysis?.status === 'rejected'">
                   <td class="filename">{{ doc.filename }}</td>
                   <td>{{ doc.type }}</td>
+                  <td>
+                    <button class="analysis-badge" 
+                            [class]="getAnalysisStatusClass(doc)"
+                            [title]="getAnalysisSummary(doc)"
+                            (click)="openDocumentAnalysis(doc)">
+                      <span class="analysis-icon">{{ getAnalysisStatusIcon(doc) }}</span>
+                      @if (doc.analysis?.confidence) {
+                        <span class="analysis-confidence">{{ doc.analysis?.confidence }}%</span>
+                      } @else {
+                        <span class="analysis-confidence">—</span>
+                      }
+                    </button>
+                  </td>
                   <td>{{ formatDate(doc.uploadDate) }}</td>
                   <td>
                     <span class="origin-badge" [class]="doc.origin">
                       {{ doc.origin === 'client' ? 'Client' : 'Agent' }}
                     </span>
                   </td>
-                  <td>
-                    <button class="view-btn">Voir</button>
+                  <td class="actions-cell">
+                    <button class="view-btn" (click)="openDocumentAnalysis(doc)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                      </svg>
+                      Analyser
+                    </button>
                   </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5" class="empty-docs">
+                  <td colspan="6" class="empty-docs">
                     Aucun document importé
                   </td>
                 </tr>
@@ -208,6 +230,14 @@
           </button>
         </div>
 
+        <!-- Vente Collect Section (only for vente dossiers) -->
+        @if (d.type === 'vente') {
+          <app-vente-collect 
+            [dossierId]="d.id" 
+            [templateType]="'appartement_copropriete'">
+          </app-vente-collect>
+        }
+
         <!-- History Card -->
         <div class="card history-card">
           <h3 class="sidebar-title">Historique récent</h3>
@@ -244,4 +274,11 @@
     </button>
   </div>
 }
+
+<!-- Document Analysis Panel (Slide-in) -->
+<app-document-analysis-panel
+  [document]="selectedDocument()"
+  [isOpen]="isAnalysisPanelOpen()"
+  (close)="closeDocumentAnalysis()">
+</app-document-analysis-panel>
 

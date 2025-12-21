@@ -125,4 +125,54 @@ export class DashboardComponent {
   truncateAddress(address: string): string {
     return address.length > 20 ? address.substring(0, 20) + '...' : address;
   }
+
+  /**
+   * Get score badge styles with gradient from red to green
+   * @param score - Note from 0 to 10
+   * @returns Object with background and color styles
+   */
+  getScoreStyle(score: number | null): { [key: string]: string } {
+    if (score === null || score === undefined) {
+      return {
+        background: '#f1f5f9',
+        color: '#94a3b8'
+      };
+    }
+
+    // Normalize score to 0-1 range
+    const normalized = Math.max(0, Math.min(10, score)) / 10;
+
+    // Color interpolation from red (0) -> yellow (5) -> green (10)
+    let r: number, g: number, b: number;
+    let bgR: number, bgG: number, bgB: number;
+
+    if (normalized < 0.5) {
+      // Red to Yellow (0-5)
+      const t = normalized * 2;
+      // Text color
+      r = 220;
+      g = Math.round(38 + t * (146 - 38));
+      b = 38;
+      // Background (lighter version)
+      bgR = 254;
+      bgG = Math.round(226 + t * (243 - 226));
+      bgB = Math.round(226 + t * (195 - 226));
+    } else {
+      // Yellow to Green (5-10)
+      const t = (normalized - 0.5) * 2;
+      // Text color
+      r = Math.round(184 - t * (184 - 22));
+      g = Math.round(146 - t * (146 - 163) + t * 17);
+      b = Math.round(38 + t * (74 - 38));
+      // Background (lighter version)
+      bgR = Math.round(254 - t * (254 - 220));
+      bgG = Math.round(243 - t * (243 - 252) + t * 9);
+      bgB = Math.round(195 + t * (231 - 195));
+    }
+
+    return {
+      background: `rgb(${bgR}, ${bgG}, ${bgB})`,
+      color: `rgb(${r}, ${g}, ${b})`
+    };
+  }
 }

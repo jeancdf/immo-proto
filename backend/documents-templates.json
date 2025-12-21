@@ -1,0 +1,220 @@
+{
+  "documentSources": [
+    {
+      "id": "vendeur",
+      "name": "Vendeur",
+      "icon": "user",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "syndic",
+      "name": "Syndic",
+      "icon": "building",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "banque",
+      "name": "Banque",
+      "icon": "bank",
+      "color": "#059669"
+    },
+    {
+      "id": "diagnostiqueur",
+      "name": "Diagnostiqueur",
+      "icon": "clipboard",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "notaire",
+      "name": "Notaire",
+      "icon": "scale",
+      "color": "#6366f1"
+    }
+  ],
+  "venteTemplates": {
+    "appartement_copropriete": {
+      "name": "Appartement en copropriété",
+      "documents": {
+        "vendeur": [
+          { "id": "v1", "name": "Titre de propriété", "required": true },
+          { "id": "v2", "name": "Pièce d'identité", "required": true },
+          { "id": "v3", "name": "Livret de famille", "required": false },
+          { "id": "v4", "name": "Dernière taxe foncière", "required": true },
+          { "id": "v5", "name": "Dernière taxe d'habitation", "required": false },
+          { "id": "v6", "name": "Factures de travaux (< 10 ans)", "required": false },
+          { "id": "v7", "name": "Contrats d'entretien", "required": false },
+          { "id": "v8", "name": "Quittances de charges", "required": false }
+        ],
+        "syndic": [
+          { "id": "s1", "name": "Règlement de copropriété", "required": true },
+          { "id": "s2", "name": "État descriptif de division", "required": true },
+          { "id": "s3", "name": "État daté", "required": true },
+          { "id": "s4", "name": "Carnet d'entretien de l'immeuble", "required": true },
+          { "id": "s5", "name": "3 derniers PV d'AG", "required": true },
+          { "id": "s6", "name": "Fiche synthétique copropriété", "required": true },
+          { "id": "s7", "name": "Diagnostic Technique Global (DTG)", "required": false },
+          { "id": "s8", "name": "Plan Pluriannuel de Travaux (PPT)", "required": false },
+          { "id": "s9", "name": "Attestation de superficie Carrez", "required": true }
+        ],
+        "banque": [
+          { "id": "b1", "name": "Tableau d'amortissement du prêt", "required": true },
+          { "id": "b2", "name": "Solde restant dû", "required": true },
+          { "id": "b3", "name": "Accord de mainlevée d'hypothèque", "required": false }
+        ],
+        "diagnostiqueur": [
+          { "id": "d1", "name": "DPE (Diagnostic Performance Énergétique)", "required": true },
+          { "id": "d2", "name": "Diagnostic Amiante", "required": true, "condition": "Immeuble avant 1997" },
+          { "id": "d3", "name": "Diagnostic Plomb (CREP)", "required": true, "condition": "Immeuble avant 1949" },
+          { "id": "d4", "name": "Diagnostic Termites", "required": true, "condition": "Zone déclarée" },
+          { "id": "d5", "name": "État des Risques (ERP)", "required": true },
+          { "id": "d6", "name": "Diagnostic Électricité", "required": true, "condition": "Installation > 15 ans" },
+          { "id": "d7", "name": "Diagnostic Gaz", "required": true, "condition": "Installation > 15 ans" },
+          { "id": "d8", "name": "Métrage Loi Carrez", "required": true },
+          { "id": "d9", "name": "Diagnostic Bruit", "required": true, "condition": "Zone aéroport" }
+        ],
+        "notaire": [
+          { "id": "n1", "name": "État hypothécaire", "required": true },
+          { "id": "n2", "name": "Certificat d'urbanisme", "required": false }
+        ]
+      }
+    },
+    "maison_individuelle": {
+      "name": "Maison individuelle",
+      "documents": {
+        "vendeur": [
+          { "id": "v1", "name": "Titre de propriété", "required": true },
+          { "id": "v2", "name": "Pièce d'identité", "required": true },
+          { "id": "v3", "name": "Livret de famille", "required": false },
+          { "id": "v4", "name": "Dernière taxe foncière", "required": true },
+          { "id": "v5", "name": "Dernière taxe d'habitation", "required": false },
+          { "id": "v6", "name": "Factures de travaux (< 10 ans)", "required": false },
+          { "id": "v7", "name": "Contrats d'entretien", "required": false },
+          { "id": "v8", "name": "Plan cadastral", "required": true },
+          { "id": "v9", "name": "Permis de construire (si travaux)", "required": false }
+        ],
+        "banque": [
+          { "id": "b1", "name": "Tableau d'amortissement du prêt", "required": true },
+          { "id": "b2", "name": "Solde restant dû", "required": true },
+          { "id": "b3", "name": "Accord de mainlevée d'hypothèque", "required": false }
+        ],
+        "diagnostiqueur": [
+          { "id": "d1", "name": "DPE (Diagnostic Performance Énergétique)", "required": true },
+          { "id": "d2", "name": "Diagnostic Amiante", "required": true, "condition": "Maison avant 1997" },
+          { "id": "d3", "name": "Diagnostic Plomb (CREP)", "required": true, "condition": "Maison avant 1949" },
+          { "id": "d4", "name": "Diagnostic Termites", "required": true, "condition": "Zone déclarée" },
+          { "id": "d5", "name": "État des Risques (ERP)", "required": true },
+          { "id": "d6", "name": "Diagnostic Électricité", "required": true, "condition": "Installation > 15 ans" },
+          { "id": "d7", "name": "Diagnostic Gaz", "required": true, "condition": "Installation > 15 ans" },
+          { "id": "d8", "name": "Diagnostic Assainissement", "required": true, "condition": "Non raccordé au tout-à-l'égout" },
+          { "id": "d9", "name": "Diagnostic Bruit", "required": true, "condition": "Zone aéroport" },
+          { "id": "d10", "name": "Diagnostic Mérule", "required": false, "condition": "Zone déclarée" }
+        ],
+        "notaire": [
+          { "id": "n1", "name": "État hypothécaire", "required": true },
+          { "id": "n2", "name": "Certificat d'urbanisme", "required": false },
+          { "id": "n3", "name": "Attestation de non-péril", "required": false }
+        ]
+      }
+    },
+    "avec_locataire": {
+      "name": "Bien occupé (locataire en place)",
+      "additionalDocuments": {
+        "vendeur": [
+          { "id": "vl1", "name": "Bail en cours", "required": true },
+          { "id": "vl2", "name": "Congé pour vente (si donné)", "required": false },
+          { "id": "vl3", "name": "Quittances de loyer (12 derniers mois)", "required": true },
+          { "id": "vl4", "name": "Dépôt de garantie", "required": true },
+          { "id": "vl5", "name": "État des lieux d'entrée", "required": true }
+        ]
+      }
+    }
+  },
+  "collectLinks": [
+    {
+      "id": 1,
+      "token": "collect-vente-001-vendeur",
+      "dossierId": 3,
+      "sourceType": "vendeur",
+      "sourceName": "M. Robert Martin",
+      "sourceEmail": "r.martin@email.com",
+      "templateType": "appartement_copropriete",
+      "documents": [
+        { "docId": "v1", "status": "received", "fileName": "titre_propriete.pdf", "uploadedAt": "2023-12-18T10:00:00Z" },
+        { "docId": "v2", "status": "received", "fileName": "cni_martin.pdf", "uploadedAt": "2023-12-18T10:05:00Z" },
+        { "docId": "v3", "status": "pending" },
+        { "docId": "v4", "status": "received", "fileName": "taxe_fonciere_2023.pdf", "uploadedAt": "2023-12-19T09:00:00Z" },
+        { "docId": "v5", "status": "pending" },
+        { "docId": "v6", "status": "pending" },
+        { "docId": "v7", "status": "pending" },
+        { "docId": "v8", "status": "pending" }
+      ],
+      "createdAt": "2023-12-15T14:00:00Z",
+      "expiresAt": "2024-01-15T14:00:00Z",
+      "lastAccessedAt": "2023-12-19T09:05:00Z"
+    },
+    {
+      "id": 2,
+      "token": "collect-vente-001-syndic",
+      "dossierId": 3,
+      "sourceType": "syndic",
+      "sourceName": "Cabinet Gestion Plus",
+      "sourceEmail": "contact@gestionplus.fr",
+      "templateType": "appartement_copropriete",
+      "documents": [
+        { "docId": "s1", "status": "received", "fileName": "reglement_copro.pdf", "uploadedAt": "2023-12-17T11:00:00Z" },
+        { "docId": "s2", "status": "pending" },
+        { "docId": "s3", "status": "pending" },
+        { "docId": "s4", "status": "pending" },
+        { "docId": "s5", "status": "pending" },
+        { "docId": "s6", "status": "pending" },
+        { "docId": "s7", "status": "not_applicable" },
+        { "docId": "s8", "status": "not_applicable" },
+        { "docId": "s9", "status": "pending" }
+      ],
+      "createdAt": "2023-12-15T14:30:00Z",
+      "expiresAt": "2024-01-15T14:30:00Z",
+      "lastAccessedAt": "2023-12-17T11:15:00Z"
+    },
+    {
+      "id": 3,
+      "token": "collect-vente-001-diag",
+      "dossierId": 3,
+      "sourceType": "diagnostiqueur",
+      "sourceName": "Diag Expert 75",
+      "sourceEmail": "rdv@diagexpert75.fr",
+      "templateType": "appartement_copropriete",
+      "documents": [
+        { "docId": "d1", "status": "received", "fileName": "dpe_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d2", "status": "received", "fileName": "amiante_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d3", "status": "not_applicable" },
+        { "docId": "d4", "status": "not_applicable" },
+        { "docId": "d5", "status": "received", "fileName": "erp_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d6", "status": "received", "fileName": "elec_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d7", "status": "received", "fileName": "gaz_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d8", "status": "received", "fileName": "carrez_2023.pdf", "uploadedAt": "2023-12-16T15:00:00Z" },
+        { "docId": "d9", "status": "not_applicable" }
+      ],
+      "createdAt": "2023-12-15T15:00:00Z",
+      "expiresAt": "2024-01-15T15:00:00Z",
+      "lastAccessedAt": "2023-12-16T15:30:00Z"
+    },
+    {
+      "id": 4,
+      "token": "collect-vente-001-banque",
+      "dossierId": 3,
+      "sourceType": "banque",
+      "sourceName": "BNP Paribas - Agence Opéra",
+      "sourceEmail": "opera@bnpparibas.fr",
+      "templateType": "appartement_copropriete",
+      "documents": [
+        { "docId": "b1", "status": "pending" },
+        { "docId": "b2", "status": "pending" },
+        { "docId": "b3", "status": "not_applicable" }
+      ],
+      "createdAt": "2023-12-15T15:30:00Z",
+      "expiresAt": "2024-01-15T15:30:00Z",
+      "lastAccessedAt": null
+    }
+  ]
+}
+

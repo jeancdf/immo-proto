@@ -1,0 +1,187 @@
+<div class="public-collect-page">
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <div class="error-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <h2>Lien invalide</h2>
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (collectData()) {
+    <div class="collect-container">
+      <!-- Header -->
+      <header class="collect-header">
+        <div class="agency-badge">
+          {{ collectData()!.agencyName }}
+        </div>
+        <div class="source-badge" 
+             [style.background-color]="collectData()!.sourceInfo.color">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <path [attr.d]="getSourceIcon()"/>
+          </svg>
+          {{ collectData()!.sourceInfo.name }}
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="collect-main">
+        <div class="welcome-section">
+          <h1>Documents demandés</h1>
+          <p class="welcome-text">
+            Bonjour <strong>{{ collectData()!.sourceName }}</strong>,<br>
+            Merci de déposer les documents ci-dessous pour la vente du bien :
+          </p>
+          @if (collectData()!.property) {
+            <div class="property-card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                <polyline points="9,22 9,12 15,12 15,22"/>
+              </svg>
+              <div>
+                <span class="property-address">
+                  {{ collectData()!.property!.address }}
+                </span>
+                <span class="property-city">
+                  {{ collectData()!.property!.zipCode }} 
+                  {{ collectData()!.property!.city }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-section">
+          <div class="progress-info">
+            <span class="progress-label">Progression</span>
+            <span class="progress-value">
+              {{ getProgressStats().received }}/{{ getProgressStats().total }} 
+              documents
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div 
+              class="progress-fill" 
+              [style.width.%]="getProgressStats().percentage"
+              [style.background-color]="collectData()!.sourceInfo.color">
+            </div>
+          </div>
+        </div>
+
+        <!-- Documents List -->
+        <div class="documents-section">
+          @for (doc of collectData()!.documents; track doc.docId) {
+            @if (doc.status !== 'not_applicable') {
+              <div class="document-card" [class.uploaded]="doc.status === 'received'">
+                <div class="doc-icon" 
+                     [class.success]="doc.status === 'received'">
+                  @if (doc.status === 'received') {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="2">
+                      <polyline points="20,6 9,17 4,12"/>
+                    </svg>
+                  } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                         stroke-width="2">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 ' +
+                            '002-2V8z"/>
+                      <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                  }
+                </div>
+
+                <div class="doc-info">
+                  <span class="doc-name">
+                    {{ doc.name }}
+                    @if (doc.required) {
+                      <span class="required-star">*</span>
+                    }
+                  </span>
+                  @if (doc.condition) {
+                    <span class="doc-condition">{{ doc.condition }}</span>
+                  }
+                  @if (doc.fileName) {
+                    <span class="doc-uploaded">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                           stroke-width="2">
+                        <polyline points="20,6 9,17 4,12"/>
+                      </svg>
+                      {{ doc.fileName }}
+                    </span>
+                  }
+                </div>
+
+                <div class="doc-action">
+                  @if (doc.status === 'received') {
+                    <button class="btn-uploaded" disabled>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                           stroke-width="2">
+                        <polyline points="20,6 9,17 4,12"/>
+                      </svg>
+                      Déposé
+                    </button>
+                  } @else {
+                    <button 
+                      class="btn-upload"
+                      [disabled]="uploadingDoc() === doc.docId"
+                      (click)="uploadDocument(doc)">
+                      @if (uploadingDoc() === doc.docId) {
+                        <div class="btn-spinner"></div>
+                        Envoi...
+                      } @else {
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                             stroke-width="2">
+                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                          <polyline points="17,8 12,3 7,8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Déposer
+                      }
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Footer Info -->
+        <div class="info-footer">
+          <p class="required-note">
+            <span class="required-star">*</span> Document obligatoire
+          </p>
+          <p class="expiry-note">
+            Ce lien expire le {{ formatExpiryDate() }}
+          </p>
+        </div>
+      </main>
+
+      <!-- Completion Message -->
+      @if (getProgressStats().percentage === 100) {
+        <div class="completion-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+          </svg>
+          <div>
+            <strong>Tous les documents ont été déposés !</strong>
+            <span>L'agence a été notifiée.</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
