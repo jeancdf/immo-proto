@@ -126,6 +126,117 @@
     <div class="content-grid">
       <!-- Left Column -->
       <div class="left-column">
+        <!-- Legal Deadlines Widget -->
+        <div class="card deadlines-card">
+          <div class="card-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              Délais Légaux
+              @if (deadlinesSummary().total > 0) {
+                <span class="deadline-count">{{ deadlinesSummary().total }}</span>
+              }
+            </h2>
+          </div>
+          <div class="card-content">
+            @if (loadingDeadlines()) {
+              <div class="loading-deadlines">
+                <div class="mini-spinner"></div>
+                <span>Chargement...</span>
+              </div>
+            } @else {
+              <!-- Summary Badges -->
+              <div class="deadline-summary">
+                @if (deadlinesSummary().critical > 0) {
+                  <div class="summary-badge critical">
+                    <span class="badge-icon">🔴</span>
+                    <span class="badge-count">{{ deadlinesSummary().critical }}</span>
+                    <span class="badge-label">Critiques</span>
+                  </div>
+                }
+                @if (deadlinesSummary().warning > 0) {
+                  <div class="summary-badge warning">
+                    <span class="badge-icon">🟠</span>
+                    <span class="badge-count">{{ deadlinesSummary().warning }}</span>
+                    <span class="badge-label">À surveiller</span>
+                  </div>
+                }
+                @if (deadlinesSummary().ok > 0) {
+                  <div class="summary-badge ok">
+                    <span class="badge-icon">🟢</span>
+                    <span class="badge-count">{{ deadlinesSummary().ok }}</span>
+                    <span class="badge-label">OK</span>
+                  </div>
+                }
+                @if (deadlinesSummary().total === 0) {
+                  <div class="no-deadlines">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                      <polyline points="22,4 12,14.01 9,11.01"/>
+                    </svg>
+                    <p>Aucun délai en cours</p>
+                  </div>
+                }
+              </div>
+
+              <!-- Deadline List (show top 5 most urgent) -->
+              @if (deadlines().length > 0) {
+                <div class="deadlines-list">
+                  @for (deadline of deadlines().slice(0, 5); track deadline.id) {
+                    <div 
+                      class="deadline-item" 
+                      [class]="getUrgencyDisplay(deadline.urgency).class"
+                      (click)="viewDossier(deadline.dossierId)">
+                      <div class="deadline-left">
+                        <span class="deadline-icon">
+                          {{ getUrgencyDisplay(deadline.urgency).icon }}
+                        </span>
+                        <div class="deadline-info">
+                          <span class="deadline-type">
+                            {{ deadline.deadlineType?.name || 'Délai' }}
+                          </span>
+                          <span class="deadline-client">
+                            @if (deadline.dossier?.client) {
+                              {{ deadline.dossier?.client?.firstName }} 
+                              {{ deadline.dossier?.client?.lastName }}
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div class="deadline-right">
+                        <span 
+                          class="days-badge"
+                          [class]="getUrgencyDisplay(deadline.urgency).class">
+                          {{ formatDaysRemaining(deadline.daysRemaining) }}
+                        </span>
+                        <button 
+                          class="complete-btn"
+                          title="Marquer comme traité"
+                          (click)="completeDeadline(deadline, $event)">
+                          <svg viewBox="0 0 24 24" fill="none" 
+                               stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                @if (deadlines().length > 5) {
+                  <div class="see-all-deadlines">
+                    <span>+ {{ deadlines().length - 5 }} autres délais</span>
+                  </div>
+                }
+              }
+            }
+          </div>
+        </div>
+
         <!-- Alerts Section -->
         <div class="card alerts-card">
           <div class="card-header">

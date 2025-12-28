@@ -1,0 +1,187 @@
+<div class="annonce-generator">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="header-info">
+        <h1>Générateur d'annonces</h1>
+        @if (property(); as prop) {
+          <p class="subtitle">{{ prop.address }}, {{ prop.city }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement du bien...</p>
+    </div>
+  } @else if (property(); as prop) {
+    <div class="generator-content">
+      <!-- Sidebar : Templates -->
+      <aside class="templates-sidebar">
+        <h2>Choisir un format</h2>
+        <div class="templates-list">
+          @for (template of templates; track template.id) {
+            <button 
+              class="template-card"
+              [class.active]="selectedTemplate() === template.id"
+              (click)="selectTemplate(template.id)">
+              <span class="template-icon">{{ template.icon }}</span>
+              <div class="template-info">
+                <span class="template-name">{{ template.name }}</span>
+                <span class="template-desc">{{ template.description }}</span>
+              </div>
+              @if (template.maxLength) {
+                <span class="template-limit">{{ template.maxLength }} car.</span>
+              }
+            </button>
+          }
+        </div>
+
+        <!-- Options -->
+        <div class="options-section">
+          <h3>Options</h3>
+          
+          <label class="checkbox-option">
+            <input type="checkbox" 
+                   [checked]="includePrice()" 
+                   (change)="includePrice.set(!includePrice()); regenerate()">
+            <span class="checkmark"></span>
+            <span>Inclure le prix</span>
+          </label>
+
+          <label class="checkbox-option">
+            <input type="checkbox" 
+                   [checked]="includeContact()" 
+                   (change)="includeContact.set(!includeContact()); regenerate()">
+            <span class="checkmark"></span>
+            <span>Inclure le contact</span>
+          </label>
+        </div>
+
+        <!-- Intro personnalisée -->
+        <div class="custom-intro-section">
+          <h3>Introduction personnalisée</h3>
+          <textarea 
+            class="custom-intro-input"
+            placeholder="Laissez vide pour une intro automatique..."
+            [value]="customIntro()"
+            (input)="customIntro.set($any($event.target).value)"
+            (blur)="regenerate()"
+            rows="3">
+          </textarea>
+        </div>
+
+        <!-- Récap du bien -->
+        <div class="property-recap">
+          <h3>Récapitulatif du bien</h3>
+          <div class="recap-grid">
+            <div class="recap-item">
+              <span class="recap-label">Type</span>
+              <span class="recap-value">
+                {{ prop.type === 'appartement' ? 'Appartement' : 'Maison' }}
+              </span>
+            </div>
+            <div class="recap-item">
+              <span class="recap-label">Transaction</span>
+              <span class="recap-value badge" 
+                    [class.location]="prop.transactionType === 'location'"
+                    [class.vente]="prop.transactionType === 'vente'">
+                {{ prop.transactionType === 'location' ? 'Location' : 'Vente' }}
+              </span>
+            </div>
+            <div class="recap-item">
+              <span class="recap-label">Surface</span>
+              <span class="recap-value">{{ prop.surface }}m²</span>
+            </div>
+            <div class="recap-item">
+              <span class="recap-label">Prix</span>
+              <span class="recap-value">
+                {{ prop.price | number:'1.0-0':'fr-FR' }}€
+                {{ prop.transactionType === 'location' ? '/mois' : '' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Zone principale : Annonce générée -->
+      <main class="annonce-main">
+        <div class="annonce-header">
+          <div class="header-title">
+            <span class="format-icon">{{ currentTemplate()?.icon }}</span>
+            <h2>{{ currentTemplate()?.name }}</h2>
+          </div>
+          <div class="header-actions">
+            <button class="btn-secondary" (click)="regenerate()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                   stroke-width="2" width="18" height="18">
+                <path d="M23 4v6h-6M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 
+                         4.36A9 9 0 0020.49 15"/>
+              </svg>
+              Régénérer
+            </button>
+            <button 
+              class="btn-primary" 
+              [class.success]="copySuccess()"
+              (click)="copyToClipboard()">
+              @if (copySuccess()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2" width="18" height="18">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                Copié !
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2" width="18" height="18">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 
+                           012 2v1"/>
+                </svg>
+                Copier
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Zone de texte -->
+        <div class="annonce-content">
+          <textarea 
+            class="annonce-textarea"
+            [value]="generatedAnnonce()"
+            (input)="generatedAnnonce.set($any($event.target).value)"
+            spellcheck="false">
+          </textarea>
+        </div>
+
+        <!-- Footer avec compteur -->
+        <div class="annonce-footer">
+          <div class="char-counter" [class.over-limit]="isOverLimit()">
+            <span class="count">{{ charCount() }}</span>
+            @if (currentTemplate()?.maxLength) {
+              <span class="separator">/</span>
+              <span class="max">{{ currentTemplate()?.maxLength }}</span>
+            }
+            <span class="label">caractères</span>
+          </div>
+          @if (isOverLimit()) {
+            <span class="warning-message">
+              ⚠️ Limite dépassée de 
+              {{ charCount() - (currentTemplate()?.maxLength || 0) }} 
+              caractères
+            </span>
+          }
+        </div>
+      </main>
+    </div>
+  }
+</div>
+

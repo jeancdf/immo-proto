@@ -255,6 +255,256 @@
   padding: 20px;
 }
 
+/* ============================================
+   LEGAL DEADLINES WIDGET
+   ============================================ */
+
+.deadlines-card {
+  border: 1px solid #e0e7ff;
+  background: linear-gradient(135deg, #fefefe, #f8faff);
+}
+
+.deadlines-card .card-header h2 svg {
+  color: #4f46e5;
+}
+
+.deadline-count {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+.loading-deadlines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.mini-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Deadline Summary Badges */
+.deadline-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.summary-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 100px;
+}
+
+.summary-badge.critical {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #fecaca;
+}
+
+.summary-badge.warning {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fed7aa;
+}
+
+.summary-badge.ok {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #bbf7d0;
+}
+
+.badge-icon {
+  font-size: 16px;
+}
+
+.badge-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.badge-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.no-deadlines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  color: #16a34a;
+}
+
+.no-deadlines svg {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.no-deadlines p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Deadline List */
+.deadlines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deadline-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.deadline-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.deadline-item.critical {
+  border-left: 3px solid #ef4444;
+  background: linear-gradient(90deg, #fef2f2 0%, #fff 20%);
+}
+
+.deadline-item.warning {
+  border-left: 3px solid #f59e0b;
+  background: linear-gradient(90deg, #fffbeb 0%, #fff 20%);
+}
+
+.deadline-item.ok {
+  border-left: 3px solid #10b981;
+  background: linear-gradient(90deg, #f0fdf4 0%, #fff 20%);
+}
+
+.deadline-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.deadline-icon {
+  font-size: 14px;
+}
+
+.deadline-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.deadline-type {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deadline-client {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.deadline-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.days-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.days-badge.critical {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.days-badge.warning {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.days-badge.ok {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.complete-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 6px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.complete-btn:hover {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.complete-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.see-all-deadlines {
+  text-align: center;
+  padding: 12px;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 13px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+/* ============================================
+   ALERTS CARD (EXISTING)
+   ============================================ */
+
 /* Alerts Card */
 .empty-alerts {
   display: flex;

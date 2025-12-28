@@ -23,9 +23,9 @@
     },
     {
       "id": 3,
-      "name": "Paul H.",
+      "name": "Paul Martin",
       "fullName": "Paul Hernandez",
-      "email": "paul.hernandez@immoparis.fr",
+      "email": "paul@agence.fr",
       "role": "agent"
     },
     {
@@ -1820,34 +1820,84 @@
       "content": "Rappel pour finaliser le dossier de location.",
       "createdAt": "2023-12-18T11:00:00Z",
       "agentId": 3
+    },
+    {
+      "id": 9,
+      "clientEmail": "j.girard@email.com",
+      "type": "call",
+      "content": "c'est un connard ",
+      "createdAt": "2025-12-26T16:12:06.168Z",
+      "agentId": 1
     }
   ],
   "clientPreferences": [
     {
       "clientEmail": "sophie.martin@email.com",
-      "budget": { "min": 800, "max": 1200 },
-      "surface": { "min": 30, "max": 50 },
+      "budget": {
+        "min": 800,
+        "max": 1200
+      },
+      "surface": {
+        "min": 30,
+        "max": 50
+      },
       "rooms": 2,
-      "zones": ["Paris 11", "Paris 12", "Paris 20"],
-      "criteria": ["Proche métro", "Lumineux", "Calme"],
+      "zones": [
+        "Paris 11",
+        "Paris 12",
+        "Paris 20"
+      ],
+      "criteria": [
+        "Proche métro",
+        "Lumineux",
+        "Calme"
+      ],
       "notes": "Accepte RDC si sécurisé"
     },
     {
       "clientEmail": "julien.girard@email.com",
-      "budget": { "min": 1500, "max": 2500 },
-      "surface": { "min": 60, "max": 100 },
+      "budget": {
+        "min": 1500,
+        "max": 2500
+      },
+      "surface": {
+        "min": 60,
+        "max": 100
+      },
       "rooms": 3,
-      "zones": ["Paris 9", "Paris 8", "Paris 16"],
-      "criteria": ["Standing", "Gardien", "Parking"],
+      "zones": [
+        "Paris 9",
+        "Paris 8",
+        "Paris 16"
+      ],
+      "criteria": [
+        "Standing",
+        "Gardien",
+        "Parking"
+      ],
       "notes": "Télétravail, besoin d'un bureau"
     },
     {
       "clientEmail": "camille.rousseau@email.com",
-      "budget": { "min": 1000, "max": 1400 },
-      "surface": { "min": 40, "max": 60 },
+      "budget": {
+        "min": 1000,
+        "max": 1400
+      },
+      "surface": {
+        "min": 40,
+        "max": 60
+      },
       "rooms": 2,
-      "zones": ["Paris 2", "Paris 3", "Paris 4"],
-      "criteria": ["Charme", "Parquet", "Moulures"],
+      "zones": [
+        "Paris 2",
+        "Paris 3",
+        "Paris 4"
+      ],
+      "criteria": [
+        "Charme",
+        "Parquet",
+        "Moulures"
+      ],
       "notes": "Aime les appartements anciens avec cachet"
     }
   ],

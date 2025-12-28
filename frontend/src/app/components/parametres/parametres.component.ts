@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state.service';
+import { AuthService, User } from '../../services/auth.service';
 
 interface AgencySettings {
   name: string;
@@ -34,10 +35,18 @@ interface NotificationSettings {
   };
 }
 
+interface NewAgentForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'agent';
+}
+
 /**
  * Parametres Component
  * Settings page for agency configuration
- * Includes agency info, modules, security, and notifications
+ * Includes agency info, modules, security, notifications, and user management
  */
 @Component({
   selector: 'app-parametres',
@@ -48,10 +57,15 @@ interface NotificationSettings {
 })
 export class ParametresComponent implements OnInit {
   private readonly state = inject(StateService);
+  readonly authService = inject(AuthService);
 
   // Agency info from state
   readonly agency = this.state.agency;
-  readonly currentUser = this.state.currentUser;
+  readonly isAdmin = this.authService.isAdmin;
+  
+  // Users list (admin only)
+  readonly users = signal<User[]>([]);
+  readonly loadingUsers = signal(false);
 
   // Form data
   agencySettings: AgencySettings = {
@@ -88,6 +102,23 @@ export class ParametresComponent implements OnInit {
   // UI State
   readonly saving = signal(false);
   readonly saved = signal(false);
+  readonly activeTab = signal<'agency' | 'users' | 'modules' | 'security'>(
+    'agency'
+  );
+
+  // New agent form
+  readonly showNewAgentModal = signal(false);
+  readonly savingAgent = signal(false);
+  newAgent: NewAgentForm = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: 'agent'
+  };
+
+  // Edit agent form
+  readonly editingUser = signal<User | null>(null);
 
   constructor() {
     // Watch for agency changes and update form
@@ -109,6 +140,109 @@ export class ParametresComponent implements OnInit {
     if (!this.agency()) {
       this.state.loadAgency();
     }
+    
+    // Load users if admin
+    if (this.isAdmin()) {
+      this.loadUsers();
+    }
+  }
+
+  // Switch tab
+  setTab(tab: 'agency' | 'users' | 'modules' | 'security'): void {
+    this.activeTab.set(tab);
+    if (tab === 'users' && this.isAdmin()) {
+      this.loadUsers();
+    }
+  }
+
+  // Load users (admin only)
+  loadUsers(): void {
+    this.loadingUsers.set(true);
+    this.authService.getUsers().subscribe({
+      next: (users) => {
+        this.users.set(users);
+        this.loadingUsers.set(false);
+      },
+      error: () => {
+        this.loadingUsers.set(false);
+      }
+    });
+  }
+
+  // Open new agent modal
+  openNewAgentModal(): void {
+    this.newAgent = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      role: 'agent'
+    };
+    this.showNewAgentModal.set(true);
+  }
+
+  // Close new agent modal
+  closeNewAgentModal(): void {
+    this.showNewAgentModal.set(false);
+  }
+
+  // Create new agent
+  createAgent(): void {
+    if (!this.newAgent.firstName || !this.newAgent.lastName || 
+        !this.newAgent.email || !this.newAgent.password) {
+      return;
+    }
+
+    this.savingAgent.set(true);
+    this.authService.createUser(this.newAgent).subscribe({
+      next: () => {
+        this.savingAgent.set(false);
+        this.showNewAgentModal.set(false);
+        this.loadUsers();
+        this.showSavedMessage();
+      },
+      error: () => {
+        this.savingAgent.set(false);
+      }
+    });
+  }
+
+  // Toggle user active status
+  toggleUserStatus(user: User): void {
+    this.authService.toggleUserStatus(user.id, !user.isActive).subscribe({
+      next: () => {
+        this.loadUsers();
+      }
+    });
+  }
+
+  // Edit user
+  editUser(user: User): void {
+    this.editingUser.set({ ...user });
+  }
+
+  // Save user edit
+  saveUserEdit(): void {
+    const user = this.editingUser();
+    if (!user) return;
+
+    this.authService.updateUser(user.id, {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role
+    }).subscribe({
+      next: () => {
+        this.editingUser.set(null);
+        this.loadUsers();
+        this.showSavedMessage();
+      }
+    });
+  }
+
+  // Cancel user edit
+  cancelUserEdit(): void {
+    this.editingUser.set(null);
   }
 
   saveAgencySettings(): void {

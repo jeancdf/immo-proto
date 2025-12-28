@@ -78,6 +78,16 @@
   height: 18px;
 }
 
+.btn-annonce {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #fff;
+  border: none;
+}
+
+.btn-annonce:hover {
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+}
+
 .btn-link {
   background: linear-gradient(135deg, #10b981, #059669);
   color: #fff;

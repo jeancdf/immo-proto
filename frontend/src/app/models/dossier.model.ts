@@ -158,7 +158,9 @@ export interface PropertyWithDossiers {
   address: string;
   city: string;
   zipCode: string;
+  postalCode?: string; // Alias for zipCode
   type: string;
+  transactionType?: 'location' | 'vente'; // Type of transaction
   dossierCount: number;
   dossierIds: number[];
   statuses: {
@@ -178,12 +180,64 @@ export interface PropertyWithDossiers {
   description?: string;
   surface?: number;
   rooms?: number;
+  bedrooms?: number;
+  bathrooms?: number;
   floor?: number;
+  totalFloors?: number;
   hasParking?: boolean;
   hasCellar?: boolean;
   hasElevator?: boolean;
   rent?: number;
   price?: number;
   charges?: number;
+  // Features and diagnostics
+  features?: string[];
+  dpe?: string;
+  ges?: string;
+  // Agent info
+  agentId?: number;
+}
+
+/**
+ * Legal Deadline Type Definition
+ * Defines the types of legal deadlines in French real estate
+ */
+export interface DeadlineType {
+  id: string;
+  name: string;
+  description: string;
+  daysFromEvent: number;
+  triggerEvent: string;
+  applicableTo: 'vente' | 'location' | 'both';
+  priority: 'high' | 'medium' | 'low';
+}
+
+/**
+ * Dossier Deadline
+ * A specific deadline associated with a dossier
+ */
+export interface DossierDeadline {
+  id: number;
+  dossierId: number;
+  deadlineTypeId: string;
+  startDate: string;
+  dueDate: string;
+  status: 'pending' | 'completed' | 'overdue';
+  notes?: string;
+  // Computed fields (from join with deadlineTypes)
+  deadlineType?: DeadlineType;
+  dossier?: Dossier;
+  daysRemaining?: number;
+  urgency?: 'critical' | 'warning' | 'ok';
+}
+
+/**
+ * Deadline Summary for Dashboard Widget
+ */
+export interface DeadlineSummary {
+  critical: number;    // < 3 days
+  warning: number;     // 3-7 days
+  ok: number;          // > 7 days
+  deadlines: DossierDeadline[];
 }
 

@@ -2,7 +2,8 @@ import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
-import { Dossier } from '../../models/dossier.model';
+import { ApiService } from '../../services/api.service';
+import { Dossier, DossierDeadline } from '../../models/dossier.model';
 
 /**
  * Interface for activity statistics
@@ -40,6 +41,7 @@ interface AlertItem {
 })
 export class MesDossiersComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly api = inject(ApiService);
   readonly state = inject(StateService);
 
   // Signals from state
@@ -49,6 +51,16 @@ export class MesDossiersComponent implements OnInit {
 
   // Local signals
   readonly selectedPeriod = signal<'week' | 'month' | 'year'>('month');
+
+  // Deadlines signals
+  readonly deadlines = signal<DossierDeadline[]>([]);
+  readonly deadlinesSummary = signal<{
+    critical: number;
+    warning: number;
+    ok: number;
+    total: number;
+  }>({ critical: 0, warning: 0, ok: 0, total: 0 });
+  readonly loadingDeadlines = signal(true);
 
   // Filter dossiers for current agent (simulated - in real app would use auth)
   readonly myDossiers = computed(() => {
@@ -223,6 +235,69 @@ export class MesDossiersComponent implements OnInit {
 
   ngOnInit(): void {
     // Data already loaded via StateService initialization
+    this.loadDeadlines();
+  }
+
+  /**
+   * Load deadlines from API
+   */
+  private loadDeadlines(): void {
+    this.loadingDeadlines.set(true);
+    this.api.getDeadlines().subscribe({
+      next: (response) => {
+        this.deadlines.set(response.deadlines);
+        this.deadlinesSummary.set(response.summary);
+        this.loadingDeadlines.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading deadlines:', err);
+        this.loadingDeadlines.set(false);
+      }
+    });
+  }
+
+  /**
+   * Mark deadline as completed
+   */
+  completeDeadline(deadline: DossierDeadline, event: Event): void {
+    event.stopPropagation();
+    this.api.updateDeadline(deadline.id, { status: 'completed' }).subscribe({
+      next: () => {
+        // Reload deadlines after update
+        this.loadDeadlines();
+      },
+      error: (err) => console.error('Error completing deadline:', err)
+    });
+  }
+
+  /**
+   * Get urgency icon and color
+   */
+  getUrgencyDisplay(urgency: string | undefined): { 
+    icon: string; 
+    class: string; 
+    label: string 
+  } {
+    switch (urgency) {
+      case 'critical':
+      case 'overdue':
+        return { icon: '🔴', class: 'critical', label: 'Critique' };
+      case 'warning':
+        return { icon: '🟠', class: 'warning', label: 'À surveiller' };
+      default:
+        return { icon: '🟢', class: 'ok', label: 'OK' };
+    }
+  }
+
+  /**
+   * Format days remaining display
+   */
+  formatDaysRemaining(days: number | undefined): string {
+    if (days === undefined) return 'N/A';
+    if (days < 0) return `${Math.abs(days)}j en retard`;
+    if (days === 0) return "Aujourd'hui";
+    if (days === 1) return 'Demain';
+    return `J-${days}`;
   }
 
   // Helper to get period start date

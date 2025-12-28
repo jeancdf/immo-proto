@@ -75,6 +75,14 @@ export class BienDetailComponent implements OnInit {
     }
   }
 
+  // Navigate to annonce generator page
+  generateAnnonce(): void {
+    const id = this.propertyId();
+    if (id) {
+      this.router.navigate(['/biens', id, 'annonce']);
+    }
+  }
+
   // Get status display label
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {

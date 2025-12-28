@@ -8,7 +8,10 @@ import {
   Dossier,
   DossierFilters,
   DashboardStats,
-  PropertyWithDossiers
+  PropertyWithDossiers,
+  DeadlineType,
+  DossierDeadline,
+  DeadlineSummary
 } from '../models/dossier.model';
 
 /**
@@ -117,6 +120,59 @@ export class ApiService {
 
   deleteDossier(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/dossiers/${id}`);
+  }
+
+  // ============================================
+  // DEADLINES ENDPOINTS
+  // ============================================
+
+  /**
+   * Get all deadlines with summary
+   */
+  getDeadlines(): Observable<{
+    summary: { critical: number; warning: number; ok: number; total: number };
+    deadlines: DossierDeadline[];
+  }> {
+    return this.http.get<{
+      summary: { critical: number; warning: number; ok: number; total: number };
+      deadlines: DossierDeadline[];
+    }>(`${this.baseUrl}/deadlines`);
+  }
+
+  /**
+   * Get all deadline types
+   */
+  getDeadlineTypes(): Observable<DeadlineType[]> {
+    return this.http.get<DeadlineType[]>(`${this.baseUrl}/deadlines/types`);
+  }
+
+  /**
+   * Create a new deadline
+   */
+  createDeadline(data: Partial<DossierDeadline>): Observable<DossierDeadline> {
+    return this.http.post<DossierDeadline>(`${this.baseUrl}/deadlines`, data);
+  }
+
+  /**
+   * Update a deadline (e.g., mark as completed)
+   */
+  updateDeadline(
+    id: number, 
+    data: Partial<DossierDeadline>
+  ): Observable<DossierDeadline> {
+    return this.http.patch<DossierDeadline>(
+      `${this.baseUrl}/deadlines/${id}`, 
+      data
+    );
+  }
+
+  /**
+   * Delete a deadline
+   */
+  deleteDeadline(id: number): Observable<{ success: boolean }> {
+    return this.http.delete<{ success: boolean }>(
+      `${this.baseUrl}/deadlines/${id}`
+    );
   }
 }
 

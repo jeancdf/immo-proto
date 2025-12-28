@@ -10,17 +10,20 @@ import {
   DashboardStats,
   PropertyWithDossiers
 } from '../models/dossier.model';
+import { AuthService } from './auth.service';
 
 /**
  * State Service
  * Centralized state management using Angular Signals
  * Handles all data fetching and state updates
+ * Filters data by agent for non-admin users
  */
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly baseUrl = '/api';
 
   // ============================================
@@ -125,10 +128,19 @@ export class StateService {
     );
   }
 
-  /** Load all dossiers from API */
+  /** Load all dossiers from API (filtered by agent for non-admins) */
   loadDossiers(): void {
     this.loadingDossiers.set(true);
-    this.http.get<Dossier[]>(`${this.baseUrl}/dossiers`).subscribe({
+    
+    // Build URL with agentId filter if user is not admin
+    let url = `${this.baseUrl}/dossiers`;
+    const user = this.authService.currentUser();
+    
+    if (user && user.role !== 'admin') {
+      url += `?agentId=${user.id}`;
+    }
+    
+    this.http.get<Dossier[]>(url).subscribe({
       next: (dossiers) => {
         this.dossiers.set(dossiers);
         this.loadingDossiers.set(false);

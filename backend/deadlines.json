@@ -1,0 +1,214 @@
+{
+  "deadlineTypes": [
+    {
+      "id": "retractation",
+      "name": "Délai de rétractation",
+      "description": "10 jours après signature du compromis de vente",
+      "daysFromEvent": 10,
+      "triggerEvent": "compromis_signed",
+      "applicableTo": "vente",
+      "priority": "high"
+    },
+    {
+      "id": "conditions_suspensives",
+      "name": "Conditions suspensives (prêt)",
+      "description": "Délai pour obtenir le financement bancaire",
+      "daysFromEvent": 45,
+      "triggerEvent": "compromis_signed",
+      "applicableTo": "vente",
+      "priority": "high"
+    },
+    {
+      "id": "signature_definitive",
+      "name": "Signature acte définitif",
+      "description": "Date prévue pour la signature chez le notaire",
+      "daysFromEvent": 90,
+      "triggerEvent": "compromis_signed",
+      "applicableTo": "vente",
+      "priority": "medium"
+    },
+    {
+      "id": "dpe_validity",
+      "name": "Validité DPE",
+      "description": "Le DPE est valide 10 ans",
+      "daysFromEvent": 3650,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "both",
+      "priority": "low"
+    },
+    {
+      "id": "electricity_validity_vente",
+      "name": "Validité diagnostic électricité (vente)",
+      "description": "Valide 3 ans pour une vente",
+      "daysFromEvent": 1095,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "vente",
+      "priority": "medium"
+    },
+    {
+      "id": "electricity_validity_location",
+      "name": "Validité diagnostic électricité (location)",
+      "description": "Valide 6 ans pour une location",
+      "daysFromEvent": 2190,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "location",
+      "priority": "medium"
+    },
+    {
+      "id": "gas_validity_vente",
+      "name": "Validité diagnostic gaz (vente)",
+      "description": "Valide 3 ans pour une vente",
+      "daysFromEvent": 1095,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "vente",
+      "priority": "medium"
+    },
+    {
+      "id": "gas_validity_location",
+      "name": "Validité diagnostic gaz (location)",
+      "description": "Valide 6 ans pour une location",
+      "daysFromEvent": 2190,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "location",
+      "priority": "medium"
+    },
+    {
+      "id": "termites_validity",
+      "name": "Validité diagnostic termites",
+      "description": "Valide 6 mois",
+      "daysFromEvent": 180,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "vente",
+      "priority": "high"
+    },
+    {
+      "id": "erp_validity",
+      "name": "Validité ERP",
+      "description": "État des risques valide 6 mois",
+      "daysFromEvent": 180,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "both",
+      "priority": "high"
+    },
+    {
+      "id": "plomb_validity_vente",
+      "name": "Validité CREP (plomb) - vente",
+      "description": "Valide 1 an si positif",
+      "daysFromEvent": 365,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "vente",
+      "priority": "medium"
+    },
+    {
+      "id": "plomb_validity_location",
+      "name": "Validité CREP (plomb) - location",
+      "description": "Valide 6 ans si positif",
+      "daysFromEvent": 2190,
+      "triggerEvent": "diagnostic_date",
+      "applicableTo": "location",
+      "priority": "medium"
+    },
+    {
+      "id": "preavis_locataire",
+      "name": "Préavis locataire",
+      "description": "1 mois (zone tendue) ou 3 mois",
+      "daysFromEvent": 30,
+      "triggerEvent": "notice_given",
+      "applicableTo": "location",
+      "priority": "high"
+    }
+  ],
+  "dossierDeadlines": [
+    {
+      "id": 1,
+      "dossierId": 1,
+      "deadlineTypeId": "retractation",
+      "startDate": "2025-12-15",
+      "dueDate": "2025-12-25",
+      "status": "pending",
+      "notes": "Compromis signé le 15/12"
+    },
+    {
+      "id": 2,
+      "dossierId": 1,
+      "deadlineTypeId": "conditions_suspensives",
+      "startDate": "2025-12-15",
+      "dueDate": "2026-01-29",
+      "status": "pending",
+      "notes": "En attente réponse banque"
+    },
+    {
+      "id": 3,
+      "dossierId": 2,
+      "deadlineTypeId": "erp_validity",
+      "startDate": "2025-09-10",
+      "dueDate": "2026-03-10",
+      "status": "pending",
+      "notes": "ERP à renouveler avant signature"
+    },
+    {
+      "id": 4,
+      "dossierId": 3,
+      "deadlineTypeId": "termites_validity",
+      "startDate": "2025-10-01",
+      "dueDate": "2026-03-30",
+      "status": "pending",
+      "notes": "Diagnostic termites expirant"
+    },
+    {
+      "id": 5,
+      "dossierId": 4,
+      "deadlineTypeId": "preavis_locataire",
+      "startDate": "2025-12-01",
+      "dueDate": "2026-01-01",
+      "status": "pending",
+      "notes": "Préavis reçu le 01/12"
+    },
+    {
+      "id": 6,
+      "dossierId": 5,
+      "deadlineTypeId": "conditions_suspensives",
+      "startDate": "2025-11-20",
+      "dueDate": "2026-01-04",
+      "status": "pending",
+      "notes": "Dossier prêt en cours"
+    },
+    {
+      "id": 7,
+      "dossierId": 6,
+      "deadlineTypeId": "retractation",
+      "startDate": "2025-12-18",
+      "dueDate": "2025-12-28",
+      "status": "pending",
+      "notes": "Compromis signé récemment"
+    },
+    {
+      "id": 8,
+      "dossierId": 7,
+      "deadlineTypeId": "electricity_validity_location",
+      "startDate": "2020-06-15",
+      "dueDate": "2026-06-15",
+      "status": "pending",
+      "notes": "Diagnostic électricité à surveiller"
+    },
+    {
+      "id": 9,
+      "dossierId": 8,
+      "deadlineTypeId": "signature_definitive",
+      "startDate": "2025-10-01",
+      "dueDate": "2025-12-30",
+      "status": "pending",
+      "notes": "Signature prévue fin décembre"
+    },
+    {
+      "id": 10,
+      "dossierId": 9,
+      "deadlineTypeId": "dpe_validity",
+      "startDate": "2016-03-15",
+      "dueDate": "2026-03-15",
+      "status": "pending",
+      "notes": "DPE ancien format à renouveler"
+    }
+  ]
+}
+

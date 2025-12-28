@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@agence.fr",
+      "password": "$2b$10$rQZ8K.XqF1qH5L5J5K5K5e5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K",
+      "firstName": "Admin",
+      "lastName": "Principal",
+      "role": "admin",
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "lastLogin": "2025-12-26T16:22:15.544Z"
+    },
+    {
+      "id": 2,
+      "email": "marie@agence.fr",
+      "password": "$2b$10$rQZ8K.XqF1qH5L5J5K5K5e5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K",
+      "firstName": "Marie",
+      "lastName": "Dupont",
+      "role": "agent",
+      "isActive": true,
+      "createdAt": "2024-06-15T10:00:00.000Z",
+      "lastLogin": "2025-12-26T16:12:11.444Z"
+    },
+    {
+      "id": 3,
+      "email": "paul@agence.fr",
+      "password": "$2b$10$rQZ8K.XqF1qH5L5J5K5K5e5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K",
+      "firstName": "Paul",
+      "lastName": "Martin",
+      "role": "agent",
+      "isActive": true,
+      "createdAt": "2024-08-01T09:00:00.000Z",
+      "lastLogin": "2024-12-19T11:00:00.000Z"
+    }
+  ]
+}

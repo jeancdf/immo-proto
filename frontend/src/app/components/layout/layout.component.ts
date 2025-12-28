@@ -6,6 +6,7 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { StateService } from '../../services/state.service';
+import { AuthService } from '../../services/auth.service';
 import { debounceTime, Subject, switchMap, of } from 'rxjs';
 
 interface SearchResult {
@@ -44,7 +45,7 @@ interface DossierResult {
 /**
  * Layout Component
  * Main application shell with sidebar navigation and header
- * Uses StateService signals for reactive data display
+ * Uses AuthService for user info and StateService for app data
  */
 @Component({
   selector: 'app-layout',
@@ -57,23 +58,36 @@ export class LayoutComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   readonly state = inject(StateService);
+  readonly authService = inject(AuthService);
 
   // Expose signals from state service
   readonly agency = this.state.agency;
-  readonly currentUser = this.state.currentUser;
+  
+  // Get user from auth service instead of state
+  readonly authUser = this.authService.currentUser;
+  readonly isAdmin = this.authService.isAdmin;
 
   // Search state
   searchQuery = '';
   readonly searchResults = signal<SearchResult | null>(null);
   readonly showResults = signal(false);
   readonly isSearching = signal(false);
+  readonly showUserMenu = signal(false);
   
   private searchSubject = new Subject<string>();
 
-  // Computed user initials
+  // Computed user initials from auth user
   readonly userInitials = computed(() => {
-    const name = this.currentUser()?.name || '';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+    const user = this.authUser();
+    if (!user) return 'U';
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+  });
+
+  // Computed full name
+  readonly userName = computed(() => {
+    const user = this.authUser();
+    if (!user) return '';
+    return `${user.firstName} ${user.lastName}`;
   });
 
   // Check if we have any results
@@ -172,5 +186,25 @@ export class LayoutComponent implements OnInit {
       acheteur: 'Acheteur'
     };
     return labels[type] || type;
+  }
+
+  // Toggle user menu dropdown
+  toggleUserMenu(): void {
+    this.showUserMenu.update(v => !v);
+  }
+
+  // Close user menu when clicking outside
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target?.closest('.user-profile') && !target?.closest('.user-menu')) {
+      this.showUserMenu.set(false);
+    }
+  }
+
+  // Logout user
+  logout(): void {
+    this.showUserMenu.set(false);
+    this.authService.logout();
   }
 }

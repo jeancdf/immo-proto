@@ -28,22 +28,31 @@ import { MesDossiersComponent } from
   './components/mes-dossiers/mes-dossiers.component';
 import { BienCreateComponent } from 
   './components/bien-create/bien-create.component';
+import { AnnonceGeneratorComponent } from 
+  './components/annonce-generator/annonce-generator.component';
+import { LoginComponent } from './components/login/login.component';
+import { authGuard, guestGuard } from './guards/auth.guard';
 
 /**
  * Application Routes
- * - Main routes wrapped in Layout component (with sidebar)
+ * - Login page (guest only)
+ * - Main routes wrapped in Layout (protected by authGuard)
  * - Public routes without Layout (client deposit, candidature, collect)
  */
 export const routes: Routes = [
-  // Public routes (no layout/sidebar)
+  // Login page (guest only - redirect to dashboard if logged in)
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+
+  // Public routes (no layout/sidebar, no auth required)
   { path: 'deposit/:token', component: ClientDepositComponent },
   { path: 'candidature/:propertyId', component: PublicApplicationComponent },
   { path: 'collect/:token', component: PublicCollectComponent },
 
-  // Main application routes with layout
+  // Main application routes with layout (protected)
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
@@ -56,6 +65,7 @@ export const routes: Routes = [
       { path: 'biens/lien', component: PropertyLinkComponent },
       { path: 'biens/:id/lien', component: PropertyLinkComponent },
       { path: 'biens/:id/edit', component: BienEditComponent },
+      { path: 'biens/:id/annonce', component: AnnonceGeneratorComponent },
       { path: 'biens/:id', component: BienDetailComponent },
       { path: 'mes-dossiers', component: MesDossiersComponent },
       { path: 'clients', component: ClientsComponent },
