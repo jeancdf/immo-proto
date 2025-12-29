@@ -1,0 +1,204 @@
+@if (loading()) {
+  <div class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Chargement du dossier propriétaire...</p>
+  </div>
+} @else if (error()) {
+  <div class="error-container">
+    <div class="error-card">
+      <span class="error-icon">⚠️</span>
+      <h2>Oups !</h2>
+      <p>{{ error() }}</p>
+      <button class="btn btn-primary" (click)="goBack()">Retour</button>
+    </div>
+  </div>
+} @else if (owner(); as o) {
+  <div class="owner-detail-page">
+    <!-- Header -->
+    <header class="detail-header">
+      <div class="header-main">
+        <button class="back-btn" (click)="goBack()" title="Retour">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div class="owner-info">
+          <h1>{{ o.firstName }} {{ o.lastName }}</h1>
+          <div class="badges">
+            <span class="badge owner-badge">Propriétaire</span>
+            <span class="badge assets-count">{{ o.stats.totalProperties }} bien(s)</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary">Modifier</button>
+        <button class="btn btn-primary" (click)="showInteractionForm.set(true)">
+          Nouvelle interaction
+        </button>
+      </div>
+    </header>
+
+    <div class="detail-grid">
+      <!-- Sidebar: Contact Info -->
+      <aside class="sidebar">
+        <div class="card contact-card">
+          <h3>Coordonnées</h3>
+          <div class="contact-item">
+            <span class="icon">📧</span>
+            <div class="info">
+              <label>Email</label>
+              <a [href]="'mailto:' + o.email">{{ o.email }}</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="icon">📞</span>
+            <div class="info">
+              <label>Téléphone</label>
+              <a [href]="'tel:' + o.phone">{{ o.phone }}</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="icon">🏠</span>
+            <div class="info">
+              <label>Adresse</label>
+              <p>{{ o.address || 'Non renseignée' }}</p>
+            </div>
+          </div>
+          @if (o.notes) {
+            <div class="contact-item notes">
+              <span class="icon">📝</span>
+              <div class="info">
+                <label>Notes</label>
+                <p>{{ o.notes }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="card stats-card">
+          <h3>Statistiques</h3>
+          <div class="stat-row">
+            <span>Dossiers actifs</span>
+            <strong>{{ o.stats.activeDossiers }}</strong>
+          </div>
+          <div class="stat-row">
+            <span>Patrimoine estimé</span>
+            <strong>NC</strong>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content: Tabs -->
+      <main class="content-area">
+        <nav class="tabs">
+          <button 
+            [class.active]="activeTab() === 'patrimoine'" 
+            (click)="setTab('patrimoine')">
+            Patrimoine ({{ o.properties.length }})
+          </button>
+          <button 
+            [class.active]="activeTab() === 'crm'" 
+            (click)="setTab('crm')">
+            Historique CRM ({{ o.interactions.length }})
+          </button>
+        </nav>
+
+        <div class="tab-content">
+          <!-- Patrimoine Tab -->
+          @if (activeTab() === 'patrimoine') {
+            <div class="assets-list">
+              @for (prop of o.properties; track prop.id) {
+                <div class="asset-card" [routerLink]="['/biens', prop.id]">
+                  <div class="asset-img">
+                    <span class="icon">🏠</span>
+                  </div>
+                  <div class="asset-info">
+                    <h4>{{ prop.address }}</h4>
+                    <p>{{ prop.zipCode }} {{ prop.city }} · {{ prop.type }}</p>
+                    <div class="asset-meta">
+                      <span class="badge" [class.rent]="prop.rent" [class.sale]="prop.price">
+                        {{ prop.rent ? 'Location' : 'Vente' }}
+                      </span>
+                      <span class="last-update">Dernière activité : {{ prop.lastUpdateFormatted }}</span>
+                    </div>
+                  </div>
+                  <div class="asset-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                  </div>
+                </div>
+              } @empty {
+                <div class="empty-state">
+                  <p>Aucun bien rattaché à ce propriétaire</p>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- CRM Tab -->
+          @if (activeTab() === 'crm') {
+            <div class="crm-history">
+              @if (showInteractionForm()) {
+                <div class="interaction-form-card card">
+                  <h4>Ajouter une interaction</h4>
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select [(ngModel)]="newInteraction().type">
+                      <option value="note">Note</option>
+                      <option value="appel">Appel</option>
+                      <option value="email">Email</option>
+                      <option value="rdv">Rendez-vous</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Compte-rendu</label>
+                    <textarea 
+                      [(ngModel)]="newInteraction().content" 
+                      placeholder="Détails de l'échange..."></textarea>
+                  </div>
+                  <div class="form-actions">
+                    <button class="btn btn-ghost" (click)="showInteractionForm.set(false)">Annuler</button>
+                    <button 
+                      class="btn btn-primary" 
+                      [disabled]="!newInteraction().content"
+                      (click)="addInteraction()">
+                      Enregistrer
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <div class="timeline">
+                @for (item of o.interactions; track item.id) {
+                  <div class="timeline-item">
+                    <div class="timeline-icon">{{ getInteractionIcon(item.type) }}</div>
+                    <div class="timeline-content card">
+                      <div class="item-header">
+                        <span class="type">{{ item.type | titlecase }}</span>
+                        <span class="date">{{ item.createdAtFormatted }}</span>
+                      </div>
+                      <p class="text">{{ item.content }}</p>
+                      <div class="item-footer">
+                        <span class="agent">Par {{ item.agentName }}</span>
+                      </div>
+                    </div>
+                  </div>
+                } @empty {
+                  @if (!showInteractionForm()) {
+                    <div class="empty-state">
+                      <p>Aucun historique d'échange</p>
+                      <button class="btn btn-secondary" (click)="showInteractionForm.set(true)">
+                        Ajouter la première interaction
+                      </button>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </main>
+    </div>
+  </div>
+}

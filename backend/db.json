@@ -68,7 +68,8 @@
         "hasParking": false,
         "hasCellar": true,
         "hasElevator": true,
-        "description": "Bel appartement lumineux au 3ème étage avec ascenseur. Parquet ancien, double vitrage."
+        "description": "Bel appartement lumineux au 3ème étage avec ascenseur. Parquet ancien, double vitrage.",
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "Mme Martin est ingénieure en CDI depuis 3 ans chez Thales, avec des revenus nets mensuels de 3 200€ (3.5x le loyer). Situation professionnelle très stable. Garant physique solide (père, retraité cadre sup). Dossier complet et réactif.",
@@ -200,7 +201,8 @@
         "city": "Paris",
         "zipCode": "75008",
         "type": "T3",
-        "rent": 1800
+        "rent": 1800,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "M. Dubois est directeur commercial avec 8 ans d'ancienneté. Revenus confortables de 5 500€/mois. Dossier exemplaire avec tous les documents fournis rapidement.",
@@ -305,7 +307,8 @@
         "city": "Paris",
         "zipCode": "75018",
         "type": "T4",
-        "price": 650000
+        "price": 650000,
+        "ownerIds": [102, 103]
       },
       "aiSummary": {
         "description": "Mme Fontaine vend son appartement familial suite à un déménagement professionnel. Bien en bon état, diagnostics à jour. Négociation en cours.",
@@ -396,7 +399,8 @@
         "hasCellar": false,
         "hasElevator": false,
         "price": null,
-        "charges": 148
+        "charges": 148,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "Dossier archivé - Le candidat a trouvé un autre logement.",
@@ -437,7 +441,8 @@
         "city": "Paris",
         "zipCode": "75008",
         "type": "T3",
-        "rent": 2200
+        "rent": 2200,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "Mme Bernard est avocate associée dans un cabinet renommé. Revenus très élevés (8 500€/mois). Excellente solvabilité. Dossier impeccable.",
@@ -525,7 +530,8 @@
         "city": "Paris",
         "zipCode": "75001",
         "type": "T5",
-        "price": 1850000
+        "price": 1850000,
+        "ownerIds": [102]
       },
       "aiSummary": {
         "description": "M. Moreau vend son appartement de prestige Place Vendôme. Bien d'exception en parfait état. Vente finalisée avec succès.",
@@ -613,7 +619,8 @@
         "city": "Paris",
         "zipCode": "75001",
         "type": "T2",
-        "rent": 1450
+        "rent": 1450,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "M. Lefebvre est développeur freelance. Revenus variables mais moyens corrects. Nécessite un garant pour sécuriser le dossier.",
@@ -798,7 +805,8 @@
         "city": "Paris",
         "zipCode": "75011",
         "type": "T3",
-        "price": 485000
+        "price": 485000,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "M. Garnier souhaite vendre rapidement pour un projet à l'étranger. Plusieurs diagnostics à refaire, dossier incomplet.",
@@ -880,7 +888,8 @@
         "city": "Paris",
         "zipCode": "75008",
         "type": "T4",
-        "rent": 3500
+        "rent": 3500,
+        "ownerIds": [102]
       },
       "aiSummary": {
         "description": "Mme Petit est directrice marketing chez L'Oréal. Excellents revenus et stabilité professionnelle. Dossier parfait.",
@@ -966,7 +975,8 @@
         "city": "Paris",
         "zipCode": "75008",
         "type": "T3",
-        "rent": 1800
+        "rent": 1800,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "Dossier refusé - Revenus insuffisants et aucun garant acceptable.",
@@ -1024,7 +1034,8 @@
         "city": "Paris",
         "zipCode": "75007",
         "type": "T2",
-        "price": 520000
+        "price": 520000,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "Mme Simon vend pour financer l'achat d'une maison en banlieue. Bien en bon état, visites en cours.",
@@ -1105,7 +1116,8 @@
         "city": "Paris",
         "zipCode": "75016",
         "type": "T3",
-        "rent": 2100
+        "rent": 2100,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "M. Mercier est consultant en stratégie. Bons revenus mais contrat de mission. Garant Visale accepté.",
@@ -1203,7 +1215,8 @@
         "city": "Paris",
         "zipCode": "75006",
         "type": "T2",
-        "price": 395000
+        "price": 395000,
+        "ownerIds": [102]
       },
       "aiSummary": {
         "description": "Vente annulée - Le vendeur a changé d'avis suite à un héritage.",
@@ -1244,7 +1257,8 @@
         "city": "Paris",
         "zipCode": "75007",
         "type": "T2",
-        "rent": 1650
+        "rent": 1650,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "Mme Blanc est médecin hospitalier. Revenus stables et élevés. Dossier en attente de décision du propriétaire.",
@@ -1331,7 +1345,8 @@
         "city": "Paris",
         "zipCode": "75016",
         "type": "T4",
-        "rent": 2800
+        "rent": 2800,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "M. Roux est banquier d'affaires. Revenus exceptionnels. Dossier validé immédiatement.",
@@ -1423,7 +1438,8 @@
         "city": "Paris",
         "zipCode": "75006",
         "type": "T3",
-        "price": 780000
+        "price": 780000,
+        "ownerIds": [102]
       },
       "aiSummary": {
         "description": "Vente réussie. Appartement familial vendu à un couple avec enfants. Transaction fluide.",
@@ -1511,7 +1527,8 @@
         "hasCellar": false,
         "hasElevator": false,
         "price": null,
-        "charges": 148
+        "charges": 148,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "M. Girard est étudiant en Master avec un job étudiant. Parents garants solides.",
@@ -1602,7 +1619,8 @@
         "city": "Paris",
         "zipCode": "75005",
         "type": "T5",
-        "price": 1250000
+        "price": 1250000,
+        "ownerIds": [103]
       },
       "aiSummary": {
         "description": "Mme Morel vend l'appartement de ses parents décédés. Succession en cours, quelques formalités à régler.",
@@ -1684,7 +1702,8 @@
         "city": "Paris",
         "zipCode": "75003",
         "type": "T2",
-        "rent": 1350
+        "rent": 1350,
+        "ownerIds": [101]
       },
       "aiSummary": {
         "description": "M. Faure est chef de projet digital. CDI solide, revenus confortables. Dossier parfait.",

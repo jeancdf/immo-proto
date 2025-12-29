@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state.service';
 import { AuthService, User } from '../../services/auth.service';
+import { ParametresDossiersComponent } from '../parametres-dossiers/parametres-dossiers.component';
 
 interface AgencySettings {
   name: string;
@@ -51,7 +52,7 @@ interface NewAgentForm {
 @Component({
   selector: 'app-parametres',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ParametresDossiersComponent],
   templateUrl: './parametres.component.html',
   styleUrl: './parametres.component.css'
 })
@@ -102,9 +103,9 @@ export class ParametresComponent implements OnInit {
   // UI State
   readonly saving = signal(false);
   readonly saved = signal(false);
-  readonly activeTab = signal<'agency' | 'users' | 'modules' | 'security'>(
-    'agency'
-  );
+  readonly activeTab = signal<
+    'agency' | 'users' | 'modules' | 'security' | 'dossiers'
+  >('agency');
 
   // New agent form
   readonly showNewAgentModal = signal(false);
@@ -148,7 +149,7 @@ export class ParametresComponent implements OnInit {
   }
 
   // Switch tab
-  setTab(tab: 'agency' | 'users' | 'modules' | 'security'): void {
+  setTab(tab: 'agency' | 'users' | 'modules' | 'security' | 'dossiers'): void {
     this.activeTab.set(tab);
     if (tab === 'users' && this.isAdmin()) {
       this.loadUsers();
@@ -309,6 +310,11 @@ export class ParametresComponent implements OnInit {
     };
   }
 
+  // Handler for dossier settings saved
+  onDossierSettingsSaved(): void {
+    this.showSavedMessage();
+  }
+
   private showSavedMessage(): void {
     this.saved.set(true);
     setTimeout(() => this.saved.set(false), 2000);
@@ -325,4 +331,3 @@ export class ParametresComponent implements OnInit {
     }
   }
 }
-

@@ -1,0 +1,404 @@
+<div class="dashboard-page">
+  <!-- Top Header -->
+  <header class="page-header">
+    <div class="header-left">
+      <div class="breadcrumb">DOSSIER VENTE</div>
+      <h1>Vue documents par partie prenante – {{ propertyAddress() }}</h1>
+      <p class="subtitle">
+        En un coup d'œil, voyez qui bloque la mise en vente : 
+        vendeur, syndic, banque, diagnostiqueur ou notaire.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="goBack()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+             stroke="currentColor" stroke-width="2">
+          <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 
+                   0 0 1-9-9m9 9c-1.657 0-3-4.03-3-9s1.343-9 3-9m0 
+                   18c1.657 0 3-4.03 3-9s-1.343-9-3-9"/>
+        </svg>
+        Relancer les parties
+      </button>
+      <button class="btn btn-primary share-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+             stroke="currentColor" stroke-width="2">
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          <polyline points="16,6 12,2 8,6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+        Partager le dossier
+      </button>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <!-- Left Column: Main Content -->
+    <main class="main-column">
+      
+      <!-- Global Compliance Card -->
+      <section class="card compliance-card">
+        <div class="card-header">
+          <h2>Vue People-first par source</h2>
+          <span class="badge region-badge">Vente · Suisse</span>
+        </div>
+        <p class="card-desc">
+          Tous les fichiers sont regroupés par partie prenante pour identifier 
+          en 2 secondes qui doit encore fournir quoi.
+        </p>
+        
+        <div class="listing-readiness" 
+             [class.ready]="globalStats().blockers === 0">
+          <p class="readiness-text">
+            <strong>Prêt pour l'annonce :</strong> l'annonce reste verrouillée 
+            tant que les documents bloquants ne sont pas fournis par la 
+            bonne personne.
+          </p>
+          
+          <div class="progress-container">
+            <div class="progress-info">
+              <span>Progression globale des pièces</span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" 
+                     [style.width.%]="globalStats().percentage">
+                </div>
+              </div>
+              <span class="progress-stats">
+                {{ globalStats().received }} / {{ globalStats().total }} 
+                documents reçus · 
+                <strong>{{ globalStats().blockers }} blocants pour l'annonce</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Responsables & Documents Section -->
+      <section class="stakeholders-section">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Responsables & documents</h2>
+            <p class="section-desc">
+              1 section par partie : le nom à appeler est toujours visible 
+              en face des pièces manquantes.
+            </p>
+          </div>
+          <div class="blocker-summary">
+            <span class="warning-icon">⚠</span>
+            <span>{{ milestones().listing.blockers.length }} blocants vendeur</span>
+            <span class="separator">·</span>
+            <span>{{ milestones().listing.blockers.length }} blocants syndic</span>
+          </div>
+        </div>
+
+        <!-- Stakeholder Cards -->
+        @for (stakeholder of stakeholders(); track stakeholder.id) {
+          <div class="stakeholder-card card" 
+               [style.--accent-color]="stakeholder.accentColor"
+               [class.collapsed]="!isSectionExpanded(stakeholder.id)">
+            
+            <!-- Card Header (Clickable to expand/collapse) -->
+            <div class="stakeholder-header" 
+                 (click)="toggleSection(stakeholder.id)"
+                 role="button"
+                 [attr.aria-expanded]="isSectionExpanded(stakeholder.id)">
+              <div class="stakeholder-info">
+                <div class="icon-circle">
+                  @switch (stakeholder.icon) {
+                    @case ('user') {
+                      <svg width="20" height="20" viewBox="0 0 24 24" 
+                           fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    }
+                    @case ('building') {
+                      <svg width="20" height="20" viewBox="0 0 24 24" 
+                           fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="2" width="16" height="20" rx="2"/>
+                        <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 
+                                 6h.01M12 10h.01M12 14h.01M16 10h.01M16 
+                                 14h.01M8 10h.01M8 14h.01"/>
+                      </svg>
+                    }
+                    @case ('bank') {
+                      <svg width="20" height="20" viewBox="0 0 24 24" 
+                           fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 
+                                 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+                      </svg>
+                    }
+                    @case ('clipboard') {
+                      <svg width="20" height="20" viewBox="0 0 24 24" 
+                           fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 
+                                 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1"/>
+                        <path d="M9 12h6M9 16h6"/>
+                      </svg>
+                    }
+                    @case ('scale') {
+                      <svg width="20" height="20" viewBox="0 0 24 24" 
+                           fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 3v18M3 9l3 6h6l3-6M3 9a3 3 0 
+                                 0 1 6 0M15 9l3 6h-6l-3-6M15 9a3 3 
+                                 0 0 1 6 0"/>
+                      </svg>
+                    }
+                  }
+                </div>
+                <div class="stakeholder-details">
+                  <h3>{{ stakeholder.name }}</h3>
+                  <p class="stakeholder-subtitle">{{ stakeholder.subtitle }}</p>
+                </div>
+              </div>
+              
+              <div class="stakeholder-right">
+                @if (getStakeholderStats(stakeholder.id); as stats) {
+                  <span class="doc-count-badge" 
+                        [class.has-blockers]="stats.blockers > 0"
+                        [class.complete]="stats.blockers === 0 
+                                          && stats.received === stats.total">
+                    {{ stats.received }} / {{ stats.total }} docs
+                    @if (stats.blockers > 0) {
+                      · {{ stats.blockers }} blocants pour l'annonce
+                    } @else if (stats.received === stats.total) {
+                      · aucun blocant pour l'annonce
+                    }
+                  </span>
+                }
+                <!-- Chevron Icon -->
+                <div class="chevron-icon" 
+                     [class.expanded]="isSectionExpanded(stakeholder.id)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" 
+                       fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Progress Bar (always visible) -->
+            @if (getStakeholderStats(stakeholder.id); as stats) {
+              <div class="stakeholder-progress">
+                <div class="progress-track">
+                  <div class="progress-fill" 
+                       [style.width.%]="stats.percentage"
+                       [class.has-blockers]="stats.blockers > 0"
+                       [class.complete]="stats.blockers === 0">
+                  </div>
+                </div>
+                <span class="pre-announce-status">
+                  {{ stakeholder.preAnnounceStatus }}
+                </span>
+              </div>
+            }
+
+            <!-- Collapsible Content -->
+            @if (isSectionExpanded(stakeholder.id)) {
+              <div class="collapsible-content">
+                <!-- Document List -->
+                <div class="document-list">
+                  @for (doc of stakeholder.documents; track doc.id) {
+                    <div class="document-row" 
+                         [class.blocker]="doc.isBlocker 
+                                          && doc.status !== 'received'">
+                      <div class="doc-status-icon" 
+                           [class]="getStatusClass(doc.status)">
+                        @if (doc.status === 'received') {
+                          <svg width="14" height="14" viewBox="0 0 24 24" 
+                               fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20,6 9,17 4,12"/>
+                          </svg>
+                        } @else {
+                          <svg width="14" height="14" viewBox="0 0 24 24" 
+                               fill="currentColor">
+                            <circle cx="12" cy="12" r="6"/>
+                          </svg>
+                        }
+                      </div>
+                      
+                      <span class="doc-name">{{ doc.name }}</span>
+                      
+                      @if (doc.milestone === 'listing') {
+                        <span class="milestone-badge listing">
+                          Nécessaire pour l'annonce
+                        </span>
+                      } @else {
+                        <span class="milestone-placeholder"></span>
+                      }
+                      
+                      <span class="status-pill" 
+                            [class]="getStatusClass(doc.status)">
+                        {{ getStatusLabel(doc.status) }}
+                      </span>
+                      
+                      <span class="responsible-text">
+                        @if (doc.note) {
+                          {{ doc.note }}
+                        } @else {
+                          Responsable : {{ doc.responsible }}
+                        }
+                      </span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Blockers Summary -->
+                @if (getStakeholderStats(stakeholder.id); as stats) {
+                  @if (stats.blockers > 0) {
+                    <p class="blockers-note">
+                      Blocants {{ stakeholder.name.toLowerCase() }} : 
+                      {{ stats.blockers }} pour l'annonce
+                      @if (hasActeBlockers(stakeholder)) {
+                        , 1 pour Acte
+                      }
+                    </p>
+                  }
+                }
+              </div>
+            }
+
+            <!-- Card Footer Actions (always visible) -->
+            <div class="card-footer">
+              <button class="btn btn-ghost" 
+                      (click)="sendReminder(stakeholder.name)">
+                Relancer le {{ stakeholder.name.toLowerCase() }}
+              </button>
+              <button class="btn btn-secondary-outline" 
+                      (click)="copyLink(stakeholder.id)">
+                Copier le lien dépôt
+              </button>
+            </div>
+          </div>
+        }
+      </section>
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar">
+      <!-- Milestone Summary Card -->
+      <section class="card summary-card">
+        <h3>Résumé des jalons</h3>
+        <p class="sidebar-desc">
+          Listing vs Acte : qui bloque quoi, côté personnes.
+        </p>
+
+        <!-- Listing Milestone -->
+        <div class="milestone-item">
+          <div class="milestone-header">
+            <span class="milestone-label">Pré-annonce (Listing)</span>
+            <span class="badge error-badge">
+              {{ milestones().listing.blockers.length }} documents blocants
+            </span>
+          </div>
+          <p class="milestone-desc">
+            Blocants : Pièces d'identité vendeur (Vendeur), taxe foncière 
+            (Vendeur), PV d'AG (Syndic), carnet d'entretien (Syndic), 
+            diagnostic amiante (Diagnostiqueur).
+          </p>
+          <div class="mini-progress">
+            <div class="bar listing-bar" 
+                 [style.width.%]="milestones().listing.percentage">
+            </div>
+          </div>
+        </div>
+
+        <!-- Acte Milestone -->
+        <div class="milestone-item">
+          <div class="milestone-header">
+            <span class="milestone-label">Acte de vente (Final deed)</span>
+            <span class="badge success-badge">En bonne voie</span>
+          </div>
+          <p class="milestone-desc">
+            Points clés restants : Accord de mainlevée (Banque), État 
+            hypothécaire & certificat d'urbanisme (Notaire).
+          </p>
+          <div class="mini-progress">
+            <div class="bar acte-bar" 
+                 [style.width.%]="milestones().acte.percentage">
+            </div>
+          </div>
+        </div>
+
+        <p class="sidebar-note">
+          Cette vue regroupe les fichiers par personne. Pour débloquer un 
+          jalon, vous savez immédiatement qui relancer : vendeur, syndic, 
+          banque, diagnostiqueur ou notaire.
+        </p>
+      </section>
+
+      <!-- Quick Links Card -->
+      <section class="card quick-links-card">
+        <h3>Liens de dépôt & relances rapides</h3>
+        <p class="sidebar-desc">
+          Gérez les liens publics par partie prenante sans quitter la vue 
+          People-first.
+        </p>
+        
+        <div class="links-list">
+          @for (stakeholder of stakeholders(); track stakeholder.id) {
+            @if (stakeholder.linkType) {
+              <div class="quick-link-item">
+                <div class="link-icon">
+                  @if (stakeholder.icon === 'user') {
+                    <svg width="16" height="16" viewBox="0 0 24 24" 
+                         fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" 
+                         fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="4" y="2" width="16" height="20" rx="2"/>
+                      <path d="M9 22v-4h6v4"/>
+                    </svg>
+                  }
+                </div>
+                <div class="link-info">
+                  <strong>{{ stakeholder.name }} · {{ stakeholder.linkType }}</strong>
+                  <span class="expiry">Expire dans {{ stakeholder.linkExpiry }}</span>
+                </div>
+                <div class="link-actions">
+                  <button class="btn btn-xs" (click)="copyLink(stakeholder.id)">
+                    Copier le lien
+                  </button>
+                  <button class="btn btn-xs btn-outline" 
+                          (click)="sendReminder(stakeholder.name)">
+                    Relancer par email
+                  </button>
+                </div>
+              </div>
+            }
+          }
+          
+          <!-- Notaire link not generated -->
+          <div class="quick-link-item not-generated">
+            <div class="link-icon muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" 
+                   fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v18M3 9l3 6h6l3-6M15 9l3 6h-6l-3-6"/>
+              </svg>
+            </div>
+            <div class="link-info">
+              <strong>Notaire · Lien non généré</strong>
+              <span class="expiry">—</span>
+            </div>
+            <div class="link-actions">
+              <button class="btn btn-xs btn-primary-outline" 
+                      (click)="generateLink('notaire')">
+                Générer le lien notaire
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="links-note">
+          Tous les liens restent rattachés à la partie prenante correspondante 
+          pour une traçabilité complète des uploads.
+        </p>
+      </section>
+    </aside>
+  </div>
+</div>

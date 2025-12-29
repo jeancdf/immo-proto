@@ -16,6 +16,8 @@ const USERS_PATH = path.join(__dirname, 'users.json');
 const DOCS_TEMPLATES_PATH = path.join(__dirname, 'documents-templates.json');
 const DOC_ANALYSIS_PATH = path.join(__dirname, 'document-analysis.json');
 const DEADLINES_PATH = path.join(__dirname, 'deadlines.json');
+const OWNERS_PATH = path.join(__dirname, 'owners.json');
+const VENTE_DOSSIERS_PATH = path.join(__dirname, 'vente-dossiers.json');
 
 // JWT Secret (in production, use environment variable)
 const JWT_SECRET = 'dossierhub-secret-key-change-in-production';
@@ -360,6 +362,55 @@ function writeAnalysisDb(data) {
   fs.writeFileSync(DOC_ANALYSIS_PATH, JSON.stringify(data, null, 2));
 }
 
+// Helper: Read owners database
+function readOwnersDb() {
+  try {
+    const data = fs.readFileSync(OWNERS_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading owners.json:', error);
+    return [];
+  }
+}
+
+// Helper: Write owners database
+function writeOwnersDb(data) {
+  fs.writeFileSync(OWNERS_PATH, JSON.stringify(data, null, 2));
+}
+
+// Helper: Read vente dossiers database
+function readVenteDossiersDb() {
+  try {
+    const data = fs.readFileSync(VENTE_DOSSIERS_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading vente-dossiers.json:', error);
+    return [];
+  }
+}
+
+// Helper: Write vente dossiers database
+function writeVenteDossiersDb(data) {
+  fs.writeFileSync(VENTE_DOSSIERS_PATH, JSON.stringify(data, null, 2));
+}
+
+// Helper: Enrich property with owner data
+function enrichPropertyWithOwners(property) {
+  if (!property.ownerIds || !Array.isArray(property.ownerIds)) {
+    return { ...property, owners: property.owners || [] };
+  }
+  
+  const ownersDb = readOwnersDb();
+  const owners = property.ownerIds
+    .map(id => ownersDb.find(o => o.id === id))
+    .filter(Boolean);
+    
+  return {
+    ...property,
+    owners
+  };
+}
+
 // Helper: Enrich documents with AI analysis data
 function enrichDocumentsWithAnalysis(dossierId, documents) {
   const analysisDb = readAnalysisDb();
@@ -396,6 +447,22 @@ function formatRelativeDate(dateString) {
 // ============================================
 // ROUTES
 // ============================================
+
+// Helper: Get all dossiers (merged from main db and vente-dossiers)
+function getAllDossiers() {
+  const db = readDb();
+  const venteDossiers = readVenteDossiersDb();
+  
+  // Combine and remove duplicates based on ID
+  const allDossiers = [...db.dossiers];
+  venteDossiers.forEach(vd => {
+    if (!allDossiers.find(d => d.id === vd.id)) {
+      allDossiers.push(vd);
+    }
+  });
+  
+  return allDossiers;
+}
 
 // GET /api/health - Health check endpoint (public)
 app.get('/api/health', (req, res) => {
@@ -443,7 +510,8 @@ app.get('/api/current-user', (req, res) => {
 // GET /api/dossiers - Get all dossiers with optional filters
 app.get('/api/dossiers', (req, res) => {
   const db = readDb();
-  let dossiers = [...db.dossiers];
+  const allDossiers = getAllDossiers();
+  let dossiers = [...allDossiers];
 
   // Apply filters
   const { type, status, minScore, agentId } = req.query;
@@ -503,9 +571,13 @@ app.get('/api/dossiers/:id', (req, res) => {
   // Enrich documents with AI analysis
   const documentsWithAnalysis = enrichDocumentsWithAnalysis(dossier.id, dossier.documents || []);
 
+  // Enrich property with owners
+  const enrichedProperty = enrichPropertyWithOwners(dossier.property);
+
   res.json({
     ...dossier,
     agent,
+    property: enrichedProperty,
     documents: documentsWithAnalysis,
     history: historyFormatted
   });
@@ -601,14 +673,62 @@ app.patch('/api/dossiers/:id/checklist/:checklistId', (req, res) => {
   res.json(checklistItem);
 });
 
+// GET /api/properties/:id - Get single property details
+app.get('/api/properties/:id', (req, res) => {
+  const db = readDb();
+  const allDossiers = getAllDossiers();
+  const propertyId = parseInt(req.params.id);
+  
+  // Find all dossiers with this property
+  const propertyDossiers = allDossiers.filter(d => d.property.id === propertyId);
+  
+  if (propertyDossiers.length === 0) {
+    return res.status(404).json({ message: 'Propriété introuvable' });
+  }
+
+  // Aggregate all ownerIds from all dossiers for this property
+  const allOwnerIds = new Set();
+  propertyDossiers.forEach(d => {
+    if (d.property.ownerIds && Array.isArray(d.property.ownerIds)) {
+      d.property.ownerIds.forEach(id => allOwnerIds.add(id));
+    }
+  });
+
+  // Use the first property object as base but with aggregated ownerIds
+  const prop = { 
+    ...propertyDossiers[0].property,
+    ownerIds: Array.from(allOwnerIds)
+  };
+  
+  // Calculate stats for this property
+  const stats = {
+    complet: propertyDossiers.filter(d => d.status === 'complet').length,
+    a_completer: propertyDossiers.filter(d => d.status === 'a_completer').length,
+    en_cours: propertyDossiers.filter(d => d.status === 'en_cours').length,
+    archive: propertyDossiers.filter(d => d.status === 'archive').length
+  };
+
+  const enriched = enrichPropertyWithOwners(prop);
+  res.json({
+    ...enriched,
+    dossierCount: propertyDossiers.length,
+    statuses: stats,
+    lastUpdate: propertyDossiers.reduce((latest, d) => 
+      new Date(d.updatedAt) > new Date(latest) ? d.updatedAt : latest, 
+      propertyDossiers[0].updatedAt
+    )
+  });
+});
+
 // GET /api/properties - Get all unique properties with dossier counts
 app.get('/api/properties', (req, res) => {
   const db = readDb();
+  const allDossiers = getAllDossiers();
   
   // Group dossiers by property address
   const propertiesMap = new Map();
   
-  db.dossiers.forEach(dossier => {
+  allDossiers.forEach(dossier => {
     const prop = dossier.property;
     const key = `${prop.address}-${prop.zipCode}-${prop.city}`;
     
@@ -652,6 +772,15 @@ app.get('/api/properties', (req, res) => {
     entry.dossierCount++;
     entry.dossierIds.push(dossier.id);
     entry.statuses[dossier.status]++;
+    
+    // Store owner IDs if not already there
+    if (prop.ownerIds) {
+      if (!entry.ownerIds) entry.ownerIds = [];
+      prop.ownerIds.forEach(id => {
+        if (!entry.ownerIds.includes(id)) entry.ownerIds.push(id);
+      });
+    }
+    
     // Track dossier types
     if (dossier.type === 'location') entry.dossierTypes.location++;
     if (dossier.type === 'vente') entry.dossierTypes.vente++;
@@ -662,11 +791,14 @@ app.get('/api/properties', (req, res) => {
     }
   });
   
-  // Convert to array and add formatted date
-  const properties = Array.from(propertiesMap.values()).map(prop => ({
-    ...prop,
-    lastUpdateFormatted: formatRelativeDate(prop.lastUpdate)
-  }));
+  // Convert to array and add formatted date and enriched owners
+  const properties = Array.from(propertiesMap.values()).map(prop => {
+    const enriched = enrichPropertyWithOwners(prop);
+    return {
+      ...enriched,
+      lastUpdateFormatted: formatRelativeDate(prop.lastUpdate)
+    };
+  });
   
   // Sort by last update
   properties.sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate));
@@ -677,9 +809,10 @@ app.get('/api/properties', (req, res) => {
 // GET /api/properties/:id/dossiers - Get all dossiers for a specific property
 app.get('/api/properties/:id/dossiers', (req, res) => {
   const db = readDb();
+  const allDossiers = getAllDossiers();
   const propertyId = parseInt(req.params.id);
   
-  let dossiers = db.dossiers.filter(d => d.property.id === propertyId);
+  let dossiers = allDossiers.filter(d => d.property.id === propertyId);
   
   // Enrich with agent info and formatted dates
   const enrichedDossiers = dossiers.map(dossier => {
@@ -697,6 +830,131 @@ app.get('/api/properties/:id/dossiers', (req, res) => {
   );
   
   res.json(enrichedDossiers);
+});
+
+// ============================================
+// OWNER CRM ENDPOINTS
+// ============================================
+
+// GET /api/owners - Get all owners with summary stats
+app.get('/api/owners', (req, res) => {
+  const ownersDb = readOwnersDb();
+  const db = readDb();
+  
+  // Calculate stats for each owner
+  const owners = ownersDb.map(owner => {
+    const properties = [];
+    db.dossiers.forEach(dossier => {
+      if (dossier.property.ownerIds && dossier.property.ownerIds.includes(owner.id)) {
+        if (!properties.find(p => p.id === dossier.property.id)) {
+          properties.push(dossier.property);
+        }
+      }
+    });
+
+    const interactions = (db.ownerInteractions || [])
+      .filter(i => i.ownerId === owner.id);
+
+    return {
+      ...owner,
+      propertiesCount: properties.length,
+      interactionsCount: interactions.length,
+      lastActivity: interactions.length > 0 
+        ? interactions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0].createdAt
+        : null,
+      lastActivityFormatted: interactions.length > 0
+        ? formatRelativeDate(interactions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0].createdAt)
+        : 'Aucune'
+    };
+  });
+
+  res.json(owners);
+});
+
+// GET /api/owners/:id - Get single owner with full details
+app.get('/api/owners/:id', (req, res) => {
+  const ownerId = parseInt(req.params.id);
+  const ownersDb = readOwnersDb();
+  const db = readDb();
+  
+  const owner = ownersDb.find(o => o.id === ownerId);
+  if (!owner) {
+    return res.status(404).json({ error: 'Propriétaire non trouvé' });
+  }
+
+  // Find all properties owned by this owner
+  const propertiesMap = new Map();
+  db.dossiers.forEach(dossier => {
+    if (dossier.property.ownerIds && dossier.property.ownerIds.includes(ownerId)) {
+      const prop = dossier.property;
+      const key = prop.id;
+      if (!propertiesMap.has(key)) {
+        propertiesMap.set(key, {
+          ...prop,
+          dossierCount: 0,
+          lastUpdate: dossier.updatedAt
+        });
+      }
+      propertiesMap.get(key).dossierCount++;
+      if (new Date(dossier.updatedAt) > new Date(propertiesMap.get(key).lastUpdate)) {
+        propertiesMap.get(key).lastUpdate = dossier.updatedAt;
+      }
+    }
+  });
+
+  const properties = Array.from(propertiesMap.values()).map(p => ({
+    ...p,
+    lastUpdateFormatted: formatRelativeDate(p.lastUpdate)
+  }));
+
+  // Get interactions (simulated for now, would be in db.ownerInteractions)
+  const interactions = (db.ownerInteractions || [])
+    .filter(i => i.ownerId === ownerId)
+    .map(i => ({
+      ...i,
+      agentName: db.agents.find(a => a.id === i.agentId)?.name || 'Agent',
+      createdAtFormatted: formatRelativeDate(i.createdAt)
+    }))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  res.json({
+    ...owner,
+    properties,
+    interactions,
+    stats: {
+      totalProperties: properties.length,
+      activeDossiers: properties.reduce((sum, p) => sum + p.dossierCount, 0)
+    }
+  });
+});
+
+// POST /api/owners/:id/interactions - Add interaction for owner
+app.post('/api/owners/:id/interactions', (req, res) => {
+  const db = readDb();
+  const ownerId = parseInt(req.params.id);
+  const { type, content } = req.body;
+  
+  if (!db.ownerInteractions) {
+    db.ownerInteractions = [];
+  }
+  
+  const newInteraction = {
+    id: Date.now(),
+    ownerId,
+    type,
+    content,
+    agentId: db.currentUser.id,
+    createdAt: new Date().toISOString()
+  };
+  
+  db.ownerInteractions.push(newInteraction);
+  writeDb(db);
+  
+  res.status(201).json({
+    ...newInteraction,
+    agentName: db.agents.find(a => a.id === newInteraction.agentId)?.name || 'Agent',
+    createdAtFormatted: formatRelativeDate(newInteraction.createdAt)
+  });
 });
 
 // POST /api/properties - Create a new property
@@ -1152,8 +1410,8 @@ app.patch('/api/interactions/:id', (req, res) => {
 
 // GET /api/stats - Get dashboard statistics
 app.get('/api/stats', (req, res) => {
-  const db = readDb();
-  const dossiers = db.dossiers;
+  const allDossiers = getAllDossiers();
+  const dossiers = allDossiers;
 
   const stats = {
     total: dossiers.length,
@@ -1308,7 +1566,8 @@ app.get('/api/collect/:token', (req, res) => {
       ...doc,
       name: templateDoc?.name || 'Document inconnu',
       required: templateDoc?.required || false,
-      condition: templateDoc?.condition
+      condition: templateDoc?.condition,
+      milestone: templateDoc?.milestone || 'acte'
     };
   });
   

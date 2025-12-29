@@ -1,0 +1,28 @@
+[
+  {
+    "id": 101,
+    "firstName": "Jean",
+    "lastName": "Dupont",
+    "email": "jean.dupont@proprietaire.fr",
+    "phone": "01 45 67 89 10",
+    "address": "45 rue de Rivoli, 75001 Paris",
+    "notes": "Préfère être contacté par email pour les questions non urgentes."
+  },
+  {
+    "id": 102,
+    "firstName": "Claire",
+    "lastName": "Fontaine",
+    "email": "claire.fontaine@email.com",
+    "phone": "06 55 44 33 22",
+    "notes": "Également la cliente du dossier de vente."
+  },
+  {
+    "id": 103,
+    "firstName": "Robert",
+    "lastName": "Fontaine",
+    "email": "robert.fontaine@email.com",
+    "phone": "06 11 22 33 44",
+    "address": "15 rue Lepic, 75018 Paris"
+  }
+]
+

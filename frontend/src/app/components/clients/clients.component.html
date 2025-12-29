@@ -2,9 +2,9 @@
   <!-- Header -->
   <div class="page-header">
     <div class="header-content">
-      <h1>Gestion Clients</h1>
+      <h1>Gestion CRM</h1>
       <p class="subtitle">
-        Gérez vos relations clients et suivez leurs dossiers
+        Gérez vos relations clients et propriétaires
       </p>
     </div>
     <div class="header-stats">
@@ -12,7 +12,25 @@
         <span class="stat-value">{{ clients().length }}</span>
         <span class="stat-label">Clients</span>
       </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ owners().length }}</span>
+        <span class="stat-label">Propriétaires</span>
+      </div>
     </div>
+  </div>
+
+  <!-- Main Tabs (Clients vs Owners) -->
+  <div class="main-tabs">
+    <button 
+      [class.active]="mainTab() === 'clients'" 
+      (click)="setMainTab('clients')">
+      Clients ({{ clients().length }})
+    </button>
+    <button 
+      [class.active]="mainTab() === 'owners'" 
+      (click)="setMainTab('owners')">
+      Propriétaires ({{ owners().length }})
+    </button>
   </div>
 
   <!-- Search Bar -->
@@ -23,76 +41,98 @@
     </svg>
     <input 
       type="text" 
-      placeholder="Rechercher un client par nom, email ou téléphone..."
+      [placeholder]="mainTab() === 'clients' ? 'Rechercher un client...' : 'Rechercher un propriétaire...'"
       [ngModel]="searchQuery()"
       (ngModelChange)="searchQuery.set($event)">
   </div>
 
   <!-- Main Content -->
   <div class="main-content" [class.has-detail]="selectedClient()">
-    <!-- Client List -->
+    <!-- List -->
     <div class="clients-list">
       @if (loading()) {
         <div class="loading-state">
           <div class="spinner"></div>
-          <span>Chargement des clients...</span>
+          <span>Chargement...</span>
         </div>
-      } @else if (filteredClients().length === 0) {
+      } @else if (currentItemsCount() === 0) {
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                stroke-width="1.5">
             <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
-            <path d="M16 3.13a4 4 0 010 7.75"/>
           </svg>
-          <span>Aucun client trouvé</span>
+          <span>Aucun résultat trouvé</span>
         </div>
       } @else {
-        @for (client of filteredClients(); track client.email) {
-          <div 
-            class="client-card" 
-            [class.selected]="selectedClient()?.email === client.email"
-            (click)="selectClient(client)">
-            
-            <div class="client-avatar">
-              {{ client.firstName[0] }}{{ client.lastName[0] }}
-            </div>
-            
-            <div class="client-info">
-              <div class="client-name">
-                {{ client.firstName }} {{ client.lastName }}
+        @if (mainTab() === 'clients') {
+          <!-- Clients List -->
+          @for (client of filteredClients(); track client.email) {
+            <div 
+              class="client-card" 
+              [class.selected]="selectedClient()?.email === client.email"
+              (click)="selectClient(client)">
+              
+              <div class="client-avatar">
+                {{ client.firstName[0] }}{{ client.lastName[0] }}
               </div>
-              <div class="client-meta">
-                <span class="client-type-badge" 
-                      [class]="'type-' + client.type">
-                  {{ getTypeLabel(client.type) }}
-                </span>
-                <span class="client-email">{{ client.email }}</span>
+              
+              <div class="client-info">
+                <div class="client-name">{{ client.firstName }} {{ client.lastName }}</div>
+                <div class="client-meta">
+                  <span class="client-type-badge" [class]="'type-' + client.type">
+                    {{ getTypeLabel(client.type) }}
+                  </span>
+                  <span class="client-email">{{ client.email }}</span>
+                </div>
               </div>
-            </div>
-            
-            <div class="client-stats-mini">
-              <div class="stat-mini" title="Dossiers actifs">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                     stroke-width="2">
-                  <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
-                </svg>
-                <span>{{ client.stats.active }}</span>
+              
+              <div class="client-stats-mini">
+                <div class="stat-mini" title="Dossiers actifs">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                  </svg>
+                  <span>{{ client.stats.active }}</span>
+                </div>
               </div>
-              <div class="stat-mini" title="Interactions">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                     stroke-width="2">
-                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-                </svg>
-                <span>{{ client.interactionsCount || 0 }}</span>
+              
+              <div class="client-last-activity">{{ client.lastActivityFormatted }}</div>
+            </div>
+          }
+        } @else {
+          <!-- Owners List -->
+          @for (owner of filteredOwners(); track owner.id) {
+            <div class="client-card owner-card" (click)="selectOwner(owner)">
+              <div class="client-avatar owner-avatar">
+                {{ owner.firstName[0] }}{{ owner.lastName[0] }}
               </div>
+              
+              <div class="client-info">
+                <div class="client-name">{{ owner.firstName }} {{ owner.lastName }}</div>
+                <div class="client-meta">
+                  <span class="client-type-badge type-owner">Propriétaire</span>
+                  <span class="client-email">{{ owner.email }}</span>
+                </div>
+              </div>
+              
+              <div class="client-stats-mini">
+                <div class="stat-mini" title="Biens rattachés">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  </svg>
+                  <span>{{ owner.propertiesCount }}</span>
+                </div>
+                <div class="stat-mini" title="Interactions">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                  </svg>
+                  <span>{{ owner.interactionsCount }}</span>
+                </div>
+              </div>
+              
+              <div class="client-last-activity">{{ owner.lastActivityFormatted }}</div>
             </div>
-            
-            <div class="client-last-activity">
-              {{ client.lastActivityFormatted }}
-            </div>
-          </div>
+          }
         }
       }
     </div>

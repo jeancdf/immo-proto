@@ -47,6 +47,7 @@ export class StateService {
 
   // Properties
   readonly properties = signal<PropertyWithDossiers[]>([]);
+  readonly selectedProperty = signal<PropertyWithDossiers | null>(null);
   readonly selectedPropertyDossiers = signal<Dossier[]>([]);
 
   // Loading states
@@ -170,6 +171,21 @@ export class StateService {
       .subscribe({
         next: (properties) => {
           this.properties.set(properties);
+          this.loadingProperties.set(false);
+        },
+        error: () => this.loadingProperties.set(false)
+      });
+  }
+
+  /** Load single property by ID with full details */
+  loadPropertyById(id: number): void {
+    this.loadingProperties.set(true);
+    this.selectedProperty.set(null);
+    
+    this.http.get<PropertyWithDossiers>(`${this.baseUrl}/properties/${id}`)
+      .subscribe({
+        next: (property) => {
+          this.selectedProperty.set(property);
           this.loadingProperties.set(false);
         },
         error: () => this.loadingProperties.set(false)

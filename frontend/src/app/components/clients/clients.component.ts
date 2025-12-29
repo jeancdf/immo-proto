@@ -4,7 +4,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { Proprietaire } from '../../models/dossier.model';
 
 interface ClientStats {
   total: number;
@@ -69,9 +70,16 @@ interface Client {
   firstContact: string;
 }
 
+interface OwnerSummary extends Proprietaire {
+  propertiesCount: number;
+  interactionsCount: number;
+  lastActivity: string | null;
+  lastActivityFormatted: string;
+}
+
 /**
  * Clients CRM Component
- * Full CRM view for managing client relationships
+ * Full CRM view for managing client and owner relationships
  */
 @Component({
   selector: 'app-clients',
@@ -82,14 +90,17 @@ interface Client {
 })
 export class ClientsComponent implements OnInit {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   // State
   readonly clients = signal<Client[]>([]);
+  readonly owners = signal<OwnerSummary[]>([]);
   readonly selectedClient = signal<Client | null>(null);
   readonly loading = signal(true);
   readonly loadingDetail = signal(false);
   
   // UI State
+  readonly mainTab = signal<'clients' | 'owners'>('clients');
   readonly activeTab = signal<'dossiers' | 'timeline' | 'preferences'>(
     'timeline'
   );
@@ -106,13 +117,32 @@ export class ClientsComponent implements OnInit {
   // Computed: filtered clients
   readonly filteredClients = computed(() => {
     const query = this.searchQuery().toLowerCase();
-    if (!query) return this.clients();
-    
-    return this.clients().filter(c => 
+    const items = this.clients();
+    if (!query) return items;
+    return items.filter(c => 
       `${c.firstName} ${c.lastName}`.toLowerCase().includes(query) ||
       c.email.toLowerCase().includes(query) ||
       c.phone.includes(query)
     );
+  });
+
+  // Computed: filtered owners
+  readonly filteredOwners = computed(() => {
+    const query = this.searchQuery().toLowerCase();
+    const items = this.owners();
+    if (!query) return items;
+    return items.filter(o => 
+      `${o.firstName} ${o.lastName}`.toLowerCase().includes(query) ||
+      o.email.toLowerCase().includes(query) ||
+      (o.phone && o.phone.includes(query))
+    );
+  });
+
+  // Computed: items to count for empty state check
+  readonly currentItemsCount = computed(() => {
+    return this.mainTab() === 'clients' 
+      ? this.filteredClients().length 
+      : this.filteredOwners().length;
   });
 
   // Computed: pending reminders for selected client
@@ -125,18 +155,29 @@ export class ClientsComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadClients();
+    this.loadData();
   }
 
-  loadClients(): void {
+  loadData(): void {
     this.loading.set(true);
+    // Load clients
     this.http.get<Client[]>('/api/clients').subscribe({
-      next: (clients) => {
-        this.clients.set(clients);
+      next: (clients) => this.clients.set(clients)
+    });
+
+    // Load owners
+    this.http.get<OwnerSummary[]>('/api/owners').subscribe({
+      next: (owners) => {
+        this.owners.set(owners);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  setMainTab(tab: 'clients' | 'owners'): void {
+    this.mainTab.set(tab);
+    this.selectedClient.set(null);
   }
 
   selectClient(client: Client): void {
@@ -149,6 +190,10 @@ export class ClientsComponent implements OnInit {
         },
         error: () => this.loadingDetail.set(false)
       });
+  }
+
+  selectOwner(owner: OwnerSummary): void {
+    this.router.navigate(['/proprietaires', owner.id]);
   }
 
   closeDetail(): void {

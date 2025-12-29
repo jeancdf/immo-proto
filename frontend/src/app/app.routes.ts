@@ -30,6 +30,10 @@ import { BienCreateComponent } from
   './components/bien-create/bien-create.component';
 import { AnnonceGeneratorComponent } from 
   './components/annonce-generator/annonce-generator.component';
+import { VenteDashboardComponent } from 
+  './components/vente-dashboard/vente-dashboard.component';
+import { ProprietaireDetailComponent } from 
+  './components/proprietaire-detail/proprietaire-detail';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard, guestGuard } from './guards/auth.guard';
 
@@ -59,6 +63,7 @@ export const routes: Routes = [
       { path: 'dossier/new', component: DossierEditComponent },
       { path: 'dossier/:id/edit', component: DossierEditComponent },
       { path: 'dossier/:id/share', component: ShareDossierComponent },
+      { path: 'dossier/:id/vente-dashboard', component: VenteDashboardComponent },
       { path: 'dossier/:id', component: DossierDetailComponent },
       { path: 'biens', component: BiensComponent },
       { path: 'biens/new', component: BienCreateComponent },
@@ -67,6 +72,7 @@ export const routes: Routes = [
       { path: 'biens/:id/edit', component: BienEditComponent },
       { path: 'biens/:id/annonce', component: AnnonceGeneratorComponent },
       { path: 'biens/:id', component: BienDetailComponent },
+      { path: 'proprietaires/:id', component: ProprietaireDetailComponent },
       { path: 'mes-dossiers', component: MesDossiersComponent },
       { path: 'clients', component: ClientsComponent },
       { path: 'parametres', component: ParametresComponent }

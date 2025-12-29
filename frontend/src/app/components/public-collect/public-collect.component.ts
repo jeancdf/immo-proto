@@ -2,26 +2,12 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-interface CollectDocument {
-  docId: string;
-  status: 'pending' | 'received' | 'not_applicable';
-  fileName?: string;
-  uploadedAt?: string;
-  name: string;
-  required: boolean;
-  condition?: string;
-}
+import { DocumentSource, CollectDocument } from '../../models/dossier.model';
 
 interface CollectData {
   sourceName: string;
   sourceType: string;
-  sourceInfo: {
-    id: string;
-    name: string;
-    icon: string;
-    color: string;
-  };
+  sourceInfo: DocumentSource;
   property: {
     address: string;
     city: string;
@@ -91,7 +77,7 @@ export class PublicCollectComponent implements OnInit {
     this.uploadingDoc.set(doc.docId);
 
     // Simulate file name
-    const fileName = `${doc.name.toLowerCase().replace(/\s+/g, '_')}.pdf`;
+    const fileName = `${doc.name?.toLowerCase().replace(/\s+/g, '_')}.pdf`;
 
     this.http.post(`/api/collect/${token}/upload`, {
       docId: doc.docId,
@@ -157,4 +143,3 @@ export class PublicCollectComponent implements OnInit {
     });
   }
 }
-

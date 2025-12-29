@@ -29,6 +29,50 @@
   gap: 16px;
 }
 
+/* Main Tabs */
+.main-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: #f1f5f9;
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.main-tabs button {
+  padding: 8px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.main-tabs button:hover {
+  color: #1e293b;
+}
+
+.main-tabs button.active {
+  background: white;
+  color: #3b82f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Owner Styles */
+.owner-avatar {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5) !important;
+  color: #059669 !important;
+}
+
+.type-owner {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+}
+
 .stat-card {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;

@@ -1,0 +1,189 @@
+<div class="dossiers-config">
+  <!-- Header -->
+  <div class="config-header">
+    <h2 class="config-title">Paramètres des dossiers</h2>
+    <button 
+      class="btn btn-primary"
+      [disabled]="saving()"
+      (click)="saveSettings()">
+      @if (saving()) {
+        <div class="spinner-small"></div>
+        Enregistrement...
+      } @else {
+        Enregistrer les paramètres
+      }
+    </button>
+  </div>
+
+  <!-- Sub-tabs Location / Vente -->
+  <div class="sub-tabs">
+    <button 
+      class="sub-tab"
+      [class.active]="activeSubTab() === 'location'"
+      (click)="setSubTab('location')">
+      Location
+    </button>
+    <button 
+      class="sub-tab"
+      [class.active]="activeSubTab() === 'vente'"
+      (click)="setSubTab('vente')">
+      Vente
+    </button>
+  </div>
+
+  <!-- Checklist Card -->
+  @if (getCurrentProfile(); as profile) {
+    <div class="config-card">
+      <div class="card-header">
+        <div class="card-title-row">
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" 
+               stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          <span class="card-title">
+            Checklist {{ activeSubTab() === 'location' ? 'Location' : 'Vente' }}
+          </span>
+        </div>
+        <div class="profile-selector">
+          <span class="profile-label">Profil :</span>
+          <select 
+            class="profile-select"
+            [ngModel]="selectedProfileId()"
+            (ngModelChange)="selectedProfileId.set($event)">
+            @for (p of getCurrentProfiles(); track p.id) {
+              <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- Document List -->
+        <div class="document-list">
+          @for (doc of profile.documents; track doc.id) {
+            <div class="document-row">
+              <!-- Drag Handle -->
+              <div class="drag-handle">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="9" cy="6" r="1.5"/>
+                  <circle cx="15" cy="6" r="1.5"/>
+                  <circle cx="9" cy="12" r="1.5"/>
+                  <circle cx="15" cy="12" r="1.5"/>
+                  <circle cx="9" cy="18" r="1.5"/>
+                  <circle cx="15" cy="18" r="1.5"/>
+                </svg>
+              </div>
+
+              <!-- Document Name Input -->
+              <input 
+                type="text"
+                class="document-input"
+                [value]="doc.name"
+                (input)="updateDocumentName(doc.id, $any($event.target).value)"
+                placeholder="Nom du document">
+
+              <!-- Category Dropdown -->
+              <select 
+                class="category-select"
+                [ngModel]="doc.category"
+                (ngModelChange)="updateDocumentCategory(doc.id, $event)">
+                @for (cat of documentCategories; track cat.value) {
+                  <option [value]="cat.value">{{ cat.label }}</option>
+                }
+              </select>
+
+              <!-- Delete Button -->
+              <button 
+                class="btn-delete"
+                (click)="removeDocument(doc.id)"
+                title="Supprimer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Add Document Button -->
+        <button class="btn-add-document" (click)="addDocument()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+               stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Ajouter un document requis
+        </button>
+      </div>
+    </div>
+
+    <!-- Scoring Criteria Card -->
+    <div class="config-card">
+      <div class="card-header">
+        <div class="card-title-row">
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" 
+               stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M9 21V9"/>
+          </svg>
+          <span class="card-title">Critères de note du dossier</span>
+        </div>
+        <span class="criteria-hint">
+          Ces poids influencent la note IA globale
+        </span>
+      </div>
+
+      <div class="card-body">
+        <div class="criteria-list">
+          @for (criterion of profile.scoringCriteria; track criterion.id) {
+            <div class="criterion-row">
+              <span class="criterion-name">{{ criterion.name }}</span>
+              <div class="criterion-slider-container">
+                <input 
+                  type="range"
+                  class="criterion-slider"
+                  min="0"
+                  max="100"
+                  [value]="criterion.weight"
+                  (input)="updateCriterionWeight(
+                    criterion.id, 
+                    +$any($event.target).value
+                  )">
+              </div>
+              <div class="criterion-value">
+                <input 
+                  type="number"
+                  class="criterion-input"
+                  min="0"
+                  max="100"
+                  [value]="criterion.weight"
+                  (input)="updateCriterionWeight(
+                    criterion.id, 
+                    +$any($event.target).value
+                  )">
+                <span class="criterion-percent">%</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Total Weight Indicator -->
+        <div class="total-weight" [class.warning]="getTotalWeight() !== 100">
+          <span class="total-label">Total :</span>
+          <span class="total-value">{{ getTotalWeight() }}%</span>
+          @if (getTotalWeight() !== 100) {
+            <span class="total-hint">
+              (recommandé : 100%)
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

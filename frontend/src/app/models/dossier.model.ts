@@ -28,6 +28,36 @@ export interface Client {
   type: 'locataire' | 'vendeur' | 'acheteur';
 }
 
+export interface Proprietaire {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address?: string;
+  notes?: string;
+}
+
+export interface OwnerInteraction {
+  id: number;
+  ownerId: number;
+  type: 'email' | 'appel' | 'rdv' | 'note';
+  content: string;
+  agentId: number;
+  agentName?: string;
+  createdAt: string;
+  createdAtFormatted?: string;
+}
+
+export interface ProprietaireFull extends Proprietaire {
+  properties: PropertyWithDossiers[];
+  interactions: OwnerInteraction[];
+  stats: {
+    totalProperties: number;
+    activeDossiers: number;
+  };
+}
+
 export interface Property {
   id: number;
   address: string;
@@ -45,6 +75,7 @@ export interface Property {
   hasCellar?: boolean;
   hasElevator?: boolean;
   charges?: number;
+  owners?: Proprietaire[];
 }
 
 export interface AiSummary {
@@ -190,12 +221,56 @@ export interface PropertyWithDossiers {
   rent?: number;
   price?: number;
   charges?: number;
+  owners?: Proprietaire[];
   // Features and diagnostics
   features?: string[];
   dpe?: string;
   ges?: string;
   // Agent info
   agentId?: number;
+}
+
+/**
+ * Multi-party document collection interfaces
+ */
+export interface DocumentSource {
+  id: string;
+  name: string;
+  subtitle: string;
+  icon: string;
+  color: string;
+}
+
+export interface CollectDocument {
+  docId: string;
+  status: 'pending' | 'received' | 'not_applicable';
+  auditStatus?: 'pending' | 'validated' | 'rejected' | 'requested';
+  fileName?: string;
+  uploadedAt?: string;
+  name?: string;
+  required?: boolean;
+  condition?: string;
+  milestone?: 'listing' | 'acte';
+}
+
+export interface CollectLink {
+  id: number;
+  token: string;
+  dossierId: number;
+  sourceType: string;
+  sourceName: string;
+  sourceEmail: string;
+  templateType: string;
+  documents: CollectDocument[];
+  sourceInfo: DocumentSource;
+  stats: {
+    received: number;
+    total: number;
+    percentage: number;
+  };
+  createdAt: string;
+  expiresAt: string;
+  lastAccessedAt: string | null;
 }
 
 /**

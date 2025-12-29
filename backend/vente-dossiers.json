@@ -1,0 +1,425 @@
+[
+  {
+    "id": 3,
+    "reference": "DOS-2023-003",
+    "type": "vente",
+    "status": "en_cours",
+    "score": 7,
+    "createdAt": "2023-10-20T10:00:00Z",
+    "updatedAt": "2023-12-17T16:00:00Z",
+    "agentId": 3,
+    "client": {
+      "id": 3,
+      "firstName": "Claire",
+      "lastName": "Fontaine",
+      "email": "claire.fontaine@email.com",
+      "phone": "06 55 44 33 22",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 3,
+      "address": "45 rue Lepic",
+      "city": "Paris",
+      "zipCode": "75018",
+      "type": "T4",
+      "price": 650000,
+      "ownerIds": [102, 103]
+    },
+    "aiSummary": {
+      "description": "Mme Fontaine vend son appartement familial suite à un déménagement professionnel. Bien en bon état, diagnostics à jour. Négociation en cours.",
+      "strengths": [
+        "Propriétaire depuis 15 ans",
+        "Diagnostics complets",
+        "Prix cohérent avec le marché"
+      ],
+      "warnings": [
+        "Travaux de copropriété prévus",
+        "Délai de vente souhaité court"
+      ]
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+      { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
+      { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Titre_Propriete_Fontaine.pdf",
+        "type": "Propriété",
+        "uploadDate": "2023-10-20",
+        "origin": "client",
+        "size": 2100000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-17T16:00:00Z",
+        "action": "Visite programmée avec acheteur potentiel",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "reference": "DOS-2023-006",
+    "type": "vente",
+    "status": "complet",
+    "score": 8.5,
+    "createdAt": "2023-10-01T09:30:00Z",
+    "updatedAt": "2023-12-15T11:00:00Z",
+    "agentId": 3,
+    "client": {
+      "id": 6,
+      "firstName": "Jean-Pierre",
+      "lastName": "Moreau",
+      "email": "jp.moreau@email.com",
+      "phone": "06 22 33 44 55",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 6,
+      "address": "8 Place Vendôme",
+      "city": "Paris",
+      "zipCode": "75001",
+      "type": "T5",
+      "price": 1850000,
+      "ownerIds": [102]
+    },
+    "aiSummary": {
+      "description": "M. Moreau vend son appartement de prestige Place Vendôme. Bien d'exception en parfait état. Vente finalisée avec succès.",
+      "strengths": [
+        "Emplacement premium",
+        "État impeccable",
+        "Documentation complète",
+        "Acheteur solvable trouvé"
+      ],
+      "warnings": []
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+      { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+      { "id": 4, "name": "Compromis de vente", "status": "received", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Diagnostics_Vendome.pdf",
+        "type": "Diagnostics",
+        "uploadDate": "2023-10-01",
+        "origin": "agent",
+        "size": 3400000
+      },
+      {
+        "id": 2,
+        "filename": "Compromis_Moreau.pdf",
+        "type": "Juridique",
+        "uploadDate": "2023-11-20",
+        "origin": "agent",
+        "size": 1200000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-15T11:00:00Z",
+        "action": "Acte de vente signé chez le notaire",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "reference": "DOS-2023-009",
+    "type": "vente",
+    "status": "a_completer",
+    "score": 5.5,
+    "createdAt": "2023-12-10T09:00:00Z",
+    "updatedAt": "2023-12-19T11:00:00Z",
+    "agentId": 1,
+    "client": {
+      "id": 9,
+      "firstName": "Philippe",
+      "lastName": "Garnier",
+      "email": "p.garnier@email.com",
+      "phone": "06 55 66 77 88",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 8,
+      "address": "33 rue de la Roquette",
+      "city": "Paris",
+      "zipCode": "75011",
+      "type": "T3",
+      "price": 485000,
+      "ownerIds": [101]
+    },
+    "aiSummary": {
+      "description": "M. Garnier souhaite vendre rapidement pour un projet à l'étranger. Plusieurs diagnostics à refaire, dossier incomplet.",
+      "strengths": [
+        "Motivation forte du vendeur",
+        "Prix attractif"
+      ],
+      "warnings": [
+        "Diagnostics expirés",
+        "Travaux à prévoir",
+        "Charges de copropriété élevées"
+      ]
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Diagnostics techniques", "status": "pending", "required": true },
+      { "id": 3, "name": "PV assemblée générale", "status": "pending", "required": true },
+      { "id": 4, "name": "Règlement de copropriété", "status": "pending", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Titre_Garnier.pdf",
+        "type": "Propriété",
+        "uploadDate": "2023-12-10",
+        "origin": "client",
+        "size": 1890000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-19T11:00:00Z",
+        "action": "Diagnostiqueur contacté",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "reference": "DOS-2023-012",
+    "type": "vente",
+    "status": "en_cours",
+    "score": 8,
+    "createdAt": "2023-11-25T14:00:00Z",
+    "updatedAt": "2023-12-19T10:00:00Z",
+    "agentId": 2,
+    "client": {
+      "id": 12,
+      "firstName": "Isabelle",
+      "lastName": "Simon",
+      "email": "i.simon@email.com",
+      "phone": "06 88 99 00 11",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 10,
+      "address": "15 rue du Bac",
+      "city": "Paris",
+      "zipCode": "75007",
+      "type": "T2",
+      "price": 520000,
+      "ownerIds": [103]
+    },
+    "aiSummary": {
+      "description": "Mme Simon vend pour financer l'achat d'une maison en banlieue. Bien en bon état, visites en cours.",
+      "strengths": [
+        "Bien entretenu",
+        "Quartier recherché",
+        "Prix dans le marché"
+      ],
+      "warnings": [
+        "Copropriété avec travaux votés"
+      ]
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+      { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+      { "id": 4, "name": "Règlement de copropriété", "status": "received", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Diagnostics_Simon.pdf",
+        "type": "Diagnostics",
+        "uploadDate": "2023-11-25",
+        "origin": "agent",
+        "size": 2800000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-19T10:00:00Z",
+        "action": "3ème visite programmée",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "reference": "DOS-2023-014",
+    "type": "vente",
+    "status": "archive",
+    "score": null,
+    "createdAt": "2023-07-01T09:00:00Z",
+    "updatedAt": "2023-08-15T14:00:00Z",
+    "agentId": 4,
+    "client": {
+      "id": 14,
+      "firstName": "François",
+      "lastName": "Lambert",
+      "email": "f.lambert@email.com",
+      "phone": "06 00 11 22 33",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 12,
+      "address": "5 rue de Sèvres",
+      "city": "Paris",
+      "zipCode": "75006",
+      "type": "T2",
+      "price": 395000,
+      "ownerIds": [102]
+    },
+    "aiSummary": {
+      "description": "Vente annulée - Le vendeur a changé d'avis suite à un héritage.",
+      "strengths": [],
+      "warnings": []
+    },
+    "checklist": [],
+    "documents": [],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-08-15T14:00:00Z",
+        "action": "Mandat annulé à la demande du vendeur",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "reference": "DOS-2023-017",
+    "type": "vente",
+    "status": "complet",
+    "score": 8.7,
+    "createdAt": "2023-09-10T11:00:00Z",
+    "updatedAt": "2023-12-01T15:00:00Z",
+    "agentId": 1,
+    "client": {
+      "id": 17,
+      "firstName": "Nathalie",
+      "lastName": "Vincent",
+      "email": "n.vincent@email.com",
+      "phone": "06 33 44 55 66",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 15,
+      "address": "18 rue de Vaugirard",
+      "city": "Paris",
+      "zipCode": "75006",
+      "type": "T3",
+      "price": 780000,
+      "ownerIds": [102]
+    },
+    "aiSummary": {
+      "description": "Vente réussie. Appartement familial vendu à un couple avec enfants. Transaction fluide.",
+      "strengths": [
+        "Bien en excellent état",
+        "Quartier familial",
+        "Transaction rapide"
+      ],
+      "warnings": []
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Diagnostics techniques", "status": "received", "required": true },
+      { "id": 3, "name": "PV assemblée générale", "status": "received", "required": true },
+      { "id": 4, "name": "Acte de vente", "status": "received", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Acte_Vente_Vincent.pdf",
+        "type": "Juridique",
+        "uploadDate": "2023-12-01",
+        "origin": "agent",
+        "size": 2300000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-01T15:00:00Z",
+        "action": "Vente finalisée",
+        "type": "update"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "reference": "DOS-2023-019",
+    "type": "vente",
+    "status": "en_cours",
+    "score": 7.5,
+    "createdAt": "2023-12-12T14:00:00Z",
+    "updatedAt": "2023-12-19T11:30:00Z",
+    "agentId": 3,
+    "client": {
+      "id": 19,
+      "firstName": "Catherine",
+      "lastName": "Morel",
+      "email": "c.morel@email.com",
+      "phone": "06 55 66 77 88",
+      "type": "vendeur"
+    },
+    "property": {
+      "id": 16,
+      "address": "64 Boulevard Saint-Germain",
+      "city": "Paris",
+      "zipCode": "75005",
+      "type": "T5",
+      "price": 1250000,
+      "ownerIds": [103]
+    },
+    "aiSummary": {
+      "description": "Mme Morel vend l'appartement de ses parents décédés. Succession en cours, quelques formalités à régler.",
+      "strengths": [
+        "Emplacement exceptionnel",
+        "Grand volume",
+        "Beaux éléments d'époque"
+      ],
+      "warnings": [
+        "Succession en cours",
+        "Travaux de rafraîchissement nécessaires"
+      ]
+    },
+    "checklist": [
+      { "id": 1, "name": "Titre de propriété", "status": "received", "required": true },
+      { "id": 2, "name": "Acte de succession", "status": "pending", "required": true },
+      { "id": 3, "name": "Diagnostics techniques", "status": "received", "required": true },
+      { "id": 4, "name": "PV assemblée générale", "status": "received", "required": true }
+    ],
+    "documents": [
+      {
+        "id": 1,
+        "filename": "Diagnostics_Morel.pdf",
+        "type": "Diagnostics",
+        "uploadDate": "2023-12-12",
+        "origin": "agent",
+        "size": 4100000
+      }
+    ],
+    "history": [
+      {
+        "id": 1,
+        "date": "2023-12-19T11:30:00Z",
+        "action": "Notaire contacté pour acte de succession",
+        "type": "update"
+      }
+    ]
+  }
+]
+
